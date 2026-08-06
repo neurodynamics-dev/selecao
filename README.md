@@ -51,6 +51,25 @@ O endereço do site institucional fica na constante
 `SITE_INSTITUCIONAL`, usada nos direcionamentos espalhados pelo site
 (início, esta página, FAQ, menu e rodapé).
 
+## FAQ e competências (editados pelo SOMA)
+
+Depois da migração **`soma_v11.sql`** (repositório `nro-pessoal`), duas
+coisas saem do código e passam a ser editadas em **SOMA → Seleção**:
+
+- **As perguntas frequentes** da página inicial, na aba **FAQ**: pergunta,
+  resposta, ordem, publicar/ocultar e o escopo (uma edição específica ou
+  todas). A resposta aceita `*negrito*`, `[texto](https://link)` e linha
+  em branco para separar parágrafos — HTML digitado ali aparece como
+  texto, não é interpretado.
+- **O catálogo de competências** que o formulário de inscrição exibe
+  (tabela `ps_competencias`). Na inscrição, o candidato marca uma vez o
+  que já sabe fazer e duas vezes o que quer desenvolver; as duas listas
+  vão para a ficha dele, e o comitê ajusta durante as fases.
+
+Enquanto a migração não roda, o site usa as listas `FAQ_RESERVA` e
+`COMPETENCIAS_RESERVA`, no topo do `<script>` — vale manter as duas mais
+ou menos em sincronia com o que estiver no banco.
+
 ## Como publicar
 
 O GitHub Pages atende **um domínio por repositório** — e este repositório
