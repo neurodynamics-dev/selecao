@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Gerador local de cartazes A3 e A4 do processo seletivo da NeuroDynamics, por unidade acadêmica da UFMG.">
+<meta name="theme-color" content="#050807">
+<meta name="robots" content="noindex">
+<title>Cartazes | Processo Seletivo NeuroDynamics</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta oficial — brand.neurodynamics.dev */
+  --cortex:#00352F; --axon:#00594F; --soma:#0B7D6E; --synapse:#CEDC00;
+  --void:#050807; --painel:#0B1210; --blackout:#1D1D1F;
+  --ink:#F5F5F7; --aura:#F8F7FF; --nevoa:#9AA5A1; --grafite:#616C68;
+  --ion:#2DD4BF; --vital:#4ADE97; --mielina:#F5C36A; --pulso:#F1806F;
+  --plasma:#7FA7F2; --dendrito:#A78BFA;
+  --line:rgba(245,245,247,.10); --line2:rgba(245,245,247,.2);
+  --card:rgba(255,255,255,.03);
+  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--void);color:var(--ink);font-size:14px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--fd);letter-spacing:-.015em}
+a{color:var(--synapse)}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+::selection{background:var(--synapse);color:var(--cortex)}
+
+/* ============================================================
+   APLICAÇÃO (só na tela — nada daqui vai para o papel)
+   ============================================================ */
+#app{display:grid;grid-template-columns:352px 1fr;min-height:100vh}
+#painel{border-right:1px solid var(--line);background:var(--painel);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 18px 40px}
+#palco{padding:22px 26px 60px;background:
+  radial-gradient(120% 80% at 70% -10%,#0A1613 0%,var(--void) 60%)}
+@media (max-width:1000px){
+  #app{grid-template-columns:1fr}
+  #painel{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+}
+.marca-app{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.marca-app svg{width:26px;height:26px;flex:none}
+.marca-app b{font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em}
+.tag{font-family:var(--fm);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--synapse);border:1px solid rgba(206,220,0,.35);border-radius:999px;padding:2px 8px}
+.subtitulo{color:var(--nevoa);font-size:12.5px;margin:8px 0 18px;line-height:1.55}
+fieldset{border:none;margin:0 0 18px}
+legend, .rotulo{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--grafite);margin-bottom:9px;display:block}
+.campo{margin-bottom:10px}
+.campo label{display:block;font-size:11.5px;color:var(--nevoa);margin-bottom:4px}
+input[type=text],input[type=date],input[type=url],select{width:100%;height:34px;padding:0 10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;font-size:13px}
+input:focus,select:focus{outline:none;border-color:var(--synapse)}
+.opcoes{display:flex;flex-wrap:wrap;gap:6px}
+.opcao{flex:1 1 auto;text-align:center;padding:7px 10px;border:1px solid var(--line);border-radius:9px;
+  font-size:12px;background:rgba(255,255,255,.03);white-space:nowrap;transition:.15s}
+.opcao:hover{border-color:var(--grafite)}
+.opcao[aria-pressed=true]{background:var(--synapse);color:var(--cortex);border-color:var(--synapse);font-weight:600}
+.chave{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:12.5px;color:var(--nevoa);cursor:pointer}
+.chave input{accent-color:var(--synapse);width:15px;height:15px;flex:none;cursor:pointer}
+.grupo{border:1px solid var(--line);border-radius:11px;margin-bottom:8px;overflow:hidden}
+.grupo-topo{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.03)}
+.grupo-topo .bolinha{width:9px;height:9px;border-radius:2px;flex:none}
+.grupo-topo b{font-size:12px;font-weight:600;font-family:var(--fd);flex:1;letter-spacing:0}
+.grupo-topo button{font-family:var(--fm);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--grafite);padding:3px 6px;border-radius:6px}
+.grupo-topo button:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.grupo .itens{padding:4px 10px 8px}
+.grupo .chave{padding:4px 0;font-size:12px}
+.acoes{display:flex;gap:8px;margin:6px 0 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;
+  border-radius:10px;font-family:var(--fd);font-weight:600;font-size:13px;transition:.15s;flex:1}
+.btn.solid{background:var(--synapse);color:var(--cortex)}
+.btn.solid:hover{filter:brightness(1.08)}
+.btn.ghost{border:1px solid var(--line2);background:rgba(255,255,255,.03)}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.nota{font-size:11.5px;color:var(--grafite);line-height:1.6}
+.nota b{color:var(--nevoa);font-weight:600}
+#palco-topo{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+#palco-topo .conta{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--grafite)}
+#zoom{width:130px;accent-color:var(--synapse)}
+#saida{display:flex;flex-wrap:wrap;align-items:flex-start;gap:34px 22px}
+.env{position:relative;flex:none}
+.env::after{content:attr(data-rotulo);position:absolute;left:0;bottom:-19px;
+  font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--grafite)}
+.vazio{border:1px dashed var(--line2);border-radius:14px;padding:40px;color:var(--grafite);
+  font-size:13px;max-width:520px;line-height:1.7}
+
+/* ============================================================
+   FOLHA — a peça impressa. Tudo é dimensionado a partir de
+   --u (1 mm no A4), então o A3 é o mesmo desenho com --k maior.
+   ============================================================ */
+.folha{
+  --k:1;                       /* A4; o A3 é o mesmo desenho com --k maior */
+  --fit:1;                     /* encolhe só o conteúdo, nunca a página */
+  --tit:21;                    /* corpo do título, ajustado por JS */
+  --u:calc(1mm * var(--k) * var(--fit));
+  --larg:210; --alt:297;       /* mm, no A4 */
+  --pad:calc(13 * var(--u));
+  --fg:#F5F5F7; --fg2:#9AA5A1; --fg3:rgba(245,245,247,.55);
+  --bg1:#00352F; --bg2:#00594F; --bg3:#083D36;
+  --grade:rgba(245,245,247,.075);
+  --ac:#CEDC00;                /* acento gráfico: réguas, marcadores, faixa */
+  --ac-txt:var(--ac);          /* acento em texto — trocado no fundo claro */
+  --tira-bg:var(--ac); --tira-fg:#0A0F0E;
+  --borda:rgba(245,245,247,.16);
+  width:calc(var(--larg) * 1mm * var(--k));
+  height:calc(var(--alt) * 1mm * var(--k));
+  position:relative;overflow:hidden;background:var(--bg1);color:var(--fg);
+  font-family:var(--fd);transform-origin:top left;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.folha.a3{--k:1.41421356;}
+.folha[data-fundo="void"]{--bg1:#050807;--bg2:#0B1210;--bg3:#081511}
+.folha[data-fundo="claro"]{
+  --fg:#101614;--fg2:#4E5A57;--fg3:rgba(16,22,20,.6);
+  --bg1:#F5F5F7;--bg2:#E9EDEB;--bg3:#EEF1EF;
+  --grade:rgba(0,53,47,.09);--borda:rgba(16,22,20,.18);
+  --tira-bg:#101614;--tira-fg:#F5F5F7;
+  --ac-txt:#0A4A41;            /* lima não se lê sobre branco */
+}
+/* margem branca para impressora que não imprime até a borda */
+.folha.margem{border:calc(5mm * var(--k)) solid #fff}
+
+.folha .fundo{position:absolute;inset:0;z-index:0}
+.folha .fundo .base{position:absolute;inset:0;
+  background:linear-gradient(152deg,var(--bg1) 0%,var(--bg2) 62%,var(--bg3) 100%)}
+.folha .fundo .grade{position:absolute;inset:0;
+  background-image:linear-gradient(var(--grade) calc(.22 * var(--u)),transparent calc(.22 * var(--u))),
+                   linear-gradient(90deg,var(--grade) calc(.22 * var(--u)),transparent calc(.22 * var(--u)));
+  background-size:calc(12 * var(--u)) calc(12 * var(--u))}
+.folha .fundo .halo{position:absolute;inset:0;
+  background:radial-gradient(58% 42% at 88% -6%, color-mix(in srgb, var(--ac) 26%, transparent) 0%, transparent 70%),
+             radial-gradient(52% 38% at -12% 104%, color-mix(in srgb, var(--ac) 12%, transparent) 0%, transparent 70%)}
+.folha .conteudo{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;
+  padding:var(--pad);overflow:hidden}
+
+/* ---------- topo ---------- */
+.f-topo{display:flex;align-items:center;gap:calc(3 * var(--u));flex:none}
+.f-topo .lockup{display:flex;align-items:center;gap:calc(2.4 * var(--u));margin-right:auto}
+.f-topo .lockup svg{width:calc(9 * var(--u));height:calc(9 * var(--u));display:block}
+.f-topo .lockup b{font-weight:700;font-size:calc(6.4 * var(--u));letter-spacing:-.025em;line-height:1}
+.f-selo{font-family:var(--fm);font-weight:500;font-size:calc(3 * var(--u));letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ac-txt);border:calc(.35 * var(--u)) solid var(--ac-txt);
+  border-radius:999px;padding:calc(1.4 * var(--u)) calc(3.4 * var(--u));white-space:nowrap}
+.f-regua{height:calc(.5 * var(--u));background:var(--ac);width:calc(26 * var(--u));
+  margin:calc(7 * var(--u)) 0 calc(6 * var(--u));flex:none}
+
+/* ---------- corpo ---------- */
+.f-corpo{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.f-eyebrow{font-family:var(--fm);font-weight:500;font-size:calc(3.5 * var(--u));letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ac-txt);margin-bottom:calc(5 * var(--u));line-height:1.4}
+.f-titulo{font-weight:800;line-height:.92;letter-spacing:-.035em;text-transform:uppercase;
+  font-size:calc(var(--tit) * var(--u));margin-bottom:calc(5 * var(--u))}
+.f-titulo em{font-style:normal;color:var(--ac-txt)}
+.f-sub{font-weight:500;font-size:calc(5.6 * var(--u));line-height:1.32;color:var(--fg);
+  max-width:calc(162 * var(--u));margin-bottom:calc(6.5 * var(--u));letter-spacing:-.012em}
+.f-itens{list-style:none;display:flex;flex-direction:column;gap:calc(3 * var(--u));
+  margin-bottom:calc(6.5 * var(--u))}
+.f-itens li{position:relative;padding-left:calc(6.8 * var(--u));font-size:calc(4.35 * var(--u));
+  line-height:1.32;color:var(--fg2);font-weight:500}
+.folha[data-fundo="claro"] .f-itens li{color:#3B4744}
+.f-itens li::before{content:'';position:absolute;left:0;top:calc(1.5 * var(--u));
+  width:calc(3.4 * var(--u));height:calc(.6 * var(--u));background:var(--ac)}
+/* a sobra de espaço da folha se acumula aqui, acima do gancho:
+   título e tópicos ficam no alto, gancho e cursos ancorados embaixo */
+.f-gancho{border-left:calc(.9 * var(--u)) solid var(--ac);padding-left:calc(4.4 * var(--u));
+  font-size:calc(4.7 * var(--u));line-height:1.36;font-weight:600;letter-spacing:-.01em;
+  margin:auto 0 calc(5 * var(--u))}
+.f-cursos{font-family:var(--fm);font-size:calc(3.3 * var(--u));line-height:1.5;color:var(--fg3)}
+.f-cursos b{color:var(--fg2);font-weight:600}
+
+/* ---------- chamada + QR ---------- */
+.f-chamada{flex:none;display:flex;align-items:stretch;gap:calc(5 * var(--u));
+  border-top:calc(.4 * var(--u)) solid var(--borda);padding-top:calc(5.5 * var(--u));
+  margin-top:calc(5.5 * var(--u))}
+.f-qr{flex:none;background:#fff;padding:calc(2.2 * var(--u));border-radius:calc(2 * var(--u));
+  width:calc(34 * var(--u));height:calc(34 * var(--u));display:flex}
+.f-qr svg{width:100%;height:100%;display:block}
+.f-cta{flex:1;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.f-prazo{font-family:var(--fm);font-weight:600;font-size:calc(3.4 * var(--u));letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ac-txt);margin-bottom:calc(1.6 * var(--u))}
+.f-link{font-weight:700;font-size:calc(8 * var(--u));letter-spacing:-.032em;line-height:1;
+  word-break:break-all;margin-bottom:calc(2.4 * var(--u))}
+.f-obs{font-size:calc(3.7 * var(--u));line-height:1.35;color:var(--fg2);font-weight:500}
+.f-prova{flex:none;font-family:var(--fm);font-size:calc(2.7 * var(--u));letter-spacing:.06em;
+  color:var(--fg3);margin-top:calc(4 * var(--u));line-height:1.5}
+
+/* ---------- tiras destacáveis ---------- */
+.folha.com-tiras .conteudo{padding-bottom:calc(43 * var(--u))}
+.f-tiras{position:absolute;left:0;right:0;bottom:0;height:calc(38mm * var(--k));z-index:2;
+  display:flex;background:var(--tira-bg);color:var(--tira-fg)}
+.f-tiras .tira{flex:1;position:relative;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  border-left:calc(.3mm * var(--k)) dashed color-mix(in srgb, var(--tira-fg) 45%, transparent)}
+.f-tiras .tira:first-child{border-left:none}
+.f-tiras .tira span{writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--fm);font-weight:600;font-size:calc(var(--tirafs, 2.5) * 1mm * var(--k));
+  letter-spacing:.04em;white-space:nowrap;line-height:1}
+/* a linha de corte é só a marca tracejada: a instrução de recortar
+   fica no verso, que é o lado escrito para quem afixa */
+.f-corte{position:absolute;left:0;right:0;bottom:calc(38mm * var(--k));z-index:3;height:0;
+  border-top:calc(.3mm * var(--k)) dashed color-mix(in srgb, var(--fg) 38%, transparent)}
+
+/* ============================================================
+   VERSO — instruções de afixação. Fundo claro: gasta menos
+   tinta no duplex e é para ser lido de perto.
+   ============================================================ */
+.verso{--fg:#121816;--fg2:#4E5A57;--bg1:#FFFFFF;background:#fff;color:var(--fg);
+  font-family:var(--f)}
+.verso .conteudo{padding:calc(12 * var(--u))}
+.v-topo{display:flex;align-items:center;gap:calc(3 * var(--u));
+  border-bottom:calc(.5 * var(--u)) solid #121816;padding-bottom:calc(3 * var(--u));flex:none}
+.v-topo .lockup{display:flex;align-items:center;gap:calc(2 * var(--u));margin-right:auto}
+.v-topo .lockup svg{width:calc(7 * var(--u));height:calc(7 * var(--u));display:block}
+.v-topo .lockup b{font-family:var(--fd);font-weight:700;font-size:calc(4.6 * var(--u));
+  letter-spacing:-.02em;line-height:1}
+.v-aviso{font-family:var(--fm);font-weight:600;font-size:calc(2.9 * var(--u));letter-spacing:.14em;
+  text-transform:uppercase;background:#121816;color:#fff;padding:calc(1.4 * var(--u)) calc(3 * var(--u));
+  border-radius:calc(1.4 * var(--u));white-space:nowrap}
+.v-cab{flex:none;margin:calc(6 * var(--u)) 0 calc(5 * var(--u))}
+.v-cab .linha-tag{display:inline-flex;align-items:center;gap:calc(1.8 * var(--u));
+  font-family:var(--fm);font-size:calc(2.9 * var(--u));letter-spacing:.16em;text-transform:uppercase;
+  color:#5A6663;margin-bottom:calc(2.4 * var(--u))}
+.v-cab .linha-tag i{width:calc(2.4 * var(--u));height:calc(2.4 * var(--u));border-radius:calc(.5 * var(--u));
+  background:var(--ac);display:block}
+.v-cab h1{font-size:calc(11 * var(--u));font-weight:700;letter-spacing:-.03em;line-height:1.02}
+.v-cab .fmt{font-family:var(--fm);font-size:calc(3 * var(--u));color:#5A6663;margin-top:calc(2 * var(--u));
+  letter-spacing:.06em}
+.v-corpo{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:calc(7 * var(--u));
+  min-height:0;overflow:hidden}
+.v-bloco{margin-bottom:calc(6 * var(--u))}
+.v-bloco:last-child{margin-bottom:0}
+.v-bloco h2{font-family:var(--fm);font-size:calc(2.9 * var(--u));letter-spacing:.2em;text-transform:uppercase;
+  color:#121816;padding-bottom:calc(1.4 * var(--u));margin-bottom:calc(2.8 * var(--u));
+  border-bottom:calc(.3 * var(--u)) solid #C9D2CF;font-weight:600}
+.v-local{font-size:calc(4 * var(--u));line-height:1.4;font-weight:600;font-family:var(--fd);
+  letter-spacing:-.01em}
+.v-local span{display:block;font-family:var(--f);font-weight:400;font-size:calc(3.4 * var(--u));
+  color:#4E5A57;margin-top:calc(1.4 * var(--u));line-height:1.45}
+.v-lista{list-style:none;display:flex;flex-direction:column;gap:calc(2 * var(--u))}
+.v-lista li{position:relative;padding-left:calc(6 * var(--u));font-size:calc(3.3 * var(--u));
+  line-height:1.4;color:#28322F}
+.v-lista.num{counter-reset:p}
+.v-lista.num li::before{counter-increment:p;content:counter(p);position:absolute;left:0;top:calc(.2 * var(--u));
+  width:calc(4.2 * var(--u));height:calc(4.2 * var(--u));border-radius:50%;background:var(--ac);
+  color:#0A0F0E;font-family:var(--fm);font-size:calc(2.5 * var(--u));font-weight:600;
+  display:flex;align-items:center;justify-content:center}
+.v-lista.trav li::before{content:'';position:absolute;left:0;top:calc(1.3 * var(--u));
+  width:calc(3 * var(--u));height:calc(.5 * var(--u));background:#121816}
+.v-lista.caixa li{padding-left:calc(6.4 * var(--u));min-height:calc(4.6 * var(--u))}
+.v-lista.caixa li::before{content:'';position:absolute;left:0;top:calc(.1 * var(--u));
+  width:calc(4 * var(--u));height:calc(4 * var(--u));border:calc(.4 * var(--u)) solid #121816;
+  border-radius:calc(.8 * var(--u))}
+.v-lista b{font-weight:700}
+.v-faq dt{font-family:var(--fd);font-weight:700;font-size:calc(3.3 * var(--u));
+  letter-spacing:-.01em;margin-bottom:calc(.6 * var(--u))}
+.v-faq dt::before{content:'“'}
+.v-faq dt::after{content:'”'}
+.v-faq dd{font-size:calc(3.1 * var(--u));line-height:1.4;color:#4E5A57;
+  margin-bottom:calc(2.4 * var(--u))}
+.v-faq dd:last-child{margin-bottom:0}
+.v-alerta{background:#F2F5F3;border-left:calc(.9 * var(--u)) solid var(--ac);
+  padding:calc(3 * var(--u)) calc(3.4 * var(--u));font-size:calc(3.2 * var(--u));line-height:1.45;
+  color:#28322F;border-radius:0 calc(1.4 * var(--u)) calc(1.4 * var(--u)) 0}
+.v-alerta b{font-weight:700;color:#121816}
+.v-prazos{display:flex;gap:calc(3 * var(--u));margin-bottom:calc(4 * var(--u))}
+.v-prazo{flex:1;border:calc(.35 * var(--u)) solid #C9D2CF;border-radius:calc(2 * var(--u));
+  padding:calc(2.6 * var(--u)) calc(3 * var(--u))}
+.v-prazo .rot{font-family:var(--fm);font-size:calc(2.5 * var(--u));letter-spacing:.14em;
+  text-transform:uppercase;color:#5A6663;margin-bottom:calc(1 * var(--u))}
+.v-prazo .val{font-family:var(--fd);font-weight:700;font-size:calc(4.6 * var(--u));letter-spacing:-.02em;
+  line-height:1.05}
+.v-registro{flex:none;border-top:calc(.4 * var(--u)) solid #121816;margin-top:calc(5 * var(--u));
+  padding-top:calc(4 * var(--u))}
+.v-registro .campos{display:flex;gap:calc(4 * var(--u));flex-wrap:wrap}
+.v-registro .c{flex:1 1 calc(38 * var(--u));min-width:calc(34 * var(--u))}
+.v-registro .c .rot{font-family:var(--fm);font-size:calc(2.5 * var(--u));letter-spacing:.14em;
+  text-transform:uppercase;color:#5A6663}
+.v-registro .c .risco{border-bottom:calc(.3 * var(--u)) solid #8B9793;height:calc(7 * var(--u))}
+.v-rodape{flex:none;display:flex;justify-content:space-between;gap:calc(4 * var(--u));
+  margin-top:calc(4 * var(--u));font-family:var(--fm);font-size:calc(2.5 * var(--u));
+  color:#7B8582;letter-spacing:.05em;line-height:1.5}
+
+/* ============================================================
+   IMPRESSÃO
+   ============================================================ */
+@media print{
+  html,body{background:#fff!important;color:#000}
+  #painel,#palco-topo{display:none!important}
+  #app{display:block}
+  #palco{padding:0;background:none}
+  #saida{display:block;gap:0}
+  .env{width:auto!important;height:auto!important;margin:0!important;display:block}
+  .env::after{display:none}
+  .folha{transform:none!important;box-shadow:none!important;break-after:page;page-break-after:always;
+    margin:0 auto}
+  .folha:last-child{break-after:auto;page-break-after:auto}
+}
+</style>
+<!-- tamanho do papel, trocado pelo painel -->
+<style id="est-pagina">@page{size:A4 portrait;margin:0}</style>
+</head>
+<body>
+<div id="app">
+
+<aside id="painel">
+  <div class="marca-app">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="16" r="5" fill="#F5F5F7"/><circle cx="23" cy="9.5" r="2.8" fill="#F5F5F7"/><circle cx="23" cy="22.5" r="2.8" fill="#F5F5F7"/><g stroke="#CEDC00" stroke-width="1.7" stroke-linecap="round"><path d="M15 13.8 20.6 10.6"/><path d="M15 18.2 20.6 21.4"/></g></svg>
+    <b>NeuroDynamics</b><span class="tag">Cartazes</span>
+  </div>
+  <p class="subtitulo">Gerador de cartazes A3 e A4 do processo seletivo, por unidade acadêmica da
+    UFMG. Roda inteiro no navegador — nada é enviado a servidor. Imprima pelo botão abaixo e
+    salve em PDF.</p>
+
+  <fieldset>
+    <legend>Campanha</legend>
+    <div class="campo"><label for="c-edicao">Edição</label>
+      <input type="text" id="c-edicao" autocomplete="off"></div>
+    <div class="campo"><label for="c-prazo">Inscrições até</label>
+      <input type="date" id="c-prazo"></div>
+    <div class="campo"><label for="c-retirada">Retirar os cartazes até</label>
+      <input type="date" id="c-retirada"></div>
+    <div class="campo"><label for="c-site">Endereço no cartaz</label>
+      <input type="text" id="c-site" autocomplete="off"></div>
+    <div class="campo"><label for="c-url">Destino do QR</label>
+      <input type="url" id="c-url" autocomplete="off"></div>
+    <div class="campo"><label for="c-contato">Contato no verso</label>
+      <input type="text" id="c-contato" autocomplete="off"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Formato</legend>
+    <div class="opcoes" id="op-formato" role="group" aria-label="Tamanho do papel"></div>
+    <span class="rotulo" style="margin-top:14px">Fundo</span>
+    <div class="opcoes" id="op-fundo" role="group" aria-label="Fundo"></div>
+    <span class="rotulo" style="margin-top:14px">Páginas</span>
+    <div class="opcoes" id="op-lados" role="group" aria-label="Páginas"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Acabamento</legend>
+    <label class="chave"><input type="checkbox" id="c-tiras" checked>
+      Tiras destacáveis com o endereço</label>
+    <label class="chave"><input type="checkbox" id="c-qr" checked>
+      QR code para a inscrição</label>
+    <label class="chave"><input type="checkbox" id="c-margem">
+      Margem branca de 5 mm (impressora sem sangria)</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Unidades</legend>
+    <div class="acoes" style="margin:0 0 10px">
+      <button class="btn ghost" style="height:32px;font-size:12px" onclick="marcarTodas(true)">Marcar todas</button>
+      <button class="btn ghost" style="height:32px;font-size:12px" onclick="marcarTodas(false)">Limpar</button>
+    </div>
+    <div id="grupos"></div>
+  </fieldset>
+
+  <div class="acoes">
+    <button class="btn solid" onclick="window.print()">Imprimir / salvar PDF</button>
+  </div>
+  <p class="nota"><b>Na caixa de impressão:</b> papel no tamanho escolhido, escala 100 %
+    (sem “ajustar à página”), margens “nenhuma” e a opção de <b>gráficos de fundo</b> ligada.
+    Para frente e verso, escolha duplex virando pela <b>borda maior</b>.</p>
+</aside>
+
+<main id="palco">
+  <div id="palco-topo">
+    <span class="conta" id="conta"></span>
+    <label class="conta" for="zoom" style="margin-left:auto">Prévia</label>
+    <input type="range" id="zoom" min="18" max="100" value="42" aria-label="Zoom da prévia">
+    <span class="conta" id="zoom-val">42 %</span>
+  </div>
+  <div id="saida"></div>
+</main>
+
+</div>
+<script>
+/* ============================================================
+   CAMPANHA — o que muda a cada edição do processo seletivo.
+   Os mesmos campos estão editáveis no painel da esquerda; o que
+   está aqui é só o valor inicial. As datas seguem o cronograma
+   publicado em selecao.neurodynamics.dev.
+   ============================================================ */
+const CAMPANHA = {
+  edicao:   'Processo Seletivo 2026',
+  prazo:    '2026-08-23',   /* fim das inscrições */
+  retirada: '2026-08-30',   /* data de retirar os cartazes dos murais */
+  site:     'selecao.neurodynamics.dev',
+  url:      'https://selecao.neurodynamics.dev',
+  contato:  'hello@neurodynamics.dev',
+  prova:    'LABBIO · Escola de Engenharia · UFMG   —   Jornal Nacional, CNN e Record · Cybathlon 2024, Suíça'
+};
+
+/* ============================================================
+   LINHAS DE CONHECIMENTO — é daqui que sai a mensagem de cada
+   cartaz, no mesmo espírito das mensagens que a gente manda
+   separadas por área nos grupos. Uma linha reúne várias
+   unidades acadêmicas; o texto grande é o mesmo para todas
+   elas, e o que muda por unidade é o gancho e a lista de cursos.
+
+   titulo aceita quebra de linha com \n — é o desenho do cartaz,
+   não a gramática, que manda na quebra.
+   ============================================================ */
+const LINHAS = {
+  eng: {
+    nome:'Engenharia, computação e exatas',
+    cor:'#CEDC00',
+    titulo:'Você projeta.\nAlguém volta\na pedalar.',
+    sub:'Firmware, placa, CAD e modelo — em dispositivos que só terminam quando funcionam no corpo de uma pessoa.',
+    itens:[
+      'Firmware que lê sensor e comanda estímulo elétrico em tempo real',
+      'Placa projetada, montada, soldada e depurada até o sinal sair limpo',
+      'Peça modelada em CAD, impressa, quebrada, corrigida e impressa de novo',
+      'Sinal fisiológico tratado e modelo treinado para virar decisão'
+    ]
+  },
+  saude: {
+    nome:'Saúde e ciências da vida',
+    cor:'#2DD4BF',
+    titulo:'Sem clínica,\né só um protótipo\nbonito.',
+    sub:'A engenharia entrega o dispositivo. Quem traduz necessidade clínica em requisito — e diz se aquilo funciona no uso real — é você.',
+    itens:[
+      'Levantar, com paciente e profissional, o que o dispositivo precisa resolver',
+      'Desenhar o protocolo de teste e conduzir as sessões de validação',
+      'Acompanhar treinos e ensaios, medindo o que melhora e o que não melhora',
+      'Cuidar da documentação ética da pesquisa e da submissão ao comitê'
+    ]
+  },
+  comunicacao: {
+    nome:'Comunicação, artes e design',
+    cor:'#F5C36A',
+    titulo:'A tecnologia\njá existe.\nFalta quem conte.',
+    sub:'A equipe já foi ao Jornal Nacional e ao Cybathlon. E tem muita coisa acontecendo na bancada que ninguém ainda viu.',
+    itens:[
+      'Gravar e editar os bastidores do laboratório, dos testes e das competições',
+      'Transformar artigo e protótipo em linguagem que a família do paciente entende',
+      'Cuidar da identidade visual da equipe e de cada projeto',
+      'Conduzir a relação com a imprensa quando a reportagem bate à porta'
+    ]
+  },
+  gestao: {
+    nome:'Gestão, negócios e direito',
+    cor:'#7FA7F2',
+    titulo:'Sem recurso,\no protótipo não sai\nda bancada.',
+    sub:'Edital, patrocínio, convênio, patente e prestação de contas: a parte que sustenta a engenharia — e que quase ninguém quer fazer.',
+    itens:[
+      'Garimpar editais de fomento e escrever as propostas',
+      'Prospectar patrocinadores e sustentar a relação com quem já apoia',
+      'Negociar convênios com hospitais, laboratórios e empresas',
+      'Cuidar da propriedade intelectual e da prestação de contas de cada recurso'
+    ]
+  },
+  pessoas: {
+    nome:'Pessoas, educação e humanas',
+    cor:'#4ADE97',
+    titulo:'Tecnologia\né feita\npor gente.',
+    sub:'Uma equipe multidisciplinar de estudantes que funciona como organização: sprint, avaliação, formação e processo. Alguém precisa cuidar disso.',
+    itens:[
+      'Conduzir as sprints, acompanhar as entregas e destravar o que emperrou',
+      'Recrutar, integrar e formar cada nova turma de trainees',
+      'Conduzir as avaliações periódicas e os planos de desenvolvimento',
+      'Manter processo e documentação de pé, para o conhecimento não se formar junto com a turma'
+    ]
+  },
+  campus: {
+    nome:'Espaços comuns do campus',
+    cor:'#CEDC00',
+    titulo:'Não precisa ser\nda engenharia.',
+    sub:'Uma equipe da UFMG que desenvolve tecnologia para a saúde, do primeiro requisito à validação com quem vai usar. E precisa de gente de todo curso para isso.',
+    itens:[
+      'Firmware, eletrônica e CAD de dispositivos que terminam em teste com paciente',
+      'Protocolo clínico, validação com usuário e ética em pesquisa',
+      'Vídeo, design, redação e assessoria de imprensa',
+      'Editais, patrocínio, convênios e propriedade intelectual'
+    ]
+  }
+};
+
+/* ============================================================
+   UNIDADES — uma versão de cartaz para cada uma.
+
+   linha    qual mensagem das LINHAS o cartaz usa
+   local    onde a unidade fica: é o que sai no verso, para quem
+            vai afixar (campus, endereço e prédio)
+   aviso    alerta de deslocamento, para quem fica fora do
+            Campus Pampulha
+   gancho   a frase que fala diretamente com essa unidade
+   cursos   convite, não exigência — a mesma lista que o site
+            usa em "De onde você vem"
+   pontos   onde colar dentro do domínio da unidade, em ordem de
+            prioridade. Confira no dia: mural muda de lugar.
+   ============================================================ */
+const PAMPULHA = 'Campus Pampulha — Av. Antônio Carlos, 6627';
+const SAUDE    = 'Campus Saúde — Av. Prof. Alfredo Balena, 190, Santa Efigênia';
+
+const UNIDADES = [
+  /* ---------------- Engenharia, computação e exatas ---------------- */
+  { id:'eng', linha:'eng', nome:'Escola de Engenharia', curto:'Escola de Engenharia',
+    campus:PAMPULHA, predio:'Blocos 1 e 2, junto ao Centro de Atividades Didáticas',
+    gancho:'A equipe fica a alguns metros daqui: o LABBIO é na própria Escola de Engenharia.',
+    cursos:'Elétrica · Controle e Automação · Mecânica · Sistemas · Produção · Aeroespacial · Civil · Química · Metalúrgica · Minas · Ambiental',
+    pontos:['Hall da entrada principal, no mural de avisos gerais',
+            'Murais dos diretórios e centros acadêmicos',
+            'Corredor da cantina e área de convivência',
+            'Salas de estudo e espaços de permanência do bloco 2',
+            'Entrada dos laboratórios de graduação',
+            'Quadros de aviso dos colegiados de curso'] },
+
+  { id:'icex', linha:'eng', nome:'Instituto de Ciências Exatas', curto:'ICEx',
+    campus:PAMPULHA, predio:'Prédios do ICEx, ao lado da Biblioteca Universitária',
+    gancho:'Metade do nosso trabalho é problema de exatas mal disfarçado de problema clínico: sinal, modelo e dado.',
+    cursos:'Ciência da Computação · Sistemas de Informação · Matemática · Matemática Computacional · Estatística · Física · Química · Ciências Atuariais',
+    pontos:['Hall de entrada do instituto',
+            'Murais do Departamento de Ciência da Computação',
+            'Corredor das salas de aula e dos laboratórios de ensino',
+            'Biblioteca setorial de Ciências Exatas',
+            'Cantina e área de convivência',
+            'Entrada do auditório'] },
+
+  { id:'coltec', linha:'eng', nome:'COLTEC — Colégio Técnico', curto:'COLTEC',
+    campus:PAMPULHA, predio:'Colégio Técnico da UFMG, dentro do campus',
+    gancho:'Aluno do COLTEC entra na equipe — e costuma chegar já sabendo se virar numa bancada.',
+    cursos:'Eletrônica · Informática · Química e demais cursos técnicos',
+    pontos:['Mural da entrada principal',
+            'Corredor das salas de aula',
+            'Quadro de avisos do grêmio estudantil',
+            'Cantina e pátio de convivência',
+            'Entrada dos laboratórios técnicos'] },
+
+  { id:'igc', linha:'eng', nome:'Instituto de Geociências', curto:'IGC',
+    campus:PAMPULHA, predio:'Prédio do IGC, próximo à Escola de Engenharia',
+    gancho:'Quem já mediu coisa em campo se acha rápido num projeto de instrumentação.',
+    cursos:'Geografia · Geologia · Turismo · Ciências Socioambientais',
+    pontos:['Hall de entrada',
+            'Murais dos diretórios acadêmicos',
+            'Corredor das salas de aula',
+            'Biblioteca setorial',
+            'Área de convivência'] },
+
+  /* ---------------- Saúde e ciências da vida ---------------- */
+  { id:'eeffto', linha:'saude', nome:'Escola de Educação Física, Fisioterapia e Terapia Ocupacional', curto:'EEFFTO',
+    campus:PAMPULHA, predio:'Prédio da EEFFTO, com ginásio e clínicas-escola',
+    gancho:'Fisioterapia e TO estão no centro do que fazemos: é a leitura de vocês sobre o movimento que diz se o dispositivo presta.',
+    cursos:'Fisioterapia · Terapia Ocupacional · Educação Física',
+    pontos:['Hall da entrada principal',
+            'Murais dos diretórios acadêmicos',
+            'Corredor das clínicas-escola de Fisioterapia e TO',
+            'Quadro de avisos de estágio e extensão',
+            'Entrada do ginásio e dos laboratórios de movimento',
+            'Cantina e área de convivência'] },
+
+  { id:'medicina', linha:'saude', nome:'Faculdade de Medicina', curto:'Faculdade de Medicina',
+    campus:SAUDE, predio:'Prédio da Faculdade de Medicina, vizinho ao Hospital das Clínicas',
+    aviso:'Fica no Campus Saúde, na região hospitalar — combine a ida com quem já tem aula por lá.',
+    gancho:'Requisito clínico mal levantado vira protótipo inútil. A medicina entra no começo do projeto, não no fim.',
+    cursos:'Medicina · Fonoaudiologia',
+    pontos:['Hall de entrada principal',
+            'Murais do centro acadêmico',
+            'Corredor de acesso à biblioteca',
+            'Áreas de convivência e cantina',
+            'Corredor de ligação com o Hospital das Clínicas'] },
+
+  { id:'enfermagem', linha:'saude', nome:'Escola de Enfermagem', curto:'Escola de Enfermagem',
+    campus:SAUDE, predio:'Prédio da Escola de Enfermagem, no Campus Saúde',
+    aviso:'Fica no Campus Saúde — aproveite a mesma ida da Faculdade de Medicina.',
+    gancho:'Quem acompanha o uso de perto enxerga o que o laboratório não enxerga.',
+    cursos:'Enfermagem · Gestão de Serviços de Saúde',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula',
+            'Área de convivência e cantina'] },
+
+  { id:'icb', linha:'saude', nome:'Instituto de Ciências Biológicas', curto:'ICB',
+    campus:PAMPULHA, predio:'Prédios do ICB, no eixo central do campus',
+    gancho:'Fisiologia aplicada de verdade: estímulo elétrico, resposta muscular e dado coletado em gente.',
+    cursos:'Ciências Biológicas e demais cursos do instituto',
+    pontos:['Hall de entrada',
+            'Murais dos departamentos e do diretório acadêmico',
+            'Corredor dos laboratórios de ensino',
+            'Cantina e área de convivência'] },
+
+  { id:'farmacia', linha:'saude', nome:'Faculdade de Farmácia', curto:'Faculdade de Farmácia',
+    campus:PAMPULHA, predio:'Prédio da Faculdade de Farmácia, no Campus Pampulha',
+    gancho:'Protocolo, controle e documentação: pesquisa clínica vive disso o tempo inteiro.',
+    cursos:'Farmácia',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula e dos laboratórios',
+            'Área de convivência'] },
+
+  { id:'odonto', linha:'saude', nome:'Faculdade de Odontologia', curto:'Faculdade de Odontologia',
+    campus:PAMPULHA, predio:'Prédio da Faculdade de Odontologia, no Campus Pampulha',
+    gancho:'Trabalho de precisão, material biocompatível e paciente na cadeira: é mais perto da bancada do que parece.',
+    cursos:'Odontologia',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das clínicas de atendimento',
+            'Área de convivência e cantina'] },
+
+  { id:'veterinaria', linha:'saude', nome:'Escola de Veterinária', curto:'Escola de Veterinária',
+    campus:PAMPULHA, predio:'Escola de Veterinária, na porção norte do campus',
+    gancho:'Anatomia, biomecânica e cuidado com o vivo — a ponte com a engenharia é mais curta do que parece.',
+    cursos:'Medicina Veterinária · Aquacultura',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula',
+            'Área de convivência e cantina'] },
+
+  /* ---------------- Comunicação, artes e design ---------------- */
+  { id:'eba', linha:'comunicacao', nome:'Escola de Belas Artes', curto:'Escola de Belas Artes',
+    campus:PAMPULHA, predio:'Escola de Belas Artes, no Campus Pampulha',
+    gancho:'A equipe tem marca, projeto e história para contar. Falta a mão de quem sabe desenhar isso.',
+    cursos:'Design · Design de Moda · Artes Visuais · Cinema de Animação e Artes Digitais · Conservação e Restauração',
+    pontos:['Hall de entrada e galeria',
+            'Murais dos ateliês e dos cursos',
+            'Corredor das salas de aula',
+            'Área de convivência e cantina'] },
+
+  { id:'fafich-com', linha:'comunicacao', nome:'FAFICH · Comunicação Social', curto:'FAFICH — Comunicação',
+    campus:PAMPULHA, predio:'FAFICH — ala da Comunicação Social',
+    gancho:'Uma equipe que já foi ao Jornal Nacional e ainda não tem quem cuide da pauta.',
+    cursos:'Jornalismo · Publicidade e Propaganda · Relações Públicas',
+    pontos:['Murais do diretório acadêmico de Comunicação',
+            'Corredor das salas do curso e dos laboratórios de rádio e TV',
+            'Hall de entrada da FAFICH',
+            'Entrada do auditório',
+            'Cantina e área de convivência'] },
+
+  { id:'fale', linha:'comunicacao', nome:'Faculdade de Letras', curto:'FALE',
+    campus:PAMPULHA, predio:'Faculdade de Letras, no Campus Pampulha',
+    gancho:'Transformar artigo científico em frase que a família do paciente entende é trabalho de quem escreve bem.',
+    cursos:'Letras, em todas as habilitações',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula',
+            'Biblioteca setorial',
+            'Cantina e área de convivência'] },
+
+  { id:'eci', linha:'comunicacao', nome:'Escola de Ciência da Informação', curto:'ECI',
+    campus:PAMPULHA, predio:'Escola de Ciência da Informação, no Campus Pampulha',
+    gancho:'A equipe produz muito e registra de menos. Organizar informação aqui é trabalho de verdade.',
+    cursos:'Biblioteconomia · Arquivologia · Museologia',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula',
+            'Área de convivência'] },
+
+  { id:'musica', linha:'comunicacao', nome:'Escola de Música', curto:'Escola de Música',
+    campus:PAMPULHA, predio:'Escola de Música, no Campus Pampulha',
+    gancho:'Metade da produção audiovisual da equipe é, no fundo, problema de áudio.',
+    cursos:'Música, em todas as habilitações',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de estudo e de ensaio',
+            'Entrada da sala de concertos'] },
+
+  { id:'arquitetura', linha:'comunicacao', nome:'Escola de Arquitetura', curto:'Escola de Arquitetura',
+    campus:'Rua Paraíba, 697 — Savassi', predio:'Escola de Arquitetura, fora do campus',
+    aviso:'Fica na Savassi, não no Campus Pampulha. Programe o deslocamento e leve cartazes de outras unidades da região no mesmo dia.',
+    gancho:'Projeto, maquete, protótipo, correção, projeto de novo. O método é o mesmo — muda a escala.',
+    cursos:'Arquitetura e Urbanismo',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor dos ateliês de projeto',
+            'Área de convivência e cantina'] },
+
+  /* ---------------- Gestão, negócios e direito ---------------- */
+  { id:'face', linha:'gestao', nome:'Faculdade de Ciências Econômicas', curto:'FACE',
+    campus:PAMPULHA, predio:'FACE, no Campus Pampulha',
+    gancho:'Orçamento, patrocínio e prestação de contas: quando isso trava, a bancada para junto.',
+    cursos:'Administração · Ciências Econômicas · Ciências Contábeis · Controladoria e Finanças · Relações Econômicas Internacionais',
+    pontos:['Hall de entrada',
+            'Murais dos diretórios acadêmicos',
+            'Corredor das salas de aula',
+            'Biblioteca setorial',
+            'Cantina e área de convivência'] },
+
+  { id:'direito', linha:'gestao', nome:'Faculdade de Direito', curto:'Faculdade de Direito',
+    campus:'Av. João Pinheiro, 100 — Centro', predio:'Faculdade de Direito, fora do campus',
+    aviso:'Fica no Centro, não no Campus Pampulha. Vale juntar com a ida ao Campus Saúde no mesmo dia.',
+    gancho:'Convênio, contrato de parceria e propriedade intelectual: tem trabalho jurídico real esperando.',
+    cursos:'Direito · Ciências do Estado',
+    pontos:['Hall de entrada principal',
+            'Murais do centro acadêmico',
+            'Corredor das salas de aula',
+            'Biblioteca e área de convivência'] },
+
+  /* ---------------- Pessoas, educação e humanas ---------------- */
+  { id:'fafich-hum', linha:'pessoas', nome:'FAFICH · Psicologia e humanas', curto:'FAFICH — Psicologia e humanas',
+    campus:PAMPULHA, predio:'FAFICH — alas da Psicologia e das ciências humanas',
+    gancho:'Gente é a parte difícil de qualquer equipe. Inclusive de uma que faz engenharia.',
+    cursos:'Psicologia · Ciências Sociais · Filosofia · História · Antropologia',
+    pontos:['Murais do diretório acadêmico de Psicologia',
+            'Corredor das salas de aula das humanas',
+            'Hall de entrada da FAFICH',
+            'Cantina e área de convivência'] },
+
+  { id:'fae', linha:'pessoas', nome:'Faculdade de Educação', curto:'FaE',
+    campus:PAMPULHA, predio:'Faculdade de Educação, no Campus Pampulha',
+    gancho:'Formar uma turma de trainees é projeto pedagógico — e a gente faz isso a cada processo seletivo.',
+    cursos:'Pedagogia e licenciaturas',
+    pontos:['Hall de entrada',
+            'Murais do diretório acadêmico',
+            'Corredor das salas de aula',
+            'Área de convivência'] },
+
+  /* ---------------- Espaços comuns ---------------- */
+  { id:'campus-pampulha', linha:'campus', nome:'Espaços comuns do Campus Pampulha', curto:'Campus Pampulha',
+    campus:PAMPULHA, predio:'Áreas de circulação compartilhadas entre as unidades',
+    eyebrow:'Para quem passa por aqui todo dia',
+    gancho:'Somos uma equipe da Escola de Engenharia — mas metade do que fazemos não é engenharia.',
+    cursos:'Engenharias · Saúde · Comunicação e artes · Gestão e negócios · Humanas · Ensino técnico — a lista é convite, não exigência',
+    pontos:['Restaurante Universitário Setorial I — entrada e área da fila',
+            'Restaurante Universitário Setorial II — entrada e área da fila',
+            'Biblioteca Universitária — hall e murais de avisos',
+            'Centros de Atividades Didáticas (CAD 1, 2 e 3)',
+            'Pontos de ônibus internos e paradas de maior movimento',
+            'Praça de Serviços e entorno do DCE'] },
+
+  { id:'campus-saude', linha:'campus', nome:'Espaços comuns do Campus Saúde', curto:'Campus Saúde',
+    campus:SAUDE, predio:'Áreas de circulação compartilhadas do Campus Saúde',
+    aviso:'Fica na região hospitalar. Um dia só resolve Medicina, Enfermagem e as áreas comuns.',
+    eyebrow:'Para quem passa por aqui todo dia',
+    gancho:'A tecnologia que a gente constrói termina em atendimento. Faz sentido que comece por aqui também.',
+    cursos:'Engenharias · Saúde · Comunicação e artes · Gestão e negócios · Humanas · Ensino técnico — a lista é convite, não exigência',
+    pontos:['Restaurante Universitário do Campus Saúde',
+            'Hall de entrada e murais de avisos gerais',
+            'Biblioteca do campus',
+            'Corredores de circulação entre as unidades'] }
+];
+
+/* ============================================================
+   AFIXAÇÃO — o que vale para qualquer unidade. Sai no verso de
+   todos os cartazes, junto com os pontos daquela unidade.
+   ============================================================ */
+const AFIXACAO = {
+  regras:[
+    'Peça autorização antes: secretaria da unidade, portaria ou o diretório acadêmico dono do mural. Cartaz sem autorização costuma durar uma hora.',
+    'Fita crepe nos quatro cantos, por trás. Nunca cola, grampo ou fita transparente em parede pintada, vidro, madeira envernizada ou porta corta-fogo.',
+    'Na altura dos olhos, mais ou menos 1,60 m do chão, em parede lisa e bem iluminada.',
+    'Não cubra cartaz de outra entidade, aviso oficial, sinalização de emergência ou extintor.',
+    'Um cartaz por mural. Dois lado a lado viram poluição visual e saem no mesmo dia.'
+  ],
+  levar:[
+    'Cartazes impressos e conferidos, frente e verso',
+    'Fita crepe e tesoura ou estilete',
+    'Celular, para fotografar cada ponto afixado',
+    'Este verso, para anotar onde cada cartaz ficou'
+  ],
+  /* só entra no verso quando o cartaz sai com tiras destacáveis */
+  tiras:'Recorte as tiras da base pela linha tracejada, com estilete, antes de afixar. Sem o corte ninguém destaca nada.',
+  depois:[
+    'Mande no grupo a foto de cada cartaz, dizendo o ponto exato',
+    'Quem se inscrever marca *Cartazes* em “Como soube do processo?”: é assim que medimos o retorno de cada unidade',
+    'Volte para retirar tudo até a data de retirada — cartaz vencido no mural queima a próxima campanha'
+  ],
+  /* respostas curtas para quem parar você no corredor; as versões
+     completas estão no FAQ de selecao.neurodynamics.dev */
+  perguntas:[
+    ['É pago?',
+     'Não, a participação é voluntária. O que se leva é responsabilidade real sobre uma entrega, portfólio próprio e uma rede que continua depois da graduação.'],
+    ['Preciso ter experiência?',
+     'Não. O período trainee existe justamente para dar a base, acompanhado pelos membros da equipe.'],
+    ['Tem que ser da engenharia?',
+     'Não. A equipe é multidisciplinar e a inscrição é aberta a qualquer estudante, inclusive do ensino técnico.'],
+    ['Como me inscrevo?',
+     'Pelo site, sem taxa e sem criar conta. O candidato recebe um protocolo e acompanha tudo com ele.']
+  ]
+};
+</script>
+<script>
+/* ============================================================
+   QR — codificador local (modo byte), sem dependência externa.
+   Devolve a matriz e um <svg> de caminho único, que sai nítido
+   na impressão em qualquer tamanho. Versões 1 a 10, níveis de
+   correção L/M/Q/H. Conferido módulo a módulo contra o segno.
+   ============================================================ */
+const QR = (() => {
+  const EXP = new Array(512), LOG = new Array(256);
+  for (let i = 0, x = 1; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 0x100) x ^= 0x11D; }
+  for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  const mul = (a, b) => (a === 0 || b === 0) ? 0 : EXP[LOG[a] + LOG[b]];
+
+  /* por versão: [cw de correção por bloco, blocos g1, dados g1, blocos g2, dados g2] */
+  const BLOCOS = {
+    L: [[7,1,19,0,0],[10,1,34,0,0],[15,1,55,0,0],[20,1,80,0,0],[26,1,108,0,0],
+        [18,2,68,0,0],[20,2,78,0,0],[24,2,97,0,0],[30,2,116,0,0],[18,2,68,2,69]],
+    M: [[10,1,16,0,0],[16,1,28,0,0],[26,1,44,0,0],[18,2,32,0,0],[24,2,43,0,0],
+        [16,4,27,0,0],[18,4,31,0,0],[22,2,38,2,39],[22,3,36,2,37],[26,4,43,1,44]],
+    Q: [[13,1,13,0,0],[22,1,22,0,0],[18,2,17,0,0],[26,2,24,0,0],[18,2,15,2,16],
+        [24,4,19,0,0],[18,2,14,4,15],[22,4,18,2,19],[20,4,16,4,17],[24,6,19,2,20]],
+    H: [[17,1,9,0,0],[28,1,16,0,0],[22,2,13,0,0],[16,4,9,0,0],[22,2,11,2,12],
+        [28,4,15,0,0],[26,4,13,1,14],[26,4,14,2,15],[24,4,12,4,13],[28,6,15,2,16]]
+  };
+  const ALINHAM = [[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50]];
+  const NIVEL_BITS = { L:1, M:0, Q:3, H:2 };
+
+  function geradorRS(n){
+    let g = [1];
+    for (let i = 0; i < n; i++){
+      const ng = new Array(g.length + 1).fill(0);
+      for (let j = 0; j < g.length; j++){
+        ng[j]     ^= g[j];
+        ng[j + 1] ^= mul(g[j], EXP[i]);
+      }
+      g = ng;
+    }
+    return g;
+  }
+  function restoRS(dados, nEc){
+    const g = geradorRS(nEc), r = new Array(nEc).fill(0);
+    for (const b of dados){
+      const f = b ^ r[0];
+      r.shift(); r.push(0);
+      for (let i = 0; i < nEc; i++) r[i] ^= mul(g[i + 1], f);
+    }
+    return r;
+  }
+
+  const bytesUtf8 = s => Array.from(new TextEncoder().encode(s));
+  const capacidade = (v, nivel) => {
+    const [, b1, d1, b2, d2] = BLOCOS[nivel][v - 1];
+    return b1 * d1 + b2 * d2;
+  };
+
+  function codewords(texto, versao, nivel){
+    const dados = bytesUtf8(texto);
+    const cap = capacidade(versao, nivel);
+    const bits = [];
+    const push = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+    push(0b0100, 4);                          /* modo byte */
+    push(dados.length, versao <= 9 ? 8 : 16); /* contador de caracteres */
+    for (const b of dados) push(b, 8);
+    for (let i = 0; i < 4 && bits.length < cap * 8; i++) bits.push(0);   /* terminador */
+    while (bits.length % 8) bits.push(0);                               /* alinha em byte */
+    const cw = [];
+    for (let i = 0; i < bits.length; i += 8){
+      let b = 0; for (let j = 0; j < 8; j++) b = (b << 1) | bits[i + j];
+      cw.push(b);
+    }
+    const PAD = [0xEC, 0x11];
+    for (let i = 0; cw.length < cap; i++) cw.push(PAD[i % 2]);
+
+    /* blocos, correção de erro e intercalação */
+    const [nEc, b1, d1, b2, d2] = BLOCOS[nivel][versao - 1];
+    const blocos = [], ecs = [];
+    let p = 0;
+    for (let i = 0; i < b1; i++){ blocos.push(cw.slice(p, p + d1)); p += d1; }
+    for (let i = 0; i < b2; i++){ blocos.push(cw.slice(p, p + d2)); p += d2; }
+    for (const bl of blocos) ecs.push(restoRS(bl, nEc));
+    const saida = [], maxD = Math.max(d1, d2);
+    for (let i = 0; i < maxD; i++) for (const bl of blocos) if (i < bl.length) saida.push(bl[i]);
+    for (let i = 0; i < nEc; i++) for (const e of ecs) saida.push(e[i]);
+    return saida;
+  }
+
+  function esqueleto(versao){
+    const n = versao * 4 + 17;
+    const m = Array.from({length:n}, () => new Array(n).fill(null));
+    const marca = (r, c, v) => { if (r >= 0 && r < n && c >= 0 && c < n) m[r][c] = v; };
+    for (const [br, bc] of [[0,0],[0,n-7],[n-7,0]])           /* localizadores e separadores */
+      for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++){
+        const dentro = r >= 0 && r <= 6 && c >= 0 && c <= 6;
+        const anel = r === 0 || r === 6 || c === 0 || c === 6;
+        const miolo = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+        marca(br + r, bc + c, dentro ? (anel || miolo ? 1 : 0) : 0);
+      }
+    const pos = ALINHAM[versao - 1];                          /* alinhamento */
+    for (const r of pos) for (const c of pos){
+      if ((r <= 7 && c <= 7) || (r <= 7 && c >= n - 8) || (r >= n - 8 && c <= 7)) continue;
+      for (let dr = -2; dr <= 2; dr++) for (let dc = -2; dc <= 2; dc++)
+        marca(r + dr, c + dc, (Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0)) ? 1 : 0);
+    }
+    for (let i = 8; i < n - 8; i++){                          /* temporizadores */
+      marca(6, i, i % 2 === 0 ? 1 : 0); marca(i, 6, i % 2 === 0 ? 1 : 0);
+    }
+    marca(n - 8, 8, 1);                                       /* módulo escuro */
+    for (let i = 0; i < 9; i++){                              /* reserva do formato */
+      if (m[8][i] === null) marca(8, i, 0);
+      if (m[i][8] === null) marca(i, 8, 0);
+    }
+    for (let i = 0; i < 8; i++){ marca(8, n - 1 - i, 0); marca(n - 1 - i, 8, 0); }
+    if (versao >= 7)                                          /* reserva da versão */
+      for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++){
+        marca(n - 11 + j, i, 0); marca(i, n - 11 + j, 0);
+      }
+    return m;
+  }
+
+  function preenche(m, cw, versao){
+    const n = m.length;
+    const reservado = esqueleto(versao).map(l => l.map(v => v !== null));
+    const bits = [];
+    for (const b of cw) for (let i = 7; i >= 0; i--) bits.push((b >> i) & 1);
+    let i = 0, subindo = true;
+    for (let col = n - 1; col > 0; col -= 2){
+      if (col === 6) col--;                                   /* pula a coluna do temporizador */
+      for (let k = 0; k < n; k++){
+        const linha = subindo ? n - 1 - k : k;
+        for (const c of [col, col - 1]){
+          if (reservado[linha][c]) continue;
+          m[linha][c] = i < bits.length ? bits[i] : 0;
+          i++;
+        }
+      }
+      subindo = !subindo;
+    }
+    return reservado;
+  }
+
+  const MASCARAS = [
+    (r,c) => (r + c) % 2 === 0,
+    (r) => r % 2 === 0,
+    (r,c) => c % 3 === 0,
+    (r,c) => (r + c) % 3 === 0,
+    (r,c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+    (r,c) => (r * c) % 2 + (r * c) % 3 === 0,
+    (r,c) => (((r * c) % 2 + (r * c) % 3) % 2) === 0,
+    (r,c) => (((r + c) % 2 + (r * c) % 3) % 2) === 0
+  ];
+
+  function bitsFormato(nivel, mascara){
+    const v = (NIVEL_BITS[nivel] << 3) | mascara;
+    let d = v << 10;
+    for (let i = 4; i >= 0; i--) if (d & (1 << (i + 10))) d ^= 0x537 << i;
+    return ((v << 10) | d) ^ 0x5412;
+  }
+  function bitsVersao(versao){
+    let d = versao << 12;
+    for (let i = 5; i >= 0; i--) if (d & (1 << (i + 12))) d ^= 0x1F25 << i;
+    return (versao << 12) | d;
+  }
+  function aplicaFormato(m, nivel, mascara){
+    const n = m.length, f = bitsFormato(nivel, mascara), bit = i => (f >> i) & 1;
+    for (let i = 0; i <= 5; i++) m[i][8] = bit(i);
+    m[7][8] = bit(6);
+    m[8][8] = bit(7);
+    m[8][7] = bit(8);
+    for (let i = 9; i <= 14; i++) m[8][14 - i] = bit(i);
+    for (let i = 0; i <= 7; i++)  m[8][n - 1 - i] = bit(i);
+    for (let i = 8; i <= 14; i++) m[n - 15 + i][8] = bit(i);
+    m[n - 8][8] = 1;
+  }
+  function aplicaVersao(m, versao){
+    if (versao < 7) return;
+    const n = m.length, v = bitsVersao(versao);
+    for (let i = 0; i < 18; i++){
+      const b = (v >> i) & 1, lin = Math.floor(i / 3), col = i % 3;
+      m[n - 11 + col][lin] = b;
+      m[lin][n - 11 + col] = b;
+    }
+  }
+
+  function penalidade(m){
+    const n = m.length; let p = 0;
+    const conta = linha => {
+      let run = 1;
+      for (let i = 1; i < n; i++){
+        if (linha[i] === linha[i - 1]) run++;
+        else { if (run >= 5) p += run - 2; run = 1; }
+      }
+      if (run >= 5) p += run - 2;
+    };
+    for (let r = 0; r < n; r++) conta(m[r]);
+    for (let c = 0; c < n; c++) conta(m.map(l => l[c]));
+    for (let r = 0; r < n - 1; r++) for (let c = 0; c < n - 1; c++)
+      if (m[r][c] === m[r][c+1] && m[r][c] === m[r+1][c] && m[r][c] === m[r+1][c+1]) p += 3;
+    /* padrão 1:1:3:1:1 com área clara de 4 módulos antes ou depois */
+    const ALVO = [1,0,1,1,1,0,1];
+    const acha = (v, de) => {
+      for (let i = de; i + 7 <= n; i++) if (ALVO.every((x, k) => v[i + k] === x)) return i;
+      return -1;
+    };
+    const claro = (v, a, b) => {
+      for (let i = Math.max(a, 0); i < Math.min(b, n); i++) if (v[i]) return false;
+      return true;
+    };
+    const ocorrencias = v => {
+      let c = 0, i = acha(v, 0);
+      while (i !== -1){
+        let prox = i + 7;
+        if (i === 0 || i === n - 7 || claro(v, i - 4, i) || claro(v, prox, prox + 4)) c += 40;
+        else prox = i + 4;
+        i = acha(v, prox);
+      }
+      return c;
+    };
+    for (let r = 0; r < n; r++){ p += ocorrencias(m[r]); p += ocorrencias(m.map(l => l[r])); }
+    let escuros = 0;
+    for (const l of m) for (const v of l) escuros += v;
+    p += Math.floor(Math.abs(escuros * 100 / (n * n) - 50) / 5) * 10;
+    return p;
+  }
+
+  function matriz(texto, opc = {}){
+    const nivel = opc.nivel || 'Q';
+    const bytes = bytesUtf8(texto).length;
+    let versao = opc.versao || 0;
+    if (!versao){
+      for (let v = 1; v <= 10; v++){
+        const cabecalho = v <= 9 ? 2 : 3;      /* modo + contador, em bytes */
+        if (capacidade(v, nivel) >= bytes + cabecalho){ versao = v; break; }
+      }
+      if (!versao) throw new Error('Conteúdo longo demais para o QR (máximo: versão 10).');
+    }
+    const cw = codewords(texto, versao, nivel);
+    const mascaras = opc.mascara != null ? [opc.mascara] : [0,1,2,3,4,5,6,7];
+    let melhor = null;
+    for (const k of mascaras){
+      const m = esqueleto(versao);
+      const reservado = preenche(m, cw, versao);
+      for (let r = 0; r < m.length; r++) for (let c = 0; c < m.length; c++)
+        if (!reservado[r][c] && MASCARAS[k](r, c)) m[r][c] ^= 1;
+      /* a avaliação roda antes de gravar formato e versão (ISO/IEC 18004, 7.8) */
+      const p = mascaras.length === 1 ? 0 : penalidade(m);
+      if (!melhor || p < melhor.p) melhor = { m, p, k };
+    }
+    aplicaFormato(melhor.m, nivel, melhor.k);
+    aplicaVersao(melhor.m, versao);
+    return { matriz: melhor.m, versao, mascara: melhor.k, nivel };
+  }
+
+  /* SVG de caminho único, em viewBox de módulos */
+  function svg(texto, opc = {}){
+    const { matriz: m } = matriz(texto, opc);
+    const n = m.length, q = opc.silencio == null ? 4 : opc.silencio, lado = n + q * 2;
+    let d = '';
+    for (let r = 0; r < n; r++){
+      let c = 0;
+      while (c < n){
+        if (!m[r][c]){ c++; continue; }
+        let fim = c; while (fim + 1 < n && m[r][fim + 1]) fim++;
+        d += `M${c + q} ${r + q}h${fim - c + 1}v1h-${fim - c + 1}z`;
+        c = fim + 1;
+      }
+    }
+    const fundo = opc.fundo === false ? '' : `<rect width="${lado}" height="${lado}" fill="${opc.fundo || '#fff'}"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${lado} ${lado}" shape-rendering="crispEdges" role="img" aria-label="QR code para a inscrição">`
+         + `${fundo}<path d="${d}" fill="${opc.cor || '#000'}"/></svg>`;
+  }
+
+  return { matriz, svg };
+})();
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = v => v == null ? '' : String(v).replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* marcação mínima dos textos editáveis: *negrito* e “aspas” */
+const rico = t => esc(t || '').replace(/\*([^*\n]+)\*/g, '<b>$1</b>');
+
+const MES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto',
+             'setembro','outubro','novembro','dezembro'];
+const dLocal = s => {
+  const p = String(s || '').slice(0,10).split('-').map(Number);
+  if (p.length !== 3 || p.some(isNaN)) return null;
+  return new Date(p[0], p[1] - 1, p[2]);
+};
+const fmtDia = s => { const d = dLocal(s); return d ? `${d.getDate()} de ${MES[d.getMonth()]}` : '—'; };
+const fmtNum = s => { const d = dLocal(s); return d ? String(s).slice(0,10).split('-').reverse().join('/') : '—'; };
+const fmtSemana = s => {
+  const d = dLocal(s);
+  return d ? d.toLocaleDateString('pt-BR', { weekday:'long' }) : '';
+};
+
+const FORMATOS = {
+  a4: { rotulo:'A4', larg:210, alt:297 },
+  a3: { rotulo:'A3', larg:297, alt:420 }
+};
+const FUNDOS = {
+  cortex: { rotulo:'Cortex' },
+  void:   { rotulo:'Void' },
+  claro:  { rotulo:'Claro' }
+};
+const LADOS = {
+  ambos:  { rotulo:'Frente e verso' },
+  frente: { rotulo:'Só frente' },
+  verso:  { rotulo:'Só verso' }
+};
+
+const estado = {
+  formato:'a4', fundo:'cortex', lados:'ambos',
+  tiras:true, qr:true, margem:false, zoom:.42,
+  sel:new Set(UNIDADES.map(u => u.id))
+};
+
+/* ============================================================
+   DESENHO DAS PEÇAS
+   ============================================================ */
+function simbolo(tam){
+  return `<svg viewBox="0 0 32 32" aria-hidden="true" style="width:${tam};height:${tam}">
+    <circle cx="11" cy="16" r="5" fill="currentColor"/>
+    <circle cx="23" cy="9.5" r="2.8" fill="currentColor"/>
+    <circle cx="23" cy="22.5" r="2.8" fill="currentColor"/>
+    <g stroke="var(--ac)" stroke-width="1.7" stroke-linecap="round">
+      <path d="M15 13.8 20.6 10.6"/><path d="M15 18.2 20.6 21.4"/></g></svg>`;
+}
+const c = () => ({
+  edicao:   $('#c-edicao').value.trim()   || CAMPANHA.edicao,
+  prazo:    $('#c-prazo').value           || CAMPANHA.prazo,
+  retirada: $('#c-retirada').value        || CAMPANHA.retirada,
+  site:     $('#c-site').value.trim()     || CAMPANHA.site,
+  url:      $('#c-url').value.trim()      || CAMPANHA.url,
+  contato:  $('#c-contato').value.trim()  || CAMPANHA.contato
+});
+
+function classesFolha(extra){
+  return ['folha', estado.formato === 'a3' ? 'a3' : '',
+          estado.margem ? 'margem' : '', extra].filter(Boolean).join(' ');
+}
+
+function frente(u, camp){
+  const L = LINHAS[u.linha];
+  const olho = u.eyebrow || `Para quem está na ${u.curto}`;
+  const titulo = esc(L.titulo).replace(/\n/g, '<br>');
+  const tiras = estado.tiras ? `
+    <div class="f-corte"></div>
+    <div class="f-tiras">${Array.from({length:9}, () => `
+      <div class="tira"><span>${esc(camp.site)}</span></div>`).join('')}
+    </div>` : '';
+  const qr = estado.qr ? `<div class="f-qr">${QR.svg(camp.url, { nivel:'Q', silencio:2, fundo:false })}</div>` : '';
+  return `
+  <section class="${classesFolha(estado.tiras ? 'com-tiras' : '')}" data-fundo="${estado.fundo}"
+           style="--ac:${L.cor}">
+    <div class="fundo"><div class="base"></div><div class="grade"></div><div class="halo"></div></div>
+    <div class="conteudo">
+      <header class="f-topo">
+        <div class="lockup">${simbolo('calc(9 * var(--u))')}<b>NeuroDynamics</b></div>
+        <span class="f-selo">${esc(camp.edicao)}</span>
+      </header>
+      <div class="f-regua"></div>
+      <div class="f-corpo">
+        <div class="f-eyebrow">${esc(olho)}</div>
+        <h1 class="f-titulo">${titulo}</h1>
+        <p class="f-sub">${rico(L.sub)}</p>
+        <ul class="f-itens">${L.itens.map(i => `<li>${rico(i)}</li>`).join('')}</ul>
+        <p class="f-gancho">${rico(u.gancho)}</p>
+        <p class="f-cursos"><b>De onde você vem:</b> ${esc(u.cursos)}</p>
+      </div>
+      <footer class="f-chamada">
+        ${qr}
+        <div class="f-cta">
+          <div class="f-prazo">Inscrições até ${esc(fmtDia(camp.prazo))}</div>
+          <div class="f-link">${esc(camp.site)}</div>
+          <div class="f-obs">Sem taxa e sem cadastro. Não exigimos experiência prévia — nem que você seja da engenharia.</div>
+        </div>
+      </footer>
+      <div class="f-prova">${esc(CAMPANHA.prova)}</div>
+    </div>
+    ${tiras}
+  </section>`;
+}
+
+function verso(u, camp){
+  const L = LINHAS[u.linha];
+  const fmt = FORMATOS[estado.formato];
+  const aviso = u.aviso
+    ? `<div class="v-alerta" style="margin-top:calc(3 * var(--u))"><b>Atenção:</b> ${rico(u.aviso)}</div>` : '';
+  return `
+  <section class="${classesFolha('verso')}" style="--ac:${L.cor}">
+    <div class="conteudo">
+      <header class="v-topo">
+        <div class="lockup">${simbolo('calc(7 * var(--u))')}<b>NeuroDynamics</b></div>
+        <span class="v-aviso">Instruções de afixação</span>
+      </header>
+
+      <div class="v-cab">
+        <div class="linha-tag"><i></i>${esc(L.nome)}</div>
+        <h1>${esc(u.nome)}</h1>
+        <div class="fmt">Cartaz ${fmt.rotulo} · ${fmt.larg} × ${fmt.alt} mm · versão “${esc(u.id)}”</div>
+      </div>
+
+      <div class="v-prazos">
+        <div class="v-prazo"><div class="rot">Inscrições até</div>
+          <div class="val">${esc(fmtNum(camp.prazo))}</div></div>
+        <div class="v-prazo"><div class="rot">Retirar o cartaz até</div>
+          <div class="val">${esc(fmtNum(camp.retirada))}</div></div>
+      </div>
+
+      <div class="v-corpo">
+        <div>
+          <div class="v-bloco">
+            <h2>Onde afixar</h2>
+            <p class="v-local">${esc(u.campus)}<span>${esc(u.predio)}</span></p>
+            ${aviso}
+          </div>
+          <div class="v-bloco">
+            <h2>Pontos recomendados</h2>
+            <ol class="v-lista num">${u.pontos.map(p => `<li>${rico(p)}</li>`).join('')}</ol>
+          </div>
+          <div class="v-bloco">
+            <h2>Se alguém perguntar</h2>
+            <dl class="v-faq">${AFIXACAO.perguntas.map(([q, r]) =>
+              `<dt>${esc(q)}</dt><dd>${rico(r)}</dd>`).join('')}</dl>
+          </div>
+        </div>
+        <div>
+          <div class="v-bloco">
+            <h2>Como afixar</h2>
+            <ul class="v-lista trav">${AFIXACAO.regras.map(r => `<li>${rico(r)}</li>`).join('')}</ul>
+          </div>
+          <div class="v-bloco">
+            <h2>Antes de sair</h2>
+            <ul class="v-lista caixa">${AFIXACAO.levar.map(r => `<li>${rico(r)}</li>`).join('')}</ul>
+            ${estado.tiras
+              ? `<div class="v-alerta" style="margin-top:calc(3 * var(--u))">${rico(AFIXACAO.tiras)}</div>`
+              : ''}
+          </div>
+          <div class="v-bloco">
+            <h2>Depois de afixar</h2>
+            <ul class="v-lista trav">${AFIXACAO.depois.map(r => `<li>${rico(r)}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="v-registro">
+        <div class="campos">
+          <div class="c"><div class="rot">Afixado por</div><div class="risco"></div></div>
+          <div class="c"><div class="rot">Data</div><div class="risco"></div></div>
+          <div class="c"><div class="rot">Ponto exato</div><div class="risco"></div></div>
+          <div class="c"><div class="rot">Autorizado por</div><div class="risco"></div></div>
+        </div>
+      </div>
+
+      <div class="v-rodape">
+        <span>${esc(camp.site)} · ${esc(camp.contato)}</span>
+        <span>${esc(camp.edicao)} · retirar até ${esc(fmtNum(camp.retirada))}${
+          fmtSemana(camp.retirada) ? ' (' + esc(fmtSemana(camp.retirada)) + ')' : ''}</span>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ============================================================
+   PRÉVIA E AJUSTE DE TEXTO
+   ============================================================ */
+function excede(folha){
+  const alvos = folha.querySelectorAll('.conteudo, .f-corpo, .v-corpo');
+  for (const el of alvos) if (el.scrollHeight > el.clientHeight + 1) return true;
+  return false;
+}
+function ajusta(folha){
+  const titulo = folha.querySelector('.f-titulo');
+  const corpo = folha.querySelector('.f-corpo');
+  if (titulo && corpo){
+    let t = 21;
+    while (t > 9 && titulo.offsetHeight > corpo.clientHeight * .46){
+      t -= .5; folha.style.setProperty('--tit', t);
+    }
+  }
+  /* o texto da tira corre na vertical: a altura da tira é o comprimento dele */
+  const tira = folha.querySelector('.f-tiras .tira');
+  if (tira){
+    const span = tira.querySelector('span');
+    let f = 2.5;
+    while (f > 1.3 && span.offsetHeight > tira.clientHeight - 4){
+      f -= .1; folha.style.setProperty('--tirafs', f.toFixed(2));
+    }
+  }
+  let fit = 1;
+  while (fit > .72 && excede(folha)){
+    fit -= .02; folha.style.setProperty('--fit', fit.toFixed(3));
+  }
+}
+
+function desenha(){
+  const camp = c(), fmt = FORMATOS[estado.formato];
+  const escolhidas = UNIDADES.filter(u => estado.sel.has(u.id));
+  const saida = $('#saida');
+
+  if (!escolhidas.length){
+    saida.innerHTML = `<div class="vazio">Nenhuma unidade marcada. Escolha ao menos uma no
+      painel à esquerda — cada uma vira um cartaz com a mensagem da sua linha de conhecimento
+      e um verso com as instruções de afixação daquele prédio.</div>`;
+    $('#conta').textContent = '';
+    return;
+  }
+
+  const partes = [];
+  for (const u of escolhidas){
+    const lados = [];
+    if (estado.lados !== 'verso') lados.push(['Frente', frente(u, camp)]);
+    if (estado.lados !== 'frente') lados.push(['Verso', verso(u, camp)]);
+    for (const [rot, html] of lados)
+      partes.push(`<div class="env" data-rotulo="${esc(u.curto)} · ${rot} · ${fmt.rotulo}">${html}</div>`);
+  }
+  saida.innerHTML = partes.join('');
+
+  saida.querySelectorAll('.folha').forEach(ajusta);
+  aplicaZoom();
+
+  const paginas = saida.querySelectorAll('.folha').length;
+  $('#conta').textContent =
+    `${escolhidas.length} ${escolhidas.length === 1 ? 'unidade' : 'unidades'} · ${paginas} ${paginas === 1 ? 'página' : 'páginas'} ${fmt.rotulo}`;
+  $('#est-pagina').textContent = `@page{size:${fmt.rotulo} portrait;margin:0}`;
+}
+
+function aplicaZoom(){
+  const fmt = FORMATOS[estado.formato], z = estado.zoom;
+  document.querySelectorAll('#saida .env').forEach(env => {
+    const folha = env.querySelector('.folha');
+    env.style.width  = `calc(${fmt.larg}mm * ${z})`;
+    env.style.height = `calc(${fmt.alt}mm * ${z})`;
+    folha.style.transform = `scale(${z})`;
+    folha.style.boxShadow = '0 18px 50px rgba(0,0,0,.5)';
+  });
+}
+
+/* ============================================================
+   PAINEL
+   ============================================================ */
+function botoes(alvo, mapa, chave){
+  $(alvo).innerHTML = Object.entries(mapa).map(([k, v]) =>
+    `<button class="opcao" type="button" data-v="${k}" aria-pressed="${estado[chave] === k}">${esc(v.rotulo)}</button>`
+  ).join('');
+  $(alvo).onclick = ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    estado[chave] = b.dataset.v;
+    $(alvo).querySelectorAll('button').forEach(x =>
+      x.setAttribute('aria-pressed', x.dataset.v === estado[chave]));
+    guarda(); desenha();
+  };
+}
+
+function grupos(){
+  const porLinha = Object.keys(LINHAS).map(k => [k, UNIDADES.filter(u => u.linha === k)]);
+  $('#grupos').innerHTML = porLinha.map(([k, us]) => `
+    <div class="grupo" data-linha="${k}">
+      <div class="grupo-topo">
+        <span class="bolinha" style="background:${LINHAS[k].cor}"></span>
+        <b>${esc(LINHAS[k].nome)}</b>
+        <button type="button" data-acao="linha">Alternar</button>
+      </div>
+      <div class="itens">${us.map(u => `
+        <label class="chave"><input type="checkbox" data-id="${u.id}"
+          ${estado.sel.has(u.id) ? 'checked' : ''}> ${esc(u.nome)}</label>`).join('')}
+      </div>
+    </div>`).join('');
+
+  $('#grupos').onchange = ev => {
+    const cx = ev.target.closest('input[data-id]'); if (!cx) return;
+    cx.checked ? estado.sel.add(cx.dataset.id) : estado.sel.delete(cx.dataset.id);
+    guarda(); desenha();
+  };
+  $('#grupos').onclick = ev => {
+    const b = ev.target.closest('button[data-acao=linha]'); if (!b) return;
+    const caixas = [...b.closest('.grupo').querySelectorAll('input[data-id]')];
+    const ligar = !caixas.every(x => x.checked);
+    caixas.forEach(x => {
+      x.checked = ligar;
+      ligar ? estado.sel.add(x.dataset.id) : estado.sel.delete(x.dataset.id);
+    });
+    guarda(); desenha();
+  };
+}
+
+function marcarTodas(v){
+  estado.sel = new Set(v ? UNIDADES.map(u => u.id) : []);
+  document.querySelectorAll('#grupos input[data-id]').forEach(x => { x.checked = v; });
+  guarda(); desenha();
+}
+
+/* ============================================================
+   MEMÓRIA — guarda o que foi preenchido, para a próxima vez
+   ============================================================ */
+const CHAVE = 'nro-cartazes-v1';
+function guarda(){
+  try{
+    localStorage.setItem(CHAVE, JSON.stringify({
+      campanha:c(), formato:estado.formato, fundo:estado.fundo, lados:estado.lados,
+      tiras:estado.tiras, qr:estado.qr, margem:estado.margem, zoom:estado.zoom,
+      sel:[...estado.sel]
+    }));
+  }catch(e){ /* modo privado ou file:// sem armazenamento — segue sem memória */ }
+}
+function recupera(){
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(CHAVE) || 'null'); }catch(e){ s = null; }
+  const camp = { ...CAMPANHA, ...(s && s.campanha ? s.campanha : {}) };
+  $('#c-edicao').value   = camp.edicao;
+  $('#c-prazo').value    = camp.prazo;
+  $('#c-retirada').value = camp.retirada;
+  $('#c-site').value     = camp.site;
+  $('#c-url').value      = camp.url;
+  $('#c-contato').value  = camp.contato;
+  if (!s) return;
+  if (FORMATOS[s.formato]) estado.formato = s.formato;
+  if (FUNDOS[s.fundo])     estado.fundo   = s.fundo;
+  if (LADOS[s.lados])      estado.lados   = s.lados;
+  for (const k of ['tiras','qr','margem']) if (typeof s[k] === 'boolean') estado[k] = s[k];
+  if (typeof s.zoom === 'number' && s.zoom >= .18 && s.zoom <= 1) estado.zoom = s.zoom;
+  if (Array.isArray(s.sel)){
+    const validos = s.sel.filter(id => UNIDADES.some(u => u.id === id));
+    if (validos.length) estado.sel = new Set(validos);
+  }
+}
+
+/* ============================================================
+   INÍCIO
+   ============================================================ */
+recupera();
+botoes('#op-formato', FORMATOS, 'formato');
+botoes('#op-fundo',   FUNDOS,   'fundo');
+botoes('#op-lados',   LADOS,    'lados');
+grupos();
+
+for (const [id, chave] of [['#c-tiras','tiras'], ['#c-qr','qr'], ['#c-margem','margem']]){
+  $(id).checked = estado[chave];
+  $(id).onchange = e => { estado[chave] = e.target.checked; guarda(); desenha(); };
+}
+for (const id of ['#c-edicao','#c-prazo','#c-retirada','#c-site','#c-url','#c-contato'])
+  $(id).oninput = () => { guarda(); desenha(); };
+
+$('#zoom').value = Math.round(estado.zoom * 100);
+$('#zoom-val').textContent = Math.round(estado.zoom * 100) + ' %';
+$('#zoom').oninput = e => {
+  estado.zoom = Number(e.target.value) / 100;
+  $('#zoom-val').textContent = e.target.value + ' %';
+  aplicaZoom(); guarda();
+};
+
+/* as fontes chegam depois do primeiro desenho: refaz o ajuste quando carregarem */
+desenha();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha).catch(() => {});
+</script>
+</body>
+</html>
