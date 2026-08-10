@@ -133,13 +133,71 @@ fica em `--imagotipo-razao`.
 Quem se inscreve marca **Cartazes** em "Como soube do processo?" — é por
 ali que dá para medir o retorno da campanha.
 
+## Redes sociais (`redes.html`)
+
+Gerador das publicações do PS: a imagem no tamanho exato de cada rede,
+mais a legenda, o texto do LinkedIn e a mensagem para os grupos. Também é
+arquivo único e roda inteiro no navegador — a imagem que você sobe não
+sai da sua máquina.
+
+### O que sai de lá
+
+- **Seis roteiros**, cada um uma publicação inteira: *Inscrições abertas*,
+  *As perguntas do direct*, *Não é só engenharia*, *O processo inteiro*,
+  *Reta final* e *O que já saiu daqui*. O conteúdo vem do que o site já
+  responde — FAQ, cronograma, as cinco frentes e as reportagens —, na
+  ideia de publicar o que a pessoa ia perguntar, não o que a gente gosta
+  de dizer.
+- **Quatro formatos**, gerados em pixel exato: carrossel 1080 × 1350,
+  quadrado 1080 × 1080, story 1080 × 1920 e LinkedIn 1200 × 627. A
+  resolução **Alta** multiplica por 4/3 (1440 e 1600 de largura), que é
+  o teto que o Instagram e o LinkedIn aproveitam.
+- **Os textos**, prontos para copiar: legenda do Instagram, texto do
+  LinkedIn, o primeiro comentário com o link, a mensagem de WhatsApp em
+  seis versões (uma por linha de conhecimento) e o texto alternativo da
+  imagem.
+- **Um plano de publicação** com o que publicar em cada momento da
+  campanha e as práticas que fazem a peça circular.
+
+O número de dias da *Reta final* é calculado a partir do prazo — não
+precisa editar nada quando a data mudar.
+
+### Foto
+
+A capa e o encerramento aceitam foto. **Foto da equipe rende mais que
+foto de banco**: bancada, teste, competição, gente trabalhando. Sem foto,
+a peça sai com a linguagem da marca, que também funciona.
+
+Para banco de imagens, o campo aceita o **endereço da imagem** do
+Unsplash (na foto aberta, botão direito → *copiar endereço da imagem*, o
+que começa com `images.unsplash.com`) — o endereço da página não serve,
+e o gerador avisa se for esse o caso. Os botões de busca abrem o Unsplash
+já com termos que costumam devolver imagem com a cara da marca. Preencha
+o crédito do fotógrafo: ele sai discreto no canto da peça.
+
+### O que editar
+
+Campanha e perfil ficam no painel e são guardados no navegador. O
+conteúdo está em três blocos no topo do primeiro `<script>`:
+
+- **`ROTEIROS`** — as lâminas de cada publicação e os textos que a
+  acompanham. Nos textos, `{prazo}`, `{abertura}`, `{site}`, `{dias}` e
+  `{edicao}` são trocados na hora de gerar.
+- **`GRUPOS`** — as mensagens de WhatsApp por linha de conhecimento.
+- **`PLANO`** — o cronograma da campanha e as práticas de publicação.
+
+Publique a imagem no tamanho gerado: Instagram e LinkedIn recomprimem o
+que sobe, e mandar já no tamanho certo evita a segunda compressão, que é
+a que borra o texto. Nada de tirar print da prévia.
+
 ## Como publicar
 
-Publicado junto com o site, o gerador fica em
-`selecao.neurodynamics.dev/cartazes.html`. A página não tem nada
-sensível, mas é material interno: já vai com `noindex`, e se a preferência
-for não deixá-la no ar, basta não subir o arquivo — ele funciona igual
-aberto do disco.
+Publicados junto com o site, os geradores ficam em
+`selecao.neurodynamics.dev/cartazes.html` e
+`selecao.neurodynamics.dev/redes.html`. Nenhum dos dois tem nada
+sensível, mas os dois são material interno: já vão com `noindex`, e se a
+preferência for não deixá-los no ar, basta não subir os arquivos — eles
+funcionam igual abertos do disco.
 
 O GitHub Pages atende **um domínio por repositório** — e este repositório
 já usa `pessoal.neurodynamics.dev`. Duas opções:
