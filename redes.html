@@ -71,6 +71,17 @@ input[type=text],input[type=date],input[type=url],input[type=file],select,textar
 input[type=text],input[type=date],input[type=url],select{height:34px;padding:0 10px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--synapse)}
 input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
+.galeria{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.galeria button{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;padding:0;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);transition:.15s}
+.galeria button:hover{border-color:var(--grafite)}
+.galeria img{width:100%;height:100%;object-fit:cover;display:block}
+.galeria button[aria-pressed=true]{border-color:var(--synapse);
+  box-shadow:0 0 0 2px rgba(206,220,0,.35)}
+.galeria button.falhou{opacity:.3}
+.galeria button.falhou::after{content:'sem rede';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-family:var(--fm);font-size:8px;
+  letter-spacing:.06em;color:var(--grafite)}
 .opcoes{display:flex;flex-wrap:wrap;gap:6px}
 .opcao{flex:1 1 auto;text-align:center;padding:7px 10px;border:1px solid var(--line);border-radius:9px;
   font-size:12px;background:rgba(255,255,255,.03);white-space:nowrap;transition:.15s}
@@ -195,7 +206,9 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
     <p class="nota" style="margin-bottom:10px">Entra na capa e no encerramento. <b>Foto da equipe
       rende mais que foto de banco</b> — bancada, teste, competição, gente da equipe trabalhando.
       Sem foto, a peça sai só com a linguagem da marca, que também funciona.</p>
-    <div class="campo"><label for="f-arquivo">Imagem própria</label>
+    <span class="rotulo">Fotos escolhidas</span>
+    <div class="galeria" id="galeria" role="group" aria-label="Fotos do banco"></div>
+    <div class="campo" style="margin-top:12px"><label for="f-arquivo">Imagem própria</label>
       <input type="file" id="f-arquivo" accept="image/*"></div>
     <div class="campo"><label for="f-unsplash">Ou link/ID de uma foto do Unsplash</label>
       <input type="url" id="f-unsplash" placeholder="https://unsplash.com/photos/…" autocomplete="off"></div>
@@ -699,6 +712,29 @@ const FORMATOS = {
 const ESCALAS = { padrao:{ rotulo:'Padrão', k:1 }, alta:{ rotulo:'Alta', k:4/3 } };
 const FUNDOS  = { cortex:{ rotulo:'Cortex' }, void:{ rotulo:'Void' }, claro:{ rotulo:'Claro' } };
 
+/* ============================================================
+   BANCO — as fotos do Unsplash já escolhidas pela equipe.
+   Cada item leva só o id do arquivo (o trecho "photo-…" do
+   endereço da imagem) e, quando alguém preencher, o crédito do
+   fotógrafo — que sai no canto da peça.
+
+   Para acrescentar uma: abra a foto no Unsplash, clique com o
+   botão direito sobre a imagem, "copiar endereço da imagem", e
+   cole aqui só o pedaço que começa com photo-.
+   ============================================================ */
+const BANCO = [
+  { id:'photo-1630959305606-3123a081dada', credito:'' },
+  { id:'photo-1701848055770-effbdb148e15', credito:'' },
+  { id:'photo-1732210038547-4b26c84a0ee3', credito:'' },
+  { id:'photo-1580982338369-650de7dfdc07', credito:'' },
+  { id:'photo-1581090464777-f3220bbe1b8b', credito:'' },
+  { id:'photo-1659261658551-f92c4780499c', credito:'' },
+  { id:'photo-1725417037956-a8ce0d832d0c', credito:'' },
+  { id:'photo-1599652749620-e45b7f38988e', credito:'' },
+  { id:'photo-1582560475052-682d1beb5f42', credito:'' },
+  { id:'photo-1575278616937-d474f5fda9a6', credito:'' }
+];
+
 /* buscas que costumam devolver imagem com a cara da marca:
    escuro, técnico, mão na massa e gente de verdade */
 const BUSCAS = [
@@ -714,7 +750,7 @@ const BUSCAS = [
 
 const estado = {
   roteiro:'grupos', formato:'quadrado', escala:'padrao', fundo:'cortex',
-  foto:null, fotoCredito:'', foco:50, escuro:68, grupo:'geral', momento:'abertura'
+  foto:null, fotoCredito:'', banco:'', foco:50, escuro:68, grupo:'geral', momento:'abertura'
 };
 const grupoAtual = () => GRUPOS.find(g => g.id === estado.grupo) || GRUPOS[0];
 const roteiroAtual = () => ROTEIROS[estado.roteiro];
@@ -1262,6 +1298,7 @@ async function desenha(){
     + ` · ${estado.roteiro === 'grupos' ? 'WhatsApp: grupos de curso' : f.onde}`;
   $('#dim').textContent = `${W} × ${H} px · ${estado.foto ? 'JPEG' : 'PNG'}`;
   desenhaTextos();
+  marcaGaleria();
 }
 
 /* ============================================================
@@ -1285,8 +1322,44 @@ function urlUnsplash(entrada){
   return null;
 }
 function limpaFoto(){
-  estado.foto = null; estado.fotoCredito = '';
+  estado.foto = null; estado.fotoCredito = ''; estado.banco = '';
   $('#f-arquivo').value = ''; $('#f-unsplash').value = ''; $('#f-credito').value = '';
+  guarda(); desenha();
+}
+
+/* ---- banco de fotos ---------------------------------------------------
+   A miniatura é o rótulo: não adianta descrever a foto, adianta vê-la.
+   O arquivo grande só é buscado quando alguém escolhe a foto. */
+const urlBanco = (id, larg) =>
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&q=85&w=${larg}`;
+
+function montaGaleria(){
+  $('#galeria').innerHTML = BANCO.map(b =>
+    `<button type="button" data-id="${b.id}" aria-pressed="false"
+       title="Usar esta foto"><img src="${urlBanco(b.id, 220)}" alt="" loading="lazy"
+       onerror="this.closest('button').classList.add('falhou')"></button>`).join('');
+  $('#galeria').onclick = ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    usaBanco(b.dataset.id);
+  };
+}
+function marcaGaleria(){
+  document.querySelectorAll('#galeria button').forEach(b =>
+    b.setAttribute('aria-pressed', b.dataset.id === estado.banco));
+}
+async function usaBanco(id){
+  const b = BANCO.find(x => x.id === id);
+  if (!b) return;
+  try{
+    estado.foto = await carregaImagem(urlBanco(id, 2000), true);
+    estado.banco = id;
+    $('#f-arquivo').value = ''; $('#f-unsplash').value = '';
+    $('#f-credito').value = b.credito || 'Unsplash';
+    estado.fotoCredito = $('#f-credito').value.trim();
+  }catch(e){
+    alert('Não consegui carregar essa foto. Ela vem do Unsplash, então precisa de internet.');
+    return;
+  }
   guarda(); desenha();
 }
 
@@ -1369,7 +1442,7 @@ function guarda(){
     localStorage.setItem(CHAVE, JSON.stringify({
       campanha:campanha(), roteiro:estado.roteiro, formato:estado.formato,
       escala:estado.escala, fundo:estado.fundo, grupo:estado.grupo, momento:estado.momento,
-      foco:estado.foco, escuro:estado.escuro, credito:estado.fotoCredito
+      foco:estado.foco, escuro:estado.escuro, credito:estado.fotoCredito, banco:estado.banco
     }));
   }catch(e){ /* sem armazenamento: segue sem memória */ }
 }
@@ -1390,6 +1463,7 @@ function recupera(){
   if (typeof s.foco === 'number')   estado.foco = s.foco;
   if (typeof s.escuro === 'number') estado.escuro = s.escuro;
   if (typeof s.credito === 'string') estado.fotoCredito = s.credito;
+  if (BANCO.some(b => b.id === s.banco)) estado.banco = s.banco;
 }
 
 /* ============================================================
@@ -1400,6 +1474,7 @@ listaRoteiros();
 botoes('#op-formato', FORMATOS, 'formato', true);
 botoes('#op-escala',  ESCALAS,  'escala');
 botoes('#op-fundo',   FUNDOS,   'fundo');
+montaGaleria();
 listaBuscas();
 desenhaPlano();
 
@@ -1412,7 +1487,7 @@ $('#f-arquivo').onchange = async e => {
   const url = URL.createObjectURL(arq);
   try{
     estado.foto = await carregaImagem(url, false);
-    $('#f-unsplash').value = '';
+    estado.banco = ''; $('#f-unsplash').value = '';
     estado.fotoCredito = $('#f-credito').value.trim();
   }catch(err){ alert('Não consegui abrir essa imagem.'); }
   guarda(); desenha();
@@ -1427,7 +1502,7 @@ $('#f-unsplash').onchange = async e => {
   }
   try{
     estado.foto = await carregaImagem(r, true);
-    $('#f-arquivo').value = '';
+    estado.banco = ''; $('#f-arquivo').value = '';
     if (!$('#f-credito').value.trim()) $('#f-credito').value = 'Unsplash';
     estado.fotoCredito = $('#f-credito').value.trim();
   }catch(err){
@@ -1450,6 +1525,8 @@ for (const [id, chave, sufixo] of [['#f-y','foco','%'], ['#f-escuro','escuro','%
 
 desenha();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha).catch(() => {});
+/* a foto do banco escolhida da última vez volta sozinha, se houver rede */
+if (estado.banco) usaBanco(estado.banco).catch(() => {});
 </script>
 </body>
 </html>

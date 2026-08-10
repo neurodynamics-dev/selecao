@@ -189,12 +189,22 @@ A capa e o encerramento aceitam foto. **Foto da equipe rende mais que
 foto de banco**: bancada, teste, competição, gente trabalhando. Sem foto,
 a peça sai com a linguagem da marca, que também funciona.
 
-Para banco de imagens, o campo aceita o **endereço da imagem** do
-Unsplash (na foto aberta, botão direito → *copiar endereço da imagem*, o
-que começa com `images.unsplash.com`) — o endereço da página não serve,
-e o gerador avisa se for esse o caso. Os botões de busca abrem o Unsplash
-já com termos que costumam devolver imagem com a cara da marca. Preencha
-o crédito do fotógrafo: ele sai discreto no canto da peça.
+Em **Fotos escolhidas** ficam as do Unsplash já selecionadas pela equipe,
+em miniatura: um clique aplica a foto e ela volta marcada na próxima
+visita. A miniatura é o rótulo — não adianta descrever foto, adianta
+vê-la. Sem internet as miniaturas aparecem apagadas e o resto do gerador
+continua funcionando.
+
+Para acrescentar uma foto à lista, edite `BANCO` no topo do primeiro
+`<script>`: cada item leva só o trecho `photo-…` do **endereço da
+imagem** (na foto aberta no Unsplash, botão direito → *copiar endereço da
+imagem*) e, quando alguém preencher, o crédito do fotógrafo. O endereço
+da página não serve — o gerador avisa se for colado.
+
+O campo de link continua ali para foto avulsa, e os botões de busca abrem
+o Unsplash já com termos que costumam devolver imagem com a cara da
+marca. O crédito sai discreto no canto da peça; vale preencher o nome de
+quem fotografou, que é o que o Unsplash pede.
 
 ### O que editar
 
