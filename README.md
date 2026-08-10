@@ -70,7 +70,68 @@ Enquanto a migração não roda, o site usa as listas `FAQ_RESERVA` e
 `COMPETENCIAS_RESERVA`, no topo do `<script>` — vale manter as duas mais
 ou menos em sincronia com o que estiver no banco.
 
+## Cartazes (`cartazes.html`)
+
+Gerador de cartazes impressos do PS, por unidade acadêmica da UFMG. É um
+arquivo único e independente do resto: abra direto no navegador (dois
+cliques no arquivo já servem), escolha as unidades e mande imprimir. Nada
+sai do navegador — sem servidor, sem upload, sem biblioteca externa.
+
+- **Frente:** a peça de rua. A mensagem grande vem da **linha de
+  conhecimento** da unidade — as mesmas cinco frentes de "De onde você
+  vem" do site, na lógica das mensagens que a gente manda separadas por
+  área nos grupos. O que muda de unidade para unidade é o rótulo do topo,
+  o gancho e a lista de cursos. Leva QR da inscrição, prazo e uma faixa
+  de **tiras destacáveis** com o endereço.
+- **Verso:** o briefing de quem vai afixar — onde fica a unidade (campus,
+  endereço e prédio), pontos recomendados em ordem de prioridade, regras
+  de afixação, o que levar, o que fazer depois, respostas curtas para
+  quem parar você no corredor e campos para anotar à mão quem afixou,
+  quando e onde.
+- **A3 e A4**, retrato. É o mesmo desenho: o A3 é a folha A4 multiplicada
+  por √2, então nada precisa ser reajustado.
+- Três fundos: **Cortex** (verde, padrão), **Void** (escuro) e **Claro**
+  (fundo branco, para impressora comum — gasta bem menos toner).
+
+### O que editar
+
+Tudo que muda por edição do PS (datas, endereço, contato) está no painel
+da esquerda e fica guardado no navegador para a próxima vez. O conteúdo
+fica em três blocos no topo do `<script>`:
+
+- **`LINHAS`** — a mensagem de cada linha de conhecimento: título, texto
+  de apoio, os quatro tópicos e a cor de acento.
+- **`UNIDADES`** — uma versão de cartaz por unidade: a linha que ela usa,
+  o local (campus, endereço, prédio), o gancho, os cursos e os pontos de
+  afixação. Vale conferir prédio e mural antes de imprimir uma tiragem
+  grande: mural muda de lugar.
+- **`AFIXACAO`** — o que vale para qualquer unidade: regras, o que levar,
+  o que fazer depois e as perguntas frequentes do verso.
+
+### Como imprimir
+
+Botão **Imprimir / salvar PDF**. Na caixa de impressão: papel no tamanho
+escolhido, escala **100 %** (sem "ajustar à página"), margens "nenhuma" e
+**gráficos de fundo** ligados. As páginas saem na ordem frente, verso,
+frente, verso — para duplex, vire pela **borda maior**. Impressora que
+não imprime até a borda: ligue a opção de **margem branca de 5 mm**.
+
+O QR é gerado no próprio arquivo (sem CDN), então funciona offline e sai
+vetorial na impressão — cerca de 0,8 mm por módulo no A4 e 1,1 mm no A3,
+folgado para qualquer câmera de celular. A tipografia vem do Google
+Fonts: sem internet o cartaz continua saindo, com a fonte do sistema no
+lugar da Archivo.
+
+Quem se inscreve marca **Cartazes** em "Como soube do processo?" — é por
+ali que dá para medir o retorno da campanha.
+
 ## Como publicar
+
+Publicado junto com o site, o gerador fica em
+`selecao.neurodynamics.dev/cartazes.html`. A página não tem nada
+sensível, mas é material interno: já vai com `noindex`, e se a preferência
+for não deixá-la no ar, basta não subir o arquivo — ele funciona igual
+aberto do disco.
 
 O GitHub Pages atende **um domínio por repositório** — e este repositório
 já usa `pessoal.neurodynamics.dev`. Duas opções:
