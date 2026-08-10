@@ -122,6 +122,14 @@ folgado para qualquer câmera de celular. A tipografia vem do Google
 Fonts: sem internet o cartaz continua saindo, com a fonte do sistema no
 lugar da Archivo.
 
+O **imagotipo oficial** vai embutido no arquivo (token `--imagotipo`, no
+`:root`), então aparece na frente e no verso de toda versão mesmo offline.
+Ele entra como máscara CSS: como o original é uma silhueta com canal
+alfa, a marca assume a cor do texto — branca sobre os fundos escuros,
+preta sobre o claro — sem precisar de dois arquivos nem de filtro. Para
+trocar por uma marca nova, substitua o `data:` desse token; a proporção
+fica em `--imagotipo-razao`.
+
 Quem se inscreve marca **Cartazes** em "Como soube do processo?" — é por
 ali que dá para medir o retorno da campanha.
 
