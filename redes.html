@@ -36,6 +36,7 @@ a{color:var(--synapse)}
 button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
 ::selection{background:var(--synapse);color:var(--cortex)}
+[hidden]{display:none!important}
 .imagotipo{--logo-alt:24px;flex:none;display:block;
   height:var(--logo-alt);width:calc(var(--logo-alt) * var(--imagotipo-razao));
   background-color:currentColor;
@@ -169,6 +170,17 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
     <div class="lista-rot" id="op-roteiro" role="group" aria-label="Roteiro"></div>
   </fieldset>
 
+  <fieldset id="fs-grupo" hidden>
+    <legend>Grupo e momento</legend>
+    <span class="rotulo">Para qual grupo</span>
+    <div class="opcoes" id="op-grupo" role="group" aria-label="Área do grupo"></div>
+    <span class="rotulo" style="margin-top:14px">Momento da campanha</span>
+    <div class="opcoes" id="op-momento" role="group" aria-label="Momento"></div>
+    <p class="nota" style="margin-top:12px">A área troca o gancho da imagem e a abertura da
+      mensagem; o momento troca o selo e o fecho. <b>Quadrado é o que aparece inteiro na
+      conversa</b> — no 1080 × 1350 o WhatsApp corta a prévia da bolha.</p>
+  </fieldset>
+
   <fieldset>
     <legend>Formato</legend>
     <div class="opcoes" id="op-formato" role="group" aria-label="Formato"></div>
@@ -271,6 +283,25 @@ const CAMPANHA = {
    ============================================================ */
 const ROTEIROS = {
 
+  /* Uma peça só, para mandar direto no grupo. O texto e a imagem mudam
+     junto: a área escolhida troca o gancho, o momento troca a urgência.
+     As lâminas são montadas na hora, por isso vêm de uma função. */
+  grupos: {
+    nome:'Mensagem para grupo de WhatsApp',
+    resumo:'Uma imagem só, com a mensagem pronta para colar. Escolha a área do grupo e o momento da campanha.',
+    quando:'Sempre que for falar com um grupo de curso',
+    cor:'#CEDC00',
+    umaPeca:true,
+    laminas(){
+      const g = grupoAtual(), mo = MOMENTOS[estado.momento] || MOMENTOS.abertura;
+      return [{ tipo:'recado', foto:true, olho:g.olho, titulo:g.titulo,
+                sub:g.apoio, selo:mo.selo, prazo:mo.prazo }];
+    },
+    cor_de(){ return grupoAtual().cor; },
+    alt:'Imagem com o convite para o processo seletivo da NeuroDynamics, equipe de tecnologia para a saúde da Escola de Engenharia da UFMG, com o prazo de inscrição e o endereço do site.',
+    porque:'No grupo, quem lê está de passagem. Uma imagem que se explica sozinha e uma mensagem curta embaixo funcionam melhor que um carrossel que ninguém abre.'
+  },
+
   abertura: {
     nome:'Inscrições abertas',
     resumo:'O anúncio. Diz o que a equipe é, mostra o que já entregou e chama para a inscrição.',
@@ -296,14 +327,14 @@ const ROTEIROS = {
                'Nem que você seja da engenharia — são cinco departamentos',
                'Estudante de ensino técnico também entra',
                'O período trainee existe para dar a base'] },
-      { tipo:'cta', foto:true, titulo:'Inscrições até\n{prazo}', sub:'Sem taxa e sem criar conta.' }
+      { tipo:'cta', foto:true, titulo:'Inscrições até\n{prazo}', sub:'Sem cadastro: você recebe um protocolo por e-mail.' }
     ],
     legenda:{
       gancho:'Você não precisa ser da engenharia para construir tecnologia que devolve movimento a alguém.',
       corpo:['A NeuroDynamics é uma equipe de pesquisa, desenvolvimento e inovação da Escola de Engenharia da UFMG, dedicada a tecnologias para a saúde. A gente percorre o ciclo inteiro de um dispositivo: concepção, firmware, eletrônica, mecânica e validação clínica com quem vai usar.',
              'São cinco departamentos — P&D, Clínica, Marketing, Relações Institucionais e Pessoal. Por isso a equipe tem gente da fisioterapia, do design, da administração, da psicologia e do direito trabalhando junto com a engenharia.',
              'Não exigimos experiência prévia nem curso específico. O período trainee existe justamente para dar a base.'],
-      cta:'Inscrições até {prazo}, em {site} — sem taxa e sem criar conta. Manda para alguém do seu curso que precisa ver isso.',
+      cta:'Inscrições até {prazo}, em {site} — sem criar conta, você recebe um protocolo por e-mail. Manda para alguém do seu curso que precisa ver isso.',
       tags:['#UFMG','#ProcessoSeletivo','#EscolaDeEngenhariaUFMG','#TecnologiaAssistiva','#EngenhariaBiomédica']
     },
     linkedin:{
@@ -430,7 +461,7 @@ const ROTEIROS = {
         titulo:'O processo\ninteiro, do começo\nao fim.',
         sub:'Quatro fases. Nenhuma surpresa: as datas estão todas publicadas.' },
       { tipo:'lamina', rotulo:'Fase 1', titulo:'Inscrição',
-        corpo:'Aberta de {abertura} a {prazo}, pelo site. Sem taxa e sem criar conta: você recebe um protocolo e acompanha tudo com ele. A lista de inscrições deferidas sai logo depois do encerramento.' },
+        corpo:'Aberta de {abertura} a {prazo}, pelo site. Sem criar conta: você recebe um protocolo e acompanha tudo com ele. A lista de inscrições deferidas sai logo depois do encerramento.' },
       { tipo:'lamina', rotulo:'Fase 2', titulo:'Dinâmica em grupo',
         corpo:'Quem tem a inscrição deferida agenda a dinâmica pelo próprio site, no horário que couber na sua grade. É uma atividade em grupo, com o comitê de seleção acompanhando.' },
       { tipo:'lamina', rotulo:'Fase 3', titulo:'Entrevista individual',
@@ -441,7 +472,7 @@ const ROTEIROS = {
     ],
     legenda:{
       gancho:'Antes de se inscrever, dá para saber exatamente no que você está entrando: as quatro fases e todas as datas.',
-      corpo:['Inscrição pelo site, sem taxa e sem cadastro. Depois, dinâmica em grupo e entrevista individual — as duas agendadas por você, no horário que couber na sua grade.',
+      corpo:['Inscrição pelo site, sem cadastro. Depois, dinâmica em grupo e entrevista individual — as duas agendadas por você, no horário que couber na sua grade.',
              'Quem passa entra no período trainee, que é quando você já atua dentro da equipe: um desafio multidisciplinar em grupo, acompanhado pelos membros, até a apresentação final.',
              'Todos os resultados são publicados na página de edital e resultados, e a sua situação individual você consulta com o protocolo.'],
       cta:'Inscrições até {prazo}, em {site}. O cronograma completo está lá.',
@@ -449,7 +480,7 @@ const ROTEIROS = {
     },
     linkedin:{
       gancho:'Processo seletivo com todas as datas publicadas antes da inscrição — inclusive as dos resultados.',
-      corpo:['Inscrição sem taxa e sem cadastro, dinâmica em grupo e entrevista individual agendadas pelo próprio candidato, e um período trainee em que a pessoa já atua na equipe, com desafio multidisciplinar e acompanhamento até a apresentação final.',
+      corpo:['Inscrição sem cadastro, dinâmica em grupo e entrevista individual agendadas pelo próprio candidato, e um período trainee em que a pessoa já atua na equipe, com desafio multidisciplinar e acompanhamento até a apresentação final.',
              'Transparência de cronograma parece detalhe, mas é o que permite a alguém decidir se cabe na própria grade.'],
       cta:'Inscrições até {prazo}. Endereço no primeiro comentário.',
       tags:['#UFMG','#ProcessoSeletivo','#Extensão']
@@ -467,7 +498,7 @@ const ROTEIROS = {
       { tipo:'numero', foto:true, valor:'{dias}', rotulo:'para o fim das inscrições',
         corpo:'Depois de {prazo} não dá mais. A inscrição leva cinco minutos e não pede cadastro.' },
       { tipo:'lamina', rotulo:'O que você precisa', titulo:'Cinco minutos e nada além disso.',
-        corpo:'Não tem taxa, não tem prova de conhecimento específico e não precisa criar conta.',
+        corpo:'Não tem prova de conhecimento específico e não precisa criar conta.',
         itens:['Seus dados e seu curso',
                'O que você já sabe fazer e o que quer desenvolver',
                'Um e-mail para receber o protocolo'] },
@@ -475,14 +506,14 @@ const ROTEIROS = {
     ],
     legenda:{
       gancho:'Faltam {dias} para o fim das inscrições — e elas levam cinco minutos.',
-      corpo:['Sem taxa, sem prova de conhecimento específico e sem criar conta: você preenche seus dados, marca o que já sabe fazer e o que quer desenvolver, e recebe um protocolo por e-mail.',
+      corpo:['Sem prova de conhecimento específico e sem criar conta: você preenche seus dados, marca o que já sabe fazer e o que quer desenvolver, e recebe um protocolo por e-mail.',
              'Se ficou alguma dúvida, o FAQ do site responde as principais — inclusive a de contrapartida, dedicação e aproveitamento acadêmico.'],
       cta:'Até {prazo}, em {site}. Manda para aquela pessoa que disse que ia se inscrever e não se inscreveu.',
       tags:['#UFMG','#ProcessoSeletivo','#ÚltimosDias']
     },
     linkedin:{
       gancho:'Últimos dias de inscrição para a próxima turma da NeuroDynamics, na Escola de Engenharia da UFMG.',
-      corpo:['Aberto a estudantes de qualquer curso, sem exigência de experiência prévia. A inscrição não tem taxa nem cadastro.'],
+      corpo:['Aberto a estudantes de qualquer curso, sem exigência de experiência prévia. A inscrição não pede cadastro.'],
       cta:'Até {prazo}. Endereço no primeiro comentário.',
       tags:['#UFMG','#ProcessoSeletivo']
     },
@@ -535,24 +566,64 @@ const ROTEIROS = {
    ============================================================ */
 const GRUPOS = [
   { id:'geral', nome:'Geral / República e moradia',
-    abertura:'Bom dia, gente! Passando rápido: a *NeuroDynamics*, equipe de tecnologia para a saúde da Escola de Engenharia da UFMG, está com inscrições abertas.',
+    olho:'Para quem estuda na UFMG', cor:'#CEDC00',
+    titulo:'Não precisa ser\nda engenharia.',
+    apoio:'Uma equipe da UFMG que constrói tecnologia para a saúde — e precisa de gente de todo curso.',
+    abertura:'Bom dia, gente! Passando rápido para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da Escola de Engenharia da UFMG.',
     meio:'A gente desenvolve dispositivos do começo ao fim — o triciclo que fez um jovem tetraplégico pedalar saiu daqui, e a equipe já foi ao Cybathlon, na Suíça. *Aceita gente de qualquer curso* e não exige experiência.' },
   { id:'eng', nome:'Engenharia, computação e exatas',
-    abertura:'Fala, pessoal! A *NeuroDynamics* (equipe de tecnologia para a saúde aqui da Escola de Engenharia) está com inscrições abertas.',
+    olho:'Para quem é da engenharia, computação ou exatas', cor:'#CEDC00',
+    titulo:'Você projeta.\nAlguém volta\na pedalar.',
+    apoio:'Firmware, placa, CAD e modelo — em dispositivos que só terminam quando funcionam no corpo de uma pessoa.',
+    abertura:'Fala, pessoal! Passando para falar da *NeuroDynamics*, a equipe de tecnologia para a saúde aqui da Escola de Engenharia.',
     meio:'É firmware que lê sensor e comanda estímulo em tempo real, placa projetada e depurada na bancada, peça em CAD impressa e refeita, sinal fisiológico virando modelo. *O projeto termina em teste com paciente, não em relatório.*' },
   { id:'saude', nome:'Saúde e ciências da vida',
-    abertura:'Oi, gente! A *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, está com inscrições abertas — e a parte de vocês é central no que a gente faz.',
+    olho:'Para quem é da saúde', cor:'#2DD4BF',
+    titulo:'Sem clínica,\né só um protótipo\nbonito.',
+    apoio:'A engenharia entrega o dispositivo. Quem diz se ele funciona no uso real é você.',
+    abertura:'Oi, gente! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG — e a parte de vocês é central no que a gente faz.',
     meio:'A engenharia entrega o dispositivo; quem traduz necessidade clínica em requisito, desenha o protocolo de teste e diz se aquilo funciona no uso real é quem entende do corpo humano. *Sem isso, é só um protótipo bonito.*' },
   { id:'comunicacao', nome:'Comunicação, artes e design',
-    abertura:'Oi! A *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, está com inscrições abertas e precisa de gente de comunicação e design.',
+    olho:'Para quem é da comunicação, artes ou design', cor:'#F5C36A',
+    titulo:'A tecnologia\njá existe.\nFalta quem conte.',
+    apoio:'A equipe já foi ao Jornal Nacional e ao Cybathlon. E tem muita coisa na bancada que ninguém viu.',
+    abertura:'Oi! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, que precisa de gente de comunicação e design.',
     meio:'A equipe já foi ao Jornal Nacional e ao Cybathlon, e tem muita coisa acontecendo na bancada que ninguém viu. É vídeo, identidade visual, redação e imprensa. *A tecnologia já existe; falta quem conte.*' },
   { id:'gestao', nome:'Gestão, negócios e direito',
-    abertura:'Fala, pessoal! A *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, está com inscrições abertas.',
+    olho:'Para quem é de gestão, negócios ou direito', cor:'#7FA7F2',
+    titulo:'Sem recurso,\no protótipo não sai\nda bancada.',
+    apoio:'Edital, patrocínio, convênio, patente e prestação de contas: a parte que sustenta a engenharia.',
+    abertura:'Fala, pessoal! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG.',
     meio:'Tem trabalho real de captação: edital de fomento, patrocínio, convênio com hospital, propriedade intelectual e prestação de contas. *Sem recurso, o protótipo não sai da bancada.*' },
   { id:'pessoas', nome:'Humanas, educação e psicologia',
-    abertura:'Oi, gente! A *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, está com inscrições abertas.',
+    olho:'Para quem é das humanas', cor:'#4ADE97',
+    titulo:'Tecnologia\né feita\npor gente.',
+    apoio:'Sprint, recrutamento, formação e avaliação, numa equipe multidisciplinar de estudantes.',
+    abertura:'Oi, gente! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG.',
     meio:'A equipe funciona como organização: sprint, avaliação periódica, formação de cada turma nova, plano de desenvolvimento por pessoa. *Tecnologia é feita por gente, e alguém precisa cuidar da gente.*' }
 ];
+
+/* ============================================================
+   MOMENTOS — a mesma área, em três pontos da campanha. Muda o
+   selo da imagem, a nota e o fecho da mensagem.
+   ============================================================ */
+const MOMENTOS = {
+  abertura:{ rotulo:'Abertura', selo:'Inscrições abertas',
+    prazo:'Inscrições até {prazo}',
+    chamada:'As inscrições para a próxima turma *acabaram de abrir*.',
+    fecho:'*Inscrições até {prazo}* — {url}',
+    remate:'Não precisa criar conta nem ter experiência prévia. Qualquer dúvida, é só chamar.' },
+  durante:{ rotulo:'Durante', selo:'Inscrições abertas',
+    prazo:'Até {prazo}',
+    chamada:'As inscrições para a próxima turma *estão abertas*.',
+    fecho:'*As inscrições vão até {prazo}* — {url}',
+    remate:'Leva cinco minutos e não pede cadastro: você recebe um protocolo por e-mail. Qualquer dúvida, é só chamar.' },
+  reta:{ rotulo:'Reta final', selo:'Faltam {dias}',
+    prazo:'Último dia: {prazo}',
+    chamada:'As inscrições para a próxima turma *fecham em {dias}*.',
+    fecho:'*Último dia: {prazo}* — {url}',
+    remate:'A inscrição leva cinco minutos. Se você ficou de fazer e não fez, é agora.' }
+};
 
 /* ============================================================
    PLANO — quando publicar o quê, e as práticas que fazem a
@@ -642,9 +713,14 @@ const BUSCAS = [
 ];
 
 const estado = {
-  roteiro:'abertura', formato:'carrossel', escala:'padrao', fundo:'cortex',
-  foto:null, fotoCredito:'', foco:50, escuro:68, grupo:'geral'
+  roteiro:'grupos', formato:'quadrado', escala:'padrao', fundo:'cortex',
+  foto:null, fotoCredito:'', foco:50, escuro:68, grupo:'geral', momento:'abertura'
 };
+const grupoAtual = () => GRUPOS.find(g => g.id === estado.grupo) || GRUPOS[0];
+const roteiroAtual = () => ROTEIROS[estado.roteiro];
+/* alguns roteiros montam as lâminas na hora, a partir do que está escolhido */
+const laminasDe = r => typeof r.laminas === 'function' ? r.laminas() : r.laminas;
+const corDe = r => typeof r.cor_de === 'function' ? r.cor_de() : r.cor;
 
 /* ============================================================
    IMAGOTIPO — o mesmo arquivo embutido dos cartazes, aqui
@@ -825,7 +901,7 @@ function desenhaLamina(cv, lamina, i, total){
   cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
   const v = estado.fundo, p = PALETA[v];
-  const ac = ROTEIROS[estado.roteiro].cor;
+  const ac = corDe(roteiroAtual());
   const acT = acentoTexto(ac, v);
 
   desenhaFundo(ctx, W, H, v, ac);
@@ -837,22 +913,28 @@ function desenhaLamina(cv, lamina, i, total){
   /* topo: marca e, no carrossel, o contador de lâminas */
   const altLogo = Math.round(u * 44);
   desenhaLogo(ctx, m, cx.topo, altLogo, fg);
-  if (FORMATOS[f].conta && total > 1){
+  const marcador = lamina.selo ? texto(lamina.selo)
+    : (FORMATOS[f].conta && total > 1
+        ? `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}` : '');
+  if (marcador){
     ctx.save();
-    ctx.font = mono(500, u * 22); ctx.fillStyle = fg2; ctx.textAlign = 'right';
+    ctx.font = mono(500, u * 22);
+    ctx.fillStyle = lamina.selo ? acC : fg2;
+    ctx.textAlign = 'right';
     if ('letterSpacing' in ctx) ctx.letterSpacing = u * 2 + 'px';
-    ctx.fillText(`${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`,
+    ctx.fillText(lamina.selo ? marcador.toUpperCase() : marcador,
                  W - m, cx.topo + altLogo * .74);
     ctx.restore();
   }
 
   const o = { fg, fg2, acC, y0: cx.topo + altLogo + u * 54, fim: cx.base - u * 46, i, total };
   if (lamina.tipo === 'capa')        capa(ctx, cx, lamina, o);
+  else if (lamina.tipo === 'recado') recado(ctx, cx, lamina, o);
   else if (lamina.tipo === 'numero') numero(ctx, cx, lamina, o);
   else if (lamina.tipo === 'cta')    cta(ctx, cx, lamina, o);
   else                               conteudo(ctx, cx, lamina, o);
 
-  if (lamina.tipo !== 'cta')
+  if (lamina.tipo !== 'cta' && lamina.tipo !== 'recado')
     rodape(ctx, cx, o, lamina.tipo === 'capa' && FORMATOS[f].conta && total > 1 ? 'arraste →' : '');
   desenhaCredito(ctx, W, H, cx, fg);
 }
@@ -903,6 +985,43 @@ function capa(ctx, cx, l, o){
   y = escreve(ctx, texto(l.titulo), { ...tit, y, cor: o.fg, x: m });
   regua(ctx, m, y + u * 22, u, o.acC);
   if (l.sub) escreve(ctx, texto(l.sub), { ...subOp, y: y + u * 62 });
+}
+
+/* uma peça só: rótulo da área no alto, gancho no meio, prazo e
+   endereço embaixo. É o que vai no grupo. */
+function recado(ctx, cx, l, o){
+  const { u, m, maxL } = cx;
+  const site = campanha().site;
+  const prazoOp = { fonte: mono(600, u * 26), lh: u * 36, cor: o.acC, maxL, x: m,
+                    esp: u * 3.4, caixaAlta: true };
+  const tamSite = corpoQueCabe(ctx, site, maxL, 700, u * 52);
+  const siteOp = { fonte: fonte(700, tamSite), lh: tamSite * 1.14, cor: o.fg, maxL, x: m,
+                   esp: -tamSite * .025 };
+  const altPrazo = alturaDe(ctx, texto(l.prazo), prazoOp);
+  const altSite = alturaDe(ctx, site, siteOp);
+  const rodapeBloco = altPrazo + u * 14 + altSite;
+
+  if (l.olho)
+    escreve(ctx, texto(l.olho), { fonte: mono(500, u * 24), lh: u * 34, cor: o.acC,
+      maxL, x: m, y: o.y0, esp: u * 4.4, caixaAlta: true });
+
+  const subOp = { fonte: fonte(500, u * 34), lh: u * 46, cor: o.fg2, maxL, x: m };
+  const altSub = l.sub ? alturaDe(ctx, texto(l.sub), subOp) : 0;
+  const topoTexto = o.y0 + (l.olho ? u * 90 : 0);
+  const fimTexto = o.fim - rodapeBloco - u * 54;
+  const tit = encaixa(ctx, texto(l.titulo), u * 104,
+    { peso:800, lhFator:.94, maxL, maxA: fimTexto - topoTexto - altSub - u * 62, x: m });
+  const altTit = alturaDe(ctx, texto(l.titulo), tit);
+
+  let y = Math.max(topoTexto, topoTexto + (fimTexto - topoTexto - altTit - u * 62 - altSub) *
+    (estado.formato === 'story' ? .5 : 1));
+  y = escreve(ctx, texto(l.titulo), { ...tit, y, cor: o.fg, x: m });
+  regua(ctx, m, y + u * 22, u, o.acC);
+  if (l.sub) escreve(ctx, texto(l.sub), { ...subOp, y: y + u * 62 });
+
+  y = o.fim - rodapeBloco;
+  y = escreve(ctx, texto(l.prazo), { ...prazoOp, y }) + u * 14;
+  escreve(ctx, site, { ...siteOp, y });
 }
 
 function conteudo(ctx, cx, l, o){
@@ -1019,39 +1138,43 @@ const legendaLinkedin = r => juntaLegenda(r.linkedin);
 const primeiroComentario = () => texto(
   'Inscrições, edital, cronograma e as perguntas frequentes: {url}');
 function mensagemGrupo(g){
-  return texto([g.abertura, g.meio,
-    '*Inscrições até {prazo}* — {url}',
-    'Não tem taxa, não precisa criar conta e não exige experiência prévia. Qualquer dúvida, é só chamar.'
-  ].join('\n\n'));
+  const mo = MOMENTOS[estado.momento] || MOMENTOS.abertura;
+  /* quem diz em que ponto a campanha está é o momento, não a área */
+  return texto([`${g.abertura} ${mo.chamada}`, g.meio, mo.fecho, mo.remate]
+    .filter(Boolean).join('\n\n'));
 }
 
 const CARTOES = [
-  { id:'insta', nome:'Legenda do Instagram', limite:2200,
+  { id:'insta', nome:'Legenda do Instagram', limite:2200, exceto:'grupos',
     valor:r => legendaInsta(r),
     dica:'Os primeiros *125 caracteres* são o que aparece antes do “mais”. O gancho já está ali.' },
-  { id:'linkedin', nome:'Texto do LinkedIn', limite:3000,
+  { id:'linkedin', nome:'Texto do LinkedIn', limite:3000, exceto:'grupos',
     valor:r => legendaLinkedin(r),
     dica:'Sem link no corpo: no LinkedIn ele costuma custar alcance. O endereço vai no cartão ao lado.' },
-  { id:'comentario', nome:'Primeiro comentário (LinkedIn)', limite:1250,
+  { id:'comentario', nome:'Primeiro comentário (LinkedIn)', limite:1250, exceto:'grupos',
     valor:() => primeiroComentario(),
     dica:'Publique como *primeiro comentário*, logo depois do post.' },
-  { id:'grupos', nome:'Mensagem para os grupos', limite:0, grupos:true,
-    valor:() => mensagemGrupo(GRUPOS.find(g => g.id === estado.grupo) || GRUPOS[0]),
-    dica:'*negrito* funciona no WhatsApp. Mande uma por vez, espaçadas: várias iguais de uma vez são tratadas como spam.' },
-  { id:'alt', nome:'Texto alternativo da imagem', limite:1000,
+  { id:'grupos', nome:'Mensagem para o grupo', limite:0, grupos:true,
+    valor:() => mensagemGrupo(grupoAtual()),
+    dica:'*negrito* funciona no WhatsApp. Mande a imagem primeiro e o texto logo abaixo, uma área por vez e espaçadas: várias iguais de uma vez, do mesmo número, são tratadas como spam.' },
+  { id:'alt', nome:'Texto alternativo da imagem', limite:1000, exceto:'grupos',
     valor:r => texto(r.alt),
     dica:'No Instagram: <b>Configurações avançadas → Escrever texto alternativo</b>. Serve de acessibilidade e ajuda a rede a entender a imagem.' }
 ];
 
 function desenhaTextos(){
-  const r = ROTEIROS[estado.roteiro];
-  $('#textos').innerHTML = CARTOES.map(c => {
+  const r = roteiroAtual();
+  const dedicado = estado.roteiro === 'grupos';
+  $('#textos').innerHTML = CARTOES.filter(c => c.exceto !== estado.roteiro).map(c => {
     const v = c.valor(r);
-    const abas = c.grupos ? `<div class="opcoes" style="padding:10px 14px 0">${GRUPOS.map(g =>
+    /* no modo dedicado quem manda são os seletores do painel */
+    const abas = c.grupos && !dedicado
+      ? `<div class="opcoes" style="padding:10px 14px 0">${GRUPOS.map(g =>
       `<button class="opcao" style="font-size:11px;padding:5px 8px" data-grupo="${g.id}"
         aria-pressed="${estado.grupo === g.id}">${esc(g.nome)}</button>`).join('')}</div>` : '';
     return `<div class="txt">
-      <div class="txt-topo"><b>${esc(c.nome)}</b>
+      <div class="txt-topo"><b>${esc(c.nome)}${c.grupos && dedicado
+        ? ' — ' + esc(grupoAtual().nome) + ' · ' + esc(MOMENTOS[estado.momento].rotulo) : ''}</b>
         ${c.limite ? `<span class="cnt">${v.length} / ${c.limite}</span>` : ''}
         <button class="btn ghost mini" data-copia="${c.id}">Copiar</button></div>
       ${abas}
@@ -1063,7 +1186,7 @@ function desenhaTextos(){
   $('#textos').onclick = ev => {
     const b = ev.target.closest('button'); if (!b) return;
     if (b.dataset.grupo){
-      estado.grupo = b.dataset.grupo; guarda(); desenhaTextos(); return;
+      estado.grupo = b.dataset.grupo; guarda(); desenha(); return;
     }
     if (b.dataset.copia){
       const ta = $('#t-' + b.dataset.copia);
@@ -1108,11 +1231,14 @@ async function desenha(){
     document.fonts.load('600 30px "IBM Plex Mono"'), logoPronto
   ]).catch(() => {});
 
-  const r = ROTEIROS[estado.roteiro], f = FORMATOS[estado.formato];
+  const r = roteiroAtual(), f = FORMATOS[estado.formato];
   const esc0 = ESCALAS[estado.escala].k;
+  const laminas = laminasDe(r);
+  $('#fs-grupo').hidden = estado.roteiro !== 'grupos';
+  if (estado.roteiro === 'grupos') seletoresGrupo();
   const alvo = $('#laminas');
   alvo.innerHTML = '';
-  r.laminas.forEach((lam, i) => {
+  laminas.forEach((lam, i) => {
     const env = document.createElement('div');
     env.className = 'lam';
     const cv = document.createElement('canvas');
@@ -1127,12 +1253,13 @@ async function desenha(){
     sob.appendChild(bt);
     env.appendChild(sob);
     alvo.appendChild(env);
-    desenhaLamina(cv, lam, i, r.laminas.length);
+    desenhaLamina(cv, lam, i, laminas.length);
   });
 
   const W = Math.round(f.l * esc0), H = Math.round(f.a * esc0);
   $('#conta').textContent =
-    `${r.nome} · ${r.laminas.length} ${r.laminas.length === 1 ? 'peça' : 'peças'} · ${f.onde}`;
+    `${r.nome} · ${laminas.length} ${laminas.length === 1 ? 'peça' : 'peças'}`
+    + ` · ${estado.roteiro === 'grupos' ? 'WhatsApp: grupos de curso' : f.onde}`;
   $('#dim').textContent = `${W} × ${H} px · ${estado.foto ? 'JPEG' : 'PNG'}`;
   desenhaTextos();
 }
@@ -1186,9 +1313,28 @@ function listaRoteiros(){
   $('#op-roteiro').onclick = ev => {
     const b = ev.target.closest('button'); if (!b) return;
     estado.roteiro = b.dataset.v;
+    if (estado.roteiro === 'grupos' && estado.formato === 'linkedin') estado.formato = 'quadrado';
+    if (estado.roteiro === 'grupos' && estado.formato === 'carrossel') estado.formato = 'quadrado';
+    botoes('#op-formato', FORMATOS, 'formato', true);
     $('#op-roteiro').querySelectorAll('button').forEach(x =>
       x.setAttribute('aria-pressed', x.dataset.v === estado.roteiro));
     guarda(); desenha();
+  };
+}
+function seletoresGrupo(){
+  $('#op-grupo').innerHTML = GRUPOS.map(g =>
+    `<button class="opcao" type="button" data-v="${g.id}" style="flex:1 1 46%"
+      aria-pressed="${estado.grupo === g.id}">${esc(g.nome)}</button>`).join('');
+  $('#op-momento').innerHTML = Object.entries(MOMENTOS).map(([k, mo]) =>
+    `<button class="opcao" type="button" data-v="${k}"
+      aria-pressed="${estado.momento === k}">${esc(mo.rotulo)}</button>`).join('');
+  $('#op-grupo').onclick = ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    estado.grupo = b.dataset.v; guarda(); desenha();
+  };
+  $('#op-momento').onclick = ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    estado.momento = b.dataset.v; guarda(); desenha();
   };
 }
 function listaBuscas(){
@@ -1222,7 +1368,7 @@ function guarda(){
   try{
     localStorage.setItem(CHAVE, JSON.stringify({
       campanha:campanha(), roteiro:estado.roteiro, formato:estado.formato,
-      escala:estado.escala, fundo:estado.fundo, grupo:estado.grupo,
+      escala:estado.escala, fundo:estado.fundo, grupo:estado.grupo, momento:estado.momento,
       foco:estado.foco, escuro:estado.escuro, credito:estado.fotoCredito
     }));
   }catch(e){ /* sem armazenamento: segue sem memória */ }
@@ -1240,6 +1386,7 @@ function recupera(){
   if (ESCALAS[s.escala])   estado.escala  = s.escala;
   if (FUNDOS[s.fundo])     estado.fundo   = s.fundo;
   if (GRUPOS.some(g => g.id === s.grupo)) estado.grupo = s.grupo;
+  if (MOMENTOS[s.momento]) estado.momento = s.momento;
   if (typeof s.foco === 'number')   estado.foco = s.foco;
   if (typeof s.escuro === 'number') estado.escuro = s.escuro;
   if (typeof s.credito === 'string') estado.fotoCredito = s.credito;

@@ -140,14 +140,35 @@ mais a legenda, o texto do LinkedIn e a mensagem para os grupos. Também é
 arquivo único e roda inteiro no navegador — a imagem que você sobe não
 sai da sua máquina.
 
-### O que sai de lá
+### Mensagem para grupo de WhatsApp
 
-- **Seis roteiros**, cada um uma publicação inteira: *Inscrições abertas*,
-  *As perguntas do direct*, *Não é só engenharia*, *O processo inteiro*,
-  *Reta final* e *O que já saiu daqui*. O conteúdo vem do que o site já
-  responde — FAQ, cronograma, as cinco frentes e as reportagens —, na
-  ideia de publicar o que a pessoa ia perguntar, não o que a gente gosta
-  de dizer.
+É o primeiro roteiro da lista e funciona diferente dos outros: sai **uma
+imagem só**, quadrada, que se explica sozinha — e o texto pronto para
+colar logo abaixo dela.
+
+Dois seletores comandam imagem e texto ao mesmo tempo:
+
+- **A área do grupo** (seis: geral, engenharia e exatas, saúde,
+  comunicação e artes, gestão e direito, humanas) troca o gancho da
+  imagem, a cor de acento e a abertura da mensagem.
+- **O momento da campanha** (abertura, durante, reta final) troca o selo
+  do canto, o prazo em destaque e o fecho da mensagem. Na reta final o
+  selo conta os dias sozinho, a partir do prazo.
+
+São 18 combinações prontas. Mande a imagem primeiro e o texto embaixo,
+uma área por vez e espaçadas ao longo do dia: várias mensagens iguais de
+uma vez, do mesmo número, são tratadas como spam. O quadrado é o formato
+que aparece inteiro na bolha da conversa — no 1080 × 1350 o WhatsApp
+corta a prévia.
+
+### Os outros roteiros
+
+- **Seis roteiros de feed**, cada um uma publicação inteira: *Inscrições
+  abertas*, *As perguntas do direct*, *Não é só engenharia*, *O processo
+  inteiro*, *Reta final* e *O que já saiu daqui*. O conteúdo vem do que o
+  site já responde — FAQ, cronograma, as cinco frentes e as reportagens
+  —, na ideia de publicar o que a pessoa ia perguntar, não o que a gente
+  gosta de dizer.
 - **Quatro formatos**, gerados em pixel exato: carrossel 1080 × 1350,
   quadrado 1080 × 1080, story 1080 × 1920 e LinkedIn 1200 × 627. A
   resolução **Alta** multiplica por 4/3 (1440 e 1600 de largura), que é
@@ -182,9 +203,17 @@ conteúdo está em três blocos no topo do primeiro `<script>`:
 
 - **`ROTEIROS`** — as lâminas de cada publicação e os textos que a
   acompanham. Nos textos, `{prazo}`, `{abertura}`, `{site}`, `{dias}` e
-  `{edicao}` são trocados na hora de gerar.
-- **`GRUPOS`** — as mensagens de WhatsApp por linha de conhecimento.
+  `{edicao}` são trocados na hora de gerar. O roteiro `grupos` monta a
+  lâmina por função, a partir da área e do momento escolhidos.
+- **`GRUPOS`** — as áreas: o gancho e a cor da imagem, mais a abertura e
+  o miolo da mensagem de cada uma.
+- **`MOMENTOS`** — abertura, durante e reta final: o selo da imagem, o
+  prazo em destaque e o fecho da mensagem.
 - **`PLANO`** — o cronograma da campanha e as práticas de publicação.
+
+Nenhum texto fala em taxa de inscrição: processo seletivo de equipe não
+cobra, e dizer que não cobra levanta uma dúvida que ninguém tinha. O que
+vale mencionar é a inscrição **sem cadastro**, que essa sim é incomum.
 
 Publique a imagem no tamanho gerado: Instagram e LinkedIn recomprimem o
 que sobe, e mandar já no tamanho certo evita a segunda compressão, que é
