@@ -224,10 +224,22 @@ a que borra o texto. Nada de tirar print da prévia.
 
 ## Dinâmica em grupo (`dinamica*.html`)
 
-A primeira fase presencial tem três páginas e um roteiro. O roteiro é o
-documento **NRO-PES-020 ROTEIRO DA DINÂMICA EM GRUPO** (pasta
-`documentos/`), escrito para ser lido em cinco minutos por quem vai
-avaliar. As três páginas são estas:
+A primeira fase presencial tem três páginas e dois documentos, ambos na
+pasta `documentos/`: o **NRO-PES-020**, o roteiro, escrito para ser lido
+em cinco minutos por quem vai avaliar, e o **NRO-PES-021**, o gabarito,
+com respostas de exemplo em três níveis para cada caso.
+
+O desafio é uma **decisão, não um problema aberto**: cada grupo recebe
+uma pessoa real, uma decisão de projeto e três caminhos já descritos, com
+o que custam e o que perdem. Em 25 minutos escolhe um e defende a escolha
+em cinco campos. Isso resolve duas coisas de uma vez: a entrega fica
+inequívoca (não é plano de desenvolvimento nem projeto de dispositivo) e
+quem nunca viu estimulação elétrica consegue decidir, porque cada opção
+está descrita pelo que faz e pelo que deixa de fora, não por como
+funciona por dentro. Todo caso fecha com uma frase dita pela pessoa: é
+ela que pesa as opções.
+
+As três páginas são estas:
 
 | Arquivo | Quem usa | Quando abre |
 |---|---|---|
@@ -321,7 +333,8 @@ Tudo em **SOMA → Seleção → Dinâmica**, sem tocar em código:
   de horário e os blocos (nome, minutos, o que o avaliador faz, o que vai
   no projetor e o que cortar se atrasar). O SOMA soma os minutos e avisa
   quando o roteiro não cabe na janela.
-- **Desafio** — o briefing, os casos e os campos do registro.
+- **Desafio** — o briefing, os casos (situação, decisão, as três opções e
+  a frase da pessoa) e os campos do registro.
 - **Critérios** — os cinco critérios com as âncoras de nota 1, 3 e 5. O
   SOMA avisa se algum não bater com os critérios da aba Avaliação.
 - **Janelas** — o código, os atalhos para as três páginas e a mesa de

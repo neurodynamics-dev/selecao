@@ -443,7 +443,10 @@ function abaRoteiro(){
       <div style="margin-top:11px">${(m.casos||[]).map(c=>`
         <div style="border-top:1px solid var(--line);padding-top:10px;margin-top:10px">
           <b style="font-family:var(--fd);font-size:14px">${esc(c.titulo||'')}</b>
-          <p class="tiny muted" style="margin-top:3px">${esc(c.pessoa||'')}</p>
+          <p class="tiny muted" style="margin-top:3px">${esc(c.contexto||'')}</p>
+          ${(c.opcoes||[]).length ? `<ul style="margin:7px 0 0 16px">${
+            c.opcoes.map(o=>`<li class="tiny muted" style="margin-bottom:3px">${esc(o)}</li>`).join('')}</ul>`:''}
+          ${c.fala ? `<p class="tiny" style="margin-top:6px">${esc(c.fala)}</p>`:''}
           ${c.pista ? `<p class="tiny" style="color:var(--syn);margin-top:5px">Se travar: ${esc(c.pista)}</p>`:''}
         </div>`).join('')}</div>
     </div>`;
