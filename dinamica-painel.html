@@ -89,10 +89,10 @@ body:not(.limpo) #ctrl{opacity:1}
 /* pessoas */
 .pessoas{display:flex;flex-wrap:wrap;gap:2.4vmin;margin-top:2vmin}
 .pessoa{flex:1 1 20vmin;max-width:32vmin;text-align:center}
-.pessoa .foto{width:16vmin;height:16vmin;margin:0 auto 1.6vmin;border-radius:50%;overflow:hidden;
-  background:linear-gradient(140deg,var(--axon),var(--cortex));display:grid;place-items:center;
-  border:.3vmin solid rgba(206,220,0,.3)}
-.pessoa .foto img{width:100%;height:100%;object-fit:cover}
+.pessoa .foto{position:relative;width:16vmin;height:16vmin;margin:0 auto 1.6vmin;border-radius:50%;
+  overflow:hidden;background:linear-gradient(140deg,var(--axon),var(--cortex));
+  display:grid;place-items:center;border:.3vmin solid rgba(206,220,0,.3)}
+.pessoa .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pessoa .foto span{font-family:var(--fd);font-weight:700;font-size:5vmin;color:var(--syn)}
 .pessoa .nm{font-family:var(--fd);font-weight:600;font-size:2.4vmin}
 .pessoa .cg{font-size:1.8vmin;color:var(--syn);margin-top:.4vmin}
@@ -714,9 +714,8 @@ function tAvaliadores(){
     <h1 class="tit" style="font-size:5.6vmin">A mesa</h1>
     <div class="pessoas">
       ${av.map(a=>`<div class="pessoa">
-        <div class="foto">${a.foto_url
-          ? `<img src="${esc(a.foto_url)}" alt="">`
-          : `<span>${esc(iniciais(a.nome))}</span>`}</div>
+        <div class="foto"><span>${esc(iniciais(a.nome))}</span>${a.foto_url
+          ? `<img src="${esc(a.foto_url)}" alt="" onerror="this.remove()">` : ''}</div>
         <div class="nm">${esc(a.nome||'')}</div>
         ${a.cargo ? `<div class="cg">${esc(a.cargo)}</div>`:''}
         ${a.curso ? `<div class="fl">${esc(a.curso)}</div>`:''}
