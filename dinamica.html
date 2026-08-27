@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Registro do desafio da dinâmica em grupo do processo seletivo da NeuroDynamics.">
+<meta name="theme-color" content="#060A09">
+<title>Desafio da dinâmica | NeuroDynamics</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060A09; --panel:#0D1513; --ink:#F5F5F7; --muted:#9FAAA6; --dim:#6E7A76;
+  --line:rgba(245,245,247,.09); --line2:rgba(245,245,247,.18);
+  --green:#00594F; --green2:#0B7D6E; --teal:#2DD4BF; --deep:#00352F; --syn:#CEDC00;
+  --ambar:#FBBF24; --bad:#F1806F; --ok:#4ADE97;
+  --card:rgba(255,255,255,.045); --glass:rgba(10,17,15,.88);
+  --r:18px; --max:720px;
+  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  --safe:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--fd);letter-spacing:-.01em;line-height:1.2}
+a{color:var(--syn)}
+button{font-family:inherit;cursor:pointer;color:inherit;border:none;background:none;font-size:16px}
+input,textarea{font-family:inherit;font-size:16px;color:var(--ink)}
+[hidden]{display:none!important}
+::selection{background:var(--syn);color:var(--deep)}
+
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(120% 80% at 70% -10%, #0A1F1B 0%, var(--bg) 55%)}
+#bg::after{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(245,245,247,.03) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(245,245,247,.03) 1px,transparent 1px);
+  background-size:110px 110px;
+  -webkit-mask-image:radial-gradient(80% 55% at 50% 20%, #000 0%, transparent 100%);
+          mask-image:radial-gradient(80% 55% at 50% 20%, #000 0%, transparent 100%)}
+
+/* ---------- topo ---------- */
+header{position:sticky;top:0;z-index:30;background:var(--glass);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--line)}
+.hd{max-width:var(--max);margin:0 auto;padding:11px 16px;display:flex;align-items:center;gap:10px}
+.hd img{height:18px;filter:brightness(0) invert(1)}
+.hd .tag{margin-left:auto;font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  color:var(--syn);border:1px solid rgba(206,220,0,.35);border-radius:999px;padding:3px 9px}
+.hd .grp{font-family:var(--fd);font-weight:700;font-size:13px;background:var(--syn);color:var(--deep);
+  border-radius:9px;padding:3px 10px}
+
+main{max-width:var(--max);margin:0 auto;padding:20px 16px calc(120px + var(--safe))}
+.eyebrow{font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim)}
+.card{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:18px;margin-bottom:14px}
+.card h2{font-size:19px;margin-bottom:8px}
+.card h3{font-size:15px;margin-bottom:6px}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+.tiny{font-size:12px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;
+  border-radius:13px;font-family:var(--fd);font-weight:700;font-size:15.5px;width:100%;
+  border:1px solid var(--line2);background:rgba(255,255,255,.05);transition:transform .12s}
+.btn:active{transform:scale(.985)}
+.btn.solid{background:var(--syn);color:var(--deep);border-color:transparent}
+.btn.solid:disabled{background:rgba(206,220,0,.28);color:rgba(0,53,47,.55)}
+.btn:disabled{cursor:default}
+.btn.sm{min-height:40px;font-size:14px;width:auto;padding:0 15px}
+
+/* ---------- entrada do código ---------- */
+.entrada{max-width:400px;margin:6vh auto 0;text-align:center}
+.entrada h1{font-size:26px;margin-bottom:8px}
+#cod{width:100%;text-align:center;font-family:var(--fd);font-weight:700;font-size:40px;letter-spacing:.28em;
+  text-transform:uppercase;background:rgba(255,255,255,.05);border:1px solid var(--line2);
+  border-radius:15px;padding:16px 10px 16px 18px;margin:20px 0 12px;outline:none}
+#cod:focus{border-color:var(--syn);box-shadow:0 0 0 3px rgba(206,220,0,.14)}
+
+/* ---------- escolha do grupo ---------- */
+.grupos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.gbtn{border:1px solid var(--line2);border-radius:15px;background:rgba(255,255,255,.045);
+  padding:16px;text-align:left;display:flex;align-items:center;gap:13px}
+.gbtn .l{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:var(--syn);color:var(--deep);
+  display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:22px}
+.gbtn .t{font-family:var(--fd);font-weight:600;font-size:15px}
+.gbtn .s{font-size:12.5px;color:var(--muted)}
+
+/* ---------- caso ---------- */
+.caso{border:1px solid rgba(206,220,0,.25);border-radius:var(--r);
+  background:linear-gradient(150deg,rgba(0,89,79,.42),rgba(11,125,110,.14));padding:18px;margin-bottom:16px}
+.caso h2{font-size:20px;margin-bottom:10px}
+.caso dl{display:grid;gap:11px;margin-top:4px}
+.caso dt{font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--syn);margin-bottom:2px}
+.caso dd{font-size:14.5px;color:rgba(245,245,247,.9)}
+.caso ul{margin:2px 0 0 18px;font-size:14.5px;color:rgba(245,245,247,.9)}
+
+/* ---------- campos ---------- */
+.campo{margin-bottom:16px}
+.campo label{display:block;font-family:var(--fd);font-weight:600;font-size:16px;margin-bottom:3px}
+.campo .aj{font-size:13.5px;color:var(--muted);margin-bottom:9px}
+.campo textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line2);
+  border-radius:13px;padding:13px 14px;line-height:1.5;resize:vertical;outline:none;min-height:92px}
+.campo textarea:focus{border-color:var(--syn);box-shadow:0 0 0 3px rgba(206,220,0,.13)}
+.campo .cnt{text-align:right;font-size:12px;color:var(--dim);margin-top:4px}
+.campo .cnt.perto{color:var(--ambar)}
+.campo .cnt.cheio{color:var(--bad)}
+
+/* ---------- barra fixa de gravação ---------- */
+#barra{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--glass);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-top:1px solid var(--line);padding:11px 16px calc(11px + var(--safe))}
+#barra .in{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:12px}
+#barra .st{flex:1;min-width:0;font-size:12.5px;line-height:1.35;color:var(--muted)}
+#barra .st b{display:block;font-family:var(--fd);font-size:13px;color:var(--ink)}
+#barra .btn{width:auto;flex:0 0 auto;padding:0 24px}
+.ponto{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.p-ok{background:var(--ok)} .p-w{background:var(--ambar)} .p-b{background:var(--bad)} .p-d{background:var(--dim)}
+
+/* ---------- avisos ---------- */
+.aviso{border-radius:13px;padding:13px 15px;font-size:14px;margin-bottom:14px;border:1px solid}
+.a-warn{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.32)}
+.a-bad{background:rgba(241,128,111,.1);border-color:rgba(241,128,111,.32)}
+.a-ok{background:rgba(74,222,151,.09);border-color:rgba(74,222,151,.3)}
+.aviso b{font-family:var(--fd)}
+
+.vs{display:grid;gap:10px;margin:12px 0}
+.vs .op{border:1px solid var(--line2);border-radius:13px;padding:13px;background:rgba(255,255,255,.03)}
+.vs .op h4{font-size:13.5px;margin-bottom:6px;color:var(--syn)}
+.vs .op p{font-size:13.5px;color:var(--muted);white-space:pre-wrap;max-height:150px;overflow:auto}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + var(--safe));z-index:60;
+  background:#12201D;border:1px solid var(--line2);border-radius:12px;padding:11px 17px;font-size:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  max-width:calc(100vw - 32px)}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(-6px)}
+#toast.err{border-color:rgba(241,128,111,.5)}
+
+.centro{text-align:center;padding:8vh 0}
+.centro .big{font-family:var(--fd);font-size:44px;font-weight:700;letter-spacing:.1em;color:var(--syn);margin:10px 0}
+@media (min-width:640px){ main{padding-top:26px} .card{padding:22px} }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<header>
+  <div class="hd">
+    <img id="logo" alt="NeuroDynamics">
+    <span class="tag">Dinâmica</span>
+    <span class="grp" id="hd-grupo" hidden></span>
+  </div>
+</header>
+
+<main id="app"><div class="centro muted">Carregando…</div></main>
+
+<div id="barra" hidden>
+  <div class="in">
+    <div class="st" id="st"><b>—</b><span></span></div>
+    <button class="btn solid" id="gravar" onclick="gravar()">Gravar alterações</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   REGISTRO DO DESAFIO — página do candidato.
+
+   Feita para celular e tablet, numa sala com 15 pessoas no
+   mesmo Wi-Fi e 25 minutos no relógio. As decisões que valem:
+
+   - RASCUNHO LOCAL. Cada tecla vai para o localStorage do
+     aparelho. Fechar a aba, travar o navegador, receber uma
+     ligação no meio: o texto continua lá quando voltar.
+   - GRAVAR É UM BOTÃO. Nada sobe sozinho. O grupo decide
+     quando o texto está pronto, e a barra de baixo diz sempre
+     em que estado a coisa está.
+   - CONFLITO NÃO APAGA NINGUÉM. Se duas pessoas do grupo
+     gravam ao mesmo tempo, a segunda recebe as duas versões e
+     escolhe — nunca perde a sua sem ver.
+   - OFFLINE NÃO TRAVA. Sem internet, o botão avisa e o texto
+     fica guardado; a gravação sai quando a rede volta.
+
+   Todo o conteúdo (caso, campos, textos) vem do banco, do que
+   o comitê editou em SOMA → Seleção → Dinâmica.
+   ============================================================ */
+
+const CONFIG = {
+  SUPABASE_URL: 'https://rxzmkyjttzzpwtodqkve.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_MJFR-aaQqTS1BthxYJG2kg_5XGhs9wg'
+};
+const LOGO_URL = 'https://raw.githubusercontent.com/matheusmarcondes1/nro/refs/heads/main/imagotipo%20preto.png';
+const sb = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+const $ = s => document.querySelector(s);
+const esc = v => v == null ? '' : String(v).replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hm = d => new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+const S = {
+  codigo:'', sala:null, grupo:null, campos:[],
+  dados:{}, versao:0, salvoEm:null, autor:'',
+  sujo:false, gravando:false, online:navigator.onLine,
+  autorLocal: (()=>{ try{ return localStorage.getItem('nro.din.quem')||''; }catch(e){ return ''; } })()
+};
+
+/* ---------- rascunho local ---------- */
+const chave = () => `nro.din.${S.codigo}.${S.grupo?.id||'x'}`;
+function salvaLocal(){
+  try{ localStorage.setItem(chave(), JSON.stringify(
+    {dados:S.dados, versao:S.versao, em:Date.now(), autor:S.autor})); }
+  catch(e){ /* modo anônimo com storage bloqueado: segue sem rascunho */ }
+}
+function leLocal(){
+  try{ return JSON.parse(localStorage.getItem(chave())||'null'); }catch(e){ return null; }
+}
+function limpaLocal(){ try{ localStorage.removeItem(chave()); }catch(e){} }
+
+function toast(msg, erro){
+  const t = $('#toast'); t.innerHTML = msg; t.className = 'on' + (erro?' err':'');
+  clearTimeout(toast.t); toast.t = setTimeout(()=>{ t.className=''; }, erro?5200:2600);
+}
+
+/* ============================================================
+   1. ENTRADA — o código de quatro letras que está no projetor
+   ============================================================ */
+function telaCodigo(msg){
+  $('#barra').hidden = true; $('#hd-grupo').hidden = true;
+  $('#app').innerHTML = `
+    <div class="entrada">
+      <span class="eyebrow">Dinâmica em grupo</span>
+      <h1 style="margin-top:8px">Digite o código da sala</h1>
+      <p class="small muted">Ele está no telão, em letras grandes. Quatro letras e números.</p>
+      ${msg ? `<div class="aviso a-warn" style="text-align:left;margin-top:16px">${msg}</div>` : ''}
+      <input id="cod" maxlength="6" autocapitalize="characters" autocomplete="off"
+             autocorrect="off" spellcheck="false" inputmode="text" placeholder="————">
+      <button class="btn solid" id="ir" onclick="entrar()">Entrar na sala</button>
+      <p class="tiny muted" style="margin-top:18px">Um celular por grupo faz o registro.
+        Os outros podem acompanhar por aqui também, mas quem grava é um de cada vez.</p>
+    </div>`;
+  const i = $('#cod');
+  i.addEventListener('input', ()=>{
+    i.value = i.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(i.value.length >= 4) $('#ir').focus();
+  });
+  i.addEventListener('keydown', e=>{ if(e.key==='Enter') entrar(); });
+  setTimeout(()=>i.focus(), 120);
+}
+
+async function entrar(){
+  const cod = ($('#cod')?.value||'').trim().toUpperCase();
+  if(cod.length < 4){ toast('O código tem quatro letras.', true); return; }
+  $('#ir').disabled = true; $('#ir').textContent = 'Entrando…';
+  S.codigo = cod;
+  const ok = await carregaSala();
+  if(ok){ location.hash = '#'+cod; }
+  else if($('#ir')){ $('#ir').disabled = false; $('#ir').textContent = 'Entrar na sala'; }
+}
+
+async function carregaSala(){
+  try{
+    const {data, error} = await sb.rpc('ps_din_sala', {p_codigo:S.codigo});
+    if(error) throw error;
+    if(!data || data.status === 'nao_encontrada'){
+      telaCodigo('Não encontrei nenhuma sala com esse código. Confira as letras no telão. O código não usa <b>O</b>, <b>0</b>, <b>I</b> nem <b>1</b>.');
+      return false;
+    }
+    if(data.status === 'fechada'){ telaFechada(data); return false; }
+    S.sala = data;
+    S.campos = data.campos || [];
+    telaGrupos();
+    return true;
+  }catch(e){
+    console.error(e);
+    telaCodigo('Não consegui falar com o servidor agora. Confira o Wi-Fi da sala e tente de novo. Se não voltar, chame um avaliador.');
+    return false;
+  }
+}
+
+function telaFechada(d){
+  $('#barra').hidden = true; $('#hd-grupo').hidden = true;
+  const abre = d.abre_em ? new Date(d.abre_em) : null;
+  const agora = d.agora ? new Date(d.agora) : new Date();
+  const antes = abre && agora < abre;
+  $('#app').innerHTML = `
+    <div class="centro">
+      <span class="eyebrow">Sala fechada</span>
+      <h1 style="font-size:24px;margin:10px 0 8px">${antes ? 'Esta sala ainda não abriu' : 'Esta dinâmica já terminou'}</h1>
+      <p class="muted small" style="max-width:420px;margin:0 auto">
+        ${antes
+          ? `A página abre às <b>${hm(d.abre_em)}</b> e fecha às <b>${hm(d.fecha_em)}</b>.
+             Guarde o código e volte na hora.`
+          : `O registro fechou às <b>${hm(d.fecha_em)}</b>. O que o seu grupo gravou está com o comitê.
+             O resultado sai na página <a href="index.html#/publicacoes">Edital e resultados</a>.`}
+      </p>
+      <div style="max-width:300px;margin:22px auto 0">
+        <button class="btn" onclick="location.hash='';location.reload()">Outro código</button>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   2. ESCOLHA DO GRUPO
+   ============================================================ */
+function telaGrupos(){
+  const g = S.sala.grupos || [];
+  $('#barra').hidden = true; $('#hd-grupo').hidden = true;
+  if(!g.length){
+    $('#app').innerHTML = `
+      <div class="centro">
+        <span class="eyebrow">Sala ${esc(S.sala.janela.codigo)}</span>
+        <h1 style="font-size:23px;margin:10px 0 8px">Os grupos ainda não foram formados</h1>
+        <p class="muted small">Espere o avaliador dividir a turma. Esta tela se atualiza sozinha.</p>
+      </div>`;
+    clearTimeout(telaGrupos.t); telaGrupos.t = setTimeout(()=>carregaSala(), 6000);
+    return;
+  }
+  $('#app').innerHTML = `
+    <div style="margin-bottom:16px">
+      <span class="eyebrow">Sala ${esc(S.sala.janela.codigo)}</span>
+      <h1 style="font-size:23px;margin:8px 0 6px">Qual é o seu grupo?</h1>
+      <p class="small muted">O avaliador disse a letra em voz alta. Toque nela.</p>
+    </div>
+    <div class="grupos">
+      ${g.map(x=>`<button class="gbtn" onclick="abreGrupo('${x.id}')">
+        <span class="l">${esc(x.letra)}</span>
+        <span><span class="t">Grupo ${esc(x.letra)}</span><br>
+        <span class="s">${x.caso?.titulo ? esc(x.caso.titulo) : 'sem caso definido'}${
+          x.versao ? ' · gravado' : ''}</span></span></button>`).join('')}
+    </div>
+    <p class="tiny muted" style="margin-top:18px">Entrou no grupo errado? Volte com o botão abaixo. Nada é gravado só por entrar.</p>
+    <div style="max-width:260px;margin-top:12px"><button class="btn sm" onclick="carregaSala()">Atualizar lista</button></div>`;
+}
+
+/* ============================================================
+   3. REGISTRO DO DESAFIO
+   ============================================================ */
+async function abreGrupo(id){
+  try{
+    const {data, error} = await sb.rpc('ps_din_registro', {p_codigo:S.codigo, p_grupo:id});
+    if(error) throw error;
+    if(data.status === 'fechada'){ telaFechada(S.sala); return; }
+    if(data.status !== 'ok'){ toast('Não consegui abrir esse grupo. Atualize a lista.', true); return; }
+
+    S.grupo  = data.grupo;
+    S.dados  = data.dados || {};
+    S.versao = data.versao || 0;
+    S.salvoEm = data.atualizado_em; S.autor = data.atualizado_por || '';
+
+    /* rascunho local mais novo que o do servidor volta para a tela */
+    const loc = leLocal();
+    if(loc && loc.versao === S.versao && JSON.stringify(loc.dados) !== JSON.stringify(S.dados)){
+      S.dados = loc.dados; S.sujo = true;
+      setTimeout(()=>toast('Recuperei o que estava escrito neste aparelho e ainda não tinha sido gravado.'), 400);
+    }
+    telaRegistro();
+  }catch(e){ console.error(e); toast('Sem resposta do servidor. Tente de novo.', true); }
+}
+
+function telaRegistro(){
+  const c = S.grupo.caso;
+  $('#hd-grupo').hidden = false; $('#hd-grupo').textContent = 'Grupo '+S.grupo.letra;
+  $('#barra').hidden = false;
+
+  $('#app').innerHTML = `
+    ${c ? `<div class="caso">
+      <span class="eyebrow" style="color:var(--syn)">O caso do grupo ${esc(S.grupo.letra)}</span>
+      <h2 style="margin-top:7px">${esc(c.titulo||'')}</h2>
+      <dl>
+        ${c.pessoa ? `<div><dt>Quem é</dt><dd>${esc(c.pessoa)}</dd></div>`:''}
+        ${c.necessidade ? `<div><dt>O que ela precisa</dt><dd>${esc(c.necessidade)}</dd></div>`:''}
+        ${(c.restricoes||[]).length ? `<div><dt>O que limita</dt><dd><ul>${
+          c.restricoes.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></dd></div>`:''}
+      </dl>
+    </div>` : ''}
+
+    ${S.sala.config?.desafio_contexto ? `<div class="card"><h3>${esc(S.sala.config.desafio_titulo||'O desafio')}</h3>
+      <p class="small muted">${esc(S.sala.config.desafio_contexto)}</p></div>` : ''}
+
+    <div id="conflito"></div>
+
+    <div class="card">
+      <h3 style="margin-bottom:4px">O registro do grupo</h3>
+      <div class="campo" style="margin-bottom:18px">
+        <div class="aj" style="margin-bottom:7px">Quem está digitando? (só para o grupo saber de quem é a última gravação)</div>
+        <input id="f-quem" value="${esc(S.autorLocal||'')}" maxlength="40" placeholder="Seu primeiro nome"
+          autocomplete="given-name" style="width:100%;background:rgba(255,255,255,.05);
+          border:1px solid var(--line2);border-radius:13px;padding:12px 14px;outline:none">
+      </div>
+      ${S.campos.map(f=>campoHtml(f)).join('')}
+    </div>
+
+    <p class="tiny muted">O que está escrito aqui fica salvo neste aparelho enquanto vocês trabalham.
+      Só vai para o comitê quando alguém tocar em <b>Gravar alterações</b>.</p>`;
+
+  const q = document.getElementById('f-quem');
+  if(q) q.addEventListener('input', ()=>{
+    S.autorLocal = q.value.trim();
+    try{ localStorage.setItem('nro.din.quem', S.autorLocal); }catch(e){}
+  });
+
+  S.campos.forEach(f=>{
+    const el = document.getElementById('f-'+f.chave);
+    if(!el) return;
+    el.addEventListener('input', ()=>{
+      S.dados[f.chave] = el.value;
+      S.sujo = true;
+      conta(f); pintaBarra();
+      clearTimeout(el._t); el._t = setTimeout(salvaLocal, 350);
+    });
+    conta(f);
+  });
+  pintaBarra();
+}
+
+function campoHtml(f){
+  const v = S.dados[f.chave] || '';
+  return `<div class="campo">
+    <label for="f-${esc(f.chave)}">${esc(f.rotulo||f.chave)}</label>
+    ${f.ajuda ? `<div class="aj">${esc(f.ajuda)}</div>`:''}
+    <textarea id="f-${esc(f.chave)}" rows="${f.linhas||3}" maxlength="${f.limite||400}"
+      placeholder="Escrevam aqui.">${esc(v)}</textarea>
+    <div class="cnt" id="c-${esc(f.chave)}"></div>
+  </div>`;
+}
+function conta(f){
+  const el = document.getElementById('f-'+f.chave), c = document.getElementById('c-'+f.chave);
+  if(!el||!c) return;
+  const lim = f.limite||400, n = el.value.length;
+  c.textContent = `${n} / ${lim}`;
+  c.className = 'cnt' + (n>=lim ? ' cheio' : n > lim*0.85 ? ' perto' : '');
+}
+
+/* ---------- barra de estado ---------- */
+function pintaBarra(){
+  const b = $('#st'), btn = $('#gravar');
+  const preenchidos = S.campos.filter(f=>(S.dados[f.chave]||'').trim()).length;
+  let ponto, titulo, linha;
+  if(!S.online){ ponto='p-b'; titulo='Sem internet';
+    linha = 'O texto está salvo neste aparelho. Grave assim que a rede voltar.'; }
+  else if(S.gravando){ ponto='p-w'; titulo='Gravando…'; linha=''; }
+  else if(S.sujo){ ponto='p-w'; titulo='Alterações não gravadas';
+    linha = `${preenchidos} de ${S.campos.length} campos preenchidos`; }
+  else if(S.versao){ ponto='p-ok'; titulo='Gravado' + (S.salvoEm ? ' às '+hm(S.salvoEm) : '');
+    linha = `versão ${S.versao}${S.autor ? ' · '+esc(S.autor) : ''}`; }
+  else { ponto='p-d'; titulo='Nada gravado ainda';
+    linha = `${preenchidos} de ${S.campos.length} campos preenchidos`; }
+  b.innerHTML = `<b><span class="ponto ${ponto}"></span>${titulo}</b><span>${linha}</span>`;
+  btn.disabled = S.gravando || (!S.sujo && !!S.versao);
+  btn.textContent = S.gravando ? 'Gravando…' : (S.sujo || !S.versao) ? 'Gravar alterações' : 'Tudo gravado';
+}
+
+/* ---------- gravação ---------- */
+async function gravar(){
+  if(S.gravando) return;
+  const vazio = S.campos.every(f=>!(S.dados[f.chave]||'').trim());
+  if(vazio){ toast('Escrevam alguma coisa antes de gravar.', true); return; }
+  S.gravando = true; pintaBarra();
+  salvaLocal();
+  try{
+    const {data, error} = await sb.rpc('ps_din_gravar', {
+      p_codigo:S.codigo, p_grupo:S.grupo.id, p_dados:S.dados,
+      p_versao:S.versao, p_autor:(S.autorLocal||null)
+    });
+    if(error) throw error;
+    S.gravando = false;
+
+    if(data.status === 'ok'){
+      S.versao = data.versao; S.salvoEm = data.atualizado_em; S.sujo = false;
+      limpaLocal(); salvaLocal(); pintaBarra();
+      toast('Gravado. O comitê já vê o texto de vocês.');
+      return;
+    }
+    if(data.status === 'conflito'){ mostraConflito(data); pintaBarra(); return; }
+    if(data.status === 'fechada'){ telaFechada(S.sala); return; }
+    if(data.status === 'longo_demais'){ toast('Texto grande demais. Enxuguem um pouco e gravem de novo.', true); }
+    else if(data.status === 'grupo_invalido'){ toast('Esse grupo não existe mais. Volte e escolha de novo.', true); }
+    else toast('Não deu para gravar agora. Tente de novo em alguns segundos.', true);
+    pintaBarra();
+  }catch(e){
+    console.error(e);
+    S.gravando = false; pintaBarra();
+    toast('Não consegui gravar. O texto continua salvo neste aparelho.<br>Confira o Wi-Fi e toque em gravar de novo.', true);
+  }
+}
+
+/* Duas pessoas do mesmo grupo gravaram. Mostramos as duas versões
+   campo a campo e deixamos o grupo decidir — nada some sozinho. */
+let CONFLITO = null;
+function mostraConflito(d){
+  CONFLITO = d;
+  const meu = S.dados, dele = d.dados || {};
+  const difs = S.campos.filter(f=>(meu[f.chave]||'') !== (dele[f.chave]||''));
+  $('#conflito').innerHTML = `
+    <div class="aviso a-warn">
+      <b>Alguém do grupo gravou antes de você.</b>
+      <p class="small" style="margin-top:6px">Para não apagar o trabalho de ninguém, o texto de vocês
+        <b>não</b> foi gravado ainda. Escolha o que fica${d.atualizado_por ? ' (a outra versão é de '+esc(d.atualizado_por)+')':''}:</p>
+      <div class="vs">
+        <div class="op"><h4>O que está no servidor (versão ${d.versao})</h4>
+          <p>${difs.map(f=>`${esc(f.rotulo)}: ${esc(dele[f.chave]||'—')}`).join('\n\n') || 'sem diferenças de texto'}</p></div>
+        <div class="op"><h4>O que está neste aparelho</h4>
+          <p>${difs.map(f=>`${esc(f.rotulo)}: ${esc(meu[f.chave]||'—')}`).join('\n\n') || 'sem diferenças de texto'}</p></div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn sm solid" onclick="resolveConflito('meu')">Manter o deste aparelho</button>
+        <button class="btn sm" onclick="resolveConflito('servidor')">Usar o do servidor</button>
+        <button class="btn sm" onclick="resolveConflito('juntar')">Juntar os dois</button>
+      </div>
+    </div>`;
+  $('#conflito').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resolveConflito(modo){
+  if(!CONFLITO) return;
+  const deles = CONFLITO.dados || {};
+  S.versao = CONFLITO.versao;
+  CONFLITO = null;
+  if(modo === 'servidor'){ S.dados = deles || {}; S.sujo = false; }
+  if(modo === 'juntar'){
+    S.campos.forEach(f=>{
+      const a = (deles||{})[f.chave]||'', b = S.dados[f.chave]||'';
+      S.dados[f.chave] = a && b && a !== b ? (a + '\n— ' + b).slice(0, f.limite||400) : (b || a);
+    });
+    S.sujo = true;
+  }
+  if(modo === 'meu') S.sujo = true;
+  $('#conflito').innerHTML = '';
+  telaRegistro();
+  if(modo !== 'servidor') setTimeout(gravar, 300);
+  else { salvaLocal(); toast('Tela atualizada com a versão do servidor.'); }
+}
+
+/* ---------- rede, saída e ciclo de vida ---------- */
+window.addEventListener('online',  ()=>{ S.online = true;  pintaBarra();
+  if(S.sujo && S.grupo) toast('Internet de volta. Toque em gravar.'); });
+window.addEventListener('offline', ()=>{ S.online = false; pintaBarra(); });
+
+window.addEventListener('beforeunload', e=>{
+  if(S.sujo && S.grupo){ e.preventDefault(); e.returnValue = ''; }
+});
+/* celular que volta do bloqueio com a aba viva: confere se a janela
+   continua aberta e se alguém do grupo gravou nesse meio-tempo */
+document.addEventListener('visibilitychange', async ()=>{
+  if(document.visibilityState !== 'visible' || !S.grupo || S.gravando) return;
+  try{
+    const {data} = await sb.rpc('ps_din_registro', {p_codigo:S.codigo, p_grupo:S.grupo.id});
+    if(!data) return;
+    if(data.status === 'fechada'){ telaFechada(S.sala); return; }
+    if(data.status === 'ok' && data.versao > S.versao && !S.sujo){
+      S.dados = data.dados||{}; S.versao = data.versao;
+      S.salvoEm = data.atualizado_em; S.autor = data.atualizado_por||'';
+      telaRegistro(); toast('Alguém do grupo gravou. Atualizei a tela.');
+    } else if(data.status === 'ok' && data.versao > S.versao){
+      S.versao = data.versao; pintaBarra();
+      toast('Alguém do grupo gravou enquanto você escrevia. Ao gravar, você escolhe o que fica.');
+    }
+  }catch(e){ /* silêncio: é só uma conferência */ }
+});
+
+/* ---------- início ---------- */
+(async function init(){
+  $('#logo').src = LOGO_URL;
+  const h = (location.hash||'').replace(/^#/,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(h.length >= 4){
+    S.codigo = h;
+    $('#app').innerHTML = '<div class="centro muted">Abrindo a sala…</div>';
+    const ok = await carregaSala();
+    if(!ok) return;
+  } else {
+    telaCodigo();
+  }
+})();
+</script>
+</body>
+</html>

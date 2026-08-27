@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Mesa do avaliador na dinâmica em grupo do processo seletivo da NeuroDynamics.">
+<meta name="theme-color" content="#060A09">
+<title>Mesa do avaliador | NeuroDynamics</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060A09; --ink:#F5F5F7; --muted:#9FAAA6; --dim:#6E7A76;
+  --line:rgba(245,245,247,.09); --line2:rgba(245,245,247,.18);
+  --deep:#00352F; --green:#00594F; --syn:#CEDC00;
+  --ambar:#FBBF24; --bad:#F1806F; --ok:#4ADE97; --azul:#7FA7F2;
+  --card:rgba(255,255,255,.045); --glass:rgba(10,17,15,.9);
+  --r:16px; --max:900px;
+  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  --safe:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,h4{font-family:var(--fd);letter-spacing:-.01em;line-height:1.22}
+a{color:var(--syn)}
+button{font-family:inherit;cursor:pointer;color:inherit;border:none;background:none;font-size:15px}
+input,textarea,select{font-family:inherit;font-size:16px;color:var(--ink)}
+[hidden]{display:none!important}
+::selection{background:var(--syn);color:var(--deep)}
+
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(120% 80% at 70% -10%, #0A1F1B 0%, var(--bg) 55%)}
+
+header{position:sticky;top:0;z-index:30;background:var(--glass);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--line)}
+.hd{max-width:var(--max);margin:0 auto;padding:10px 15px;display:flex;align-items:center;gap:10px}
+.hd img{height:17px;filter:brightness(0) invert(1)}
+.hd .tag{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--syn);
+  border:1px solid rgba(206,220,0,.35);border-radius:999px;padding:3px 8px}
+.hd .rel{margin-left:auto;font-family:var(--fm);font-size:12.5px;color:var(--muted);text-align:right;line-height:1.3}
+.hd .rel b{display:block;color:var(--ink);font-family:var(--fd);font-size:13px}
+
+.abas{max-width:var(--max);margin:0 auto;display:flex;gap:2px;padding:0 9px 8px;overflow-x:auto;
+  scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.abas button{flex:0 0 auto;font-family:var(--fd);font-weight:600;font-size:13.5px;color:var(--muted);
+  padding:8px 13px;border-radius:10px;white-space:nowrap}
+.abas button.on{background:rgba(206,220,0,.13);color:var(--syn)}
+
+main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe))}
+.eyebrow{font-family:var(--fm);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.card{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px;margin-bottom:12px}
+.card h2{font-size:18px;margin-bottom:7px}
+.card h3{font-size:15px;margin-bottom:6px}
+.muted{color:var(--muted)} .small{font-size:13.5px} .tiny{font-size:12px;line-height:1.45}
+.mono{font-family:var(--fm)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 17px;
+  border-radius:12px;font-family:var(--fd);font-weight:700;font-size:14.5px;
+  border:1px solid var(--line2);background:rgba(255,255,255,.05)}
+.btn.solid{background:var(--syn);color:var(--deep);border-color:transparent}
+.btn.w{width:100%}
+.btn.sm{min-height:36px;font-size:13px;padding:0 12px;border-radius:10px}
+.btn:disabled{opacity:.5;cursor:default}
+
+.aviso{border-radius:12px;padding:12px 14px;font-size:13.5px;margin-bottom:12px;border:1px solid}
+.a-warn{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.32)}
+.a-bad{background:rgba(241,128,111,.1);border-color:rgba(241,128,111,.32)}
+.a-ok{background:rgba(74,222,151,.09);border-color:rgba(74,222,151,.3)}
+.aviso b{font-family:var(--fd)}
+
+/* ---- login ---- */
+.login{max-width:360px;margin:8vh auto 0}
+.login h1{font-size:24px;margin:8px 0 6px}
+.campo{margin-bottom:12px}
+.campo label{display:block;font-family:var(--fd);font-weight:600;font-size:13.5px;margin-bottom:5px}
+.campo input,.campo textarea,.campo select{width:100%;background:rgba(255,255,255,.05);
+  border:1px solid var(--line2);border-radius:11px;padding:12px 13px;outline:none}
+.campo input:focus,.campo textarea:focus{border-color:var(--syn)}
+.campo textarea{resize:vertical;min-height:80px;line-height:1.45}
+
+/* ---- roteiro ---- */
+.bloco{border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:10px;overflow:hidden}
+.bloco.on{border-color:var(--syn);background:rgba(206,220,0,.07)}
+.bloco.fim{opacity:.55}
+.bloco .cab{display:flex;align-items:center;gap:11px;padding:13px 15px;cursor:pointer}
+.bloco .h{font-family:var(--fm);font-size:13px;color:var(--syn);width:46px;flex:0 0 46px}
+.bloco .nm{font-family:var(--fd);font-weight:600;font-size:15.5px;flex:1}
+.bloco .mi{font-family:var(--fm);font-size:12px;color:var(--dim)}
+.bloco .corpo{padding:0 15px 14px;border-top:1px solid var(--line)}
+.bloco .corpo ul{margin:11px 0 0 17px}
+.bloco .corpo li{font-size:14px;margin-bottom:6px;color:rgba(245,245,247,.9)}
+.bloco .proj{font-size:12.5px;color:var(--muted);margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
+.bloco .proj b{color:var(--syn);font-family:var(--fm);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+
+/* ---- presença e grupos ---- */
+.pes{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.pes:last-child{border-bottom:none}
+.pes .nm{flex:1;min-width:0}
+.pes .nm b{font-family:var(--fd);font-weight:600;font-size:14.5px;display:block}
+.pes .nm span{font-size:12px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden;flex:0 0 auto}
+.seg button{font-size:12.5px;font-weight:600;padding:7px 11px;color:var(--muted);min-width:42px}
+.seg button.on{background:var(--syn);color:var(--deep)}
+.seg button.no.on{background:var(--bad);color:#2b0a06}
+.gl{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;
+  font-family:var(--fd);font-weight:700;font-size:15px;background:rgba(255,255,255,.07);color:var(--muted);
+  border:1px solid var(--line2);flex:0 0 auto}
+.gl.on{background:var(--syn);color:var(--deep);border-color:transparent}
+.gsel{display:flex;gap:5px;flex-wrap:wrap;flex:0 0 auto}
+
+.gcard{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px;margin-bottom:10px}
+.gcard .top{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.gcard .letra{width:38px;height:38px;border-radius:11px;background:var(--syn);color:var(--deep);
+  display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:18px;flex:0 0 auto}
+.gcard .meta{flex:1;min-width:0}
+.gcard .meta b{font-family:var(--fd);font-size:15px;display:block}
+.gcard .meta span{font-size:12px;color:var(--muted)}
+.gcard dl{display:grid;gap:9px;margin-top:4px}
+.gcard dt{font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--syn)}
+.gcard dd{font-size:13.5px;color:rgba(245,245,247,.9);white-space:pre-wrap}
+
+/* ---- avaliação ---- */
+.escala{display:flex;gap:6px;margin:7px 0 3px}
+.escala button{flex:1;min-height:44px;border-radius:11px;border:1px solid var(--line2);
+  background:rgba(255,255,255,.04);font-family:var(--fd);font-weight:700;font-size:16px;color:var(--muted)}
+.escala button.on{background:var(--syn);color:var(--deep);border-color:transparent}
+.anc{font-size:12px;color:var(--dim);line-height:1.45;margin-top:5px}
+.anc b{color:var(--muted)}
+.crit{padding:13px 0;border-bottom:1px solid var(--line)}
+.crit:last-of-type{border-bottom:none}
+.crit .nm{font-family:var(--fd);font-weight:600;font-size:15px}
+.rec{display:flex;gap:6px;margin-top:8px}
+.rec button{flex:1;min-height:44px;border-radius:11px;border:1px solid var(--line2);
+  background:rgba(255,255,255,.04);font-family:var(--fd);font-weight:600;font-size:13.5px;color:var(--muted)}
+.rec button.on-a{background:rgba(74,222,151,.2);border-color:var(--ok);color:var(--ok)}
+.rec button.on-d{background:rgba(251,191,36,.18);border-color:var(--ambar);color:var(--ambar)}
+.rec button.on-r{background:rgba(241,128,111,.18);border-color:var(--bad);color:var(--bad)}
+
+.lista-c{display:flex;flex-direction:column;gap:8px}
+.itemc{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);padding:11px 13px;width:100%;text-align:left}
+.itemc.feito{border-color:rgba(74,222,151,.35)}
+.itemc .nm{flex:1;min-width:0}
+.itemc .nm b{font-family:var(--fd);font-weight:600;font-size:14.5px;display:block}
+.itemc .nm span{font-size:12px;color:var(--muted)}
+.itemc .nota{font-family:var(--fd);font-weight:700;font-size:17px;color:var(--syn)}
+.itemc .nada{font-size:12px;color:var(--dim)}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + var(--safe));z-index:60;
+  background:#12201D;border:1px solid var(--line2);border-radius:12px;padding:11px 17px;font-size:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;
+  max-width:calc(100vw - 30px)}
+#toast.on{opacity:1}
+#toast.err{border-color:rgba(241,128,111,.5)}
+.centro{text-align:center;padding:9vh 15px}
+
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  #bg,header,.abas,#toast,.naoimp{display:none!important}
+  main{padding:0;max-width:none}
+  .card,.bloco,.gcard{border:1px solid #bbb;background:#fff;break-inside:avoid;margin-bottom:8pt}
+  .muted,.tiny,.small,.anc{color:#444}
+  .eyebrow,.bloco .h,.gcard dt{color:#005}
+  h1,h2,h3{color:#000}
+  .escala button{border:1px solid #999;color:#000;min-height:26pt}
+  .linha-esc{display:flex;gap:4pt}
+}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<header>
+  <div class="hd">
+    <img id="logo" alt="NeuroDynamics">
+    <span class="tag">Mesa</span>
+    <div class="rel" id="rel"></div>
+  </div>
+  <div class="abas" id="abas" hidden></div>
+</header>
+
+<main id="app"><div class="centro muted">Carregando…</div></main>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   MESA DO AVALIADOR — a página que só existe durante a janela.
+
+   Duas travas, as duas no banco, não aqui:
+     1. login do SOMA com papel de comitê (eh_comite);
+     2. horário: as funções ps_din_* só respondem entre
+        (início − tolerância) e (fim + tolerância) da janela.
+   Fora disso a página não mostra candidato, grupo, registro
+   nem roteiro — nem para quem tem a senha. Quem precisa ler o
+   roteiro antes lê no documento NRO-PES-020 ou em
+   SOMA → Seleção → Dinâmica, que é onde se prepara.
+
+   As quatro abas seguem a ordem do que acontece na sala:
+   Roteiro (o que falar agora), Sala (presença e formação dos
+   grupos), Registros (o que os grupos estão escrevendo) e
+   Avaliar (a nota de cada candidato, com as âncoras à vista).
+
+   A avaliação cai na mesma tabela ps_avaliacoes que o SOMA já
+   usa, com fase 'dinamica' — a nota aparece na ficha do
+   candidato sem nenhuma ponte manual.
+   ============================================================ */
+
+const CONFIG = {
+  SUPABASE_URL: 'https://rxzmkyjttzzpwtodqkve.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_MJFR-aaQqTS1BthxYJG2kg_5XGhs9wg'
+};
+const LOGO_URL = 'https://raw.githubusercontent.com/matheusmarcondes1/nro/refs/heads/main/imagotipo%20preto.png';
+const sb = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+const $ = s => document.querySelector(s);
+const esc = v => v == null ? '' : String(v).replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hm = d => new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const LETRAS = 'ABCDEFGH';
+
+const M = { sessao:null, janelas:[], slot:null, mesa:null, aba:'roteiro',
+            aberto:null, avaliando:null, rascunho:{}, timer:null };
+
+function toast(msg, erro){
+  const t = $('#toast'); t.innerHTML = msg; t.className = 'on'+(erro?' err':'');
+  clearTimeout(toast.t); toast.t = setTimeout(()=>t.className='', erro?5000:2400);
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+function telaLogin(erro){
+  $('#abas').hidden = true;
+  $('#app').innerHTML = `
+    <div class="login">
+      <span class="eyebrow">Dinâmica em grupo</span>
+      <h1>Mesa do avaliador</h1>
+      <p class="small muted" style="margin-bottom:18px">Entre com a mesma conta do SOMA.
+        A página só abre durante o horário da janela.</p>
+      ${erro ? `<div class="aviso a-bad">${erro}</div>`:''}
+      <div class="campo"><label>E-mail</label>
+        <input id="lg-mail" type="email" autocomplete="username" inputmode="email"></div>
+      <div class="campo"><label>Senha</label>
+        <input id="lg-pass" type="password" autocomplete="current-password"></div>
+      <button class="btn solid w" id="lg-btn" onclick="logar()">Entrar</button>
+      <p class="tiny muted" style="margin-top:14px">Esqueceu a senha? Redefina no SOMA
+        (<span class="mono">pessoal.neurodynamics.dev</span>) e volte aqui.</p>
+    </div>`;
+  $('#lg-pass').addEventListener('keydown', e=>{ if(e.key==='Enter') logar(); });
+}
+
+async function logar(){
+  const email = $('#lg-mail').value.trim(), pass = $('#lg-pass').value;
+  if(!email || !pass) return;
+  $('#lg-btn').disabled = true; $('#lg-btn').textContent = 'Entrando…';
+  const {error} = await sb.auth.signInWithPassword({email, password:pass});
+  if(error){ telaLogin('E-mail ou senha incorretos.'); return; }
+  await depoisDoLogin();
+}
+
+async function depoisDoLogin(){
+  const {data:{session}} = await sb.auth.getSession();
+  M.sessao = session;
+  if(!session) return telaLogin();
+  await carregaJanelas();
+}
+
+async function sair(){ await sb.auth.signOut(); location.reload(); }
+
+/* ============================================================
+   JANELAS ABERTAS AGORA
+   ============================================================ */
+async function carregaJanelas(){
+  try{
+    const {data, error} = await sb.rpc('ps_din_janelas');
+    if(error) throw error;
+    if(data.status === 'sem_acesso'){
+      $('#abas').hidden = true;
+      $('#app').innerHTML = `<div class="centro">
+        <h2 style="font-size:20px;margin-bottom:8px">Acesso restrito ao Comitê de Seleção</h2>
+        <p class="small muted" style="max-width:420px;margin:0 auto">Sua conta existe, mas não está
+          no comitê desta edição. Peça ao Departamento de Pessoal para incluir você em
+          SOMA → Seleção → Configurações.</p>
+        <div style="max-width:220px;margin:20px auto 0"><button class="btn w" onclick="sair()">Sair</button></div></div>`;
+      return;
+    }
+    M.janelas = data.janelas || [];
+    if(!M.janelas.length){ telaSemJanela(); return; }
+    if(M.janelas.length === 1){ abreJanela(M.janelas[0].id); return; }
+    telaEscolha();
+  }catch(e){ console.error(e); telaSemJanela('Não consegui falar com o servidor.'); }
+}
+
+function telaSemJanela(msg){
+  $('#abas').hidden = true;
+  clearInterval(M.timer); M.timer = null;
+  $('#app').innerHTML = `
+    <div class="centro">
+      <span class="eyebrow">Fora da janela</span>
+      <h2 style="font-size:21px;margin:10px 0 8px">Nenhuma dinâmica acontecendo agora</h2>
+      <p class="small muted" style="max-width:440px;margin:0 auto">
+        ${msg ? esc(msg)+'<br><br>' : ''}
+        Esta página abre sozinha alguns minutos antes de cada janela e fecha depois que ela termina.
+        Para preparar a dinâmica (roteiro, casos, critérios, mesa de avaliadores),
+        vá em <b>SOMA → Seleção → Dinâmica</b>.</p>
+      <div style="max-width:260px;margin:22px auto 0;display:grid;gap:8px">
+        <button class="btn w" onclick="carregaJanelas()">Conferir de novo</button>
+        <button class="btn w" onclick="sair()">Sair</button>
+      </div>
+    </div>`;
+  setTimeout(()=>{ if(!M.slot) carregaJanelas(); }, 60000);
+}
+
+function telaEscolha(){
+  $('#abas').hidden = true;
+  $('#app').innerHTML = `
+    <h2 style="font-size:20px;margin-bottom:4px">Qual janela?</h2>
+    <p class="small muted" style="margin-bottom:14px">Mais de uma acontecendo agora.</p>
+    <div class="lista-c">
+      ${M.janelas.map(j=>`<button class="itemc" onclick="abreJanela('${j.id}')">
+        <span class="gl on">${esc(j.codigo||'?')}</span>
+        <span class="nm"><b>${esc(j.hora_inicio)}–${esc(j.hora_fim)}</b>
+          <span>${esc(j.local||'sem local')}</span></span></button>`).join('')}
+    </div>`;
+}
+
+/* ============================================================
+   A MESA
+   ============================================================ */
+async function abreJanela(id){
+  M.slot = id;
+  await carregaMesa();
+  if(!M.timer) M.timer = setInterval(()=>carregaMesa(true), 20000);
+}
+
+async function carregaMesa(silencioso){
+  try{
+    const {data, error} = await sb.rpc('ps_din_mesa', {p_slot:M.slot});
+    if(error) throw error;
+    if(data.status === 'fechada'){ M.slot = null; M.mesa = null; telaSemJanela(); return; }
+    if(data.status !== 'ok'){ M.slot = null; telaSemJanela(); return; }
+    M.mesa = data;
+    pinta();
+  }catch(e){
+    console.error(e);
+    if(!silencioso) toast('Sem resposta do servidor. Tento de novo em 20 segundos.', true);
+  }
+}
+
+const ABAS = [['roteiro','Roteiro'],['sala','Sala'],['registros','Registros'],['avaliar','Avaliar']];
+
+function pinta(){
+  const m = M.mesa; if(!m) return;
+  const j = m.janela;
+  $('#rel').innerHTML = `<b>${esc(j.codigo)} · ${esc(j.hora_inicio)}–${esc(j.hora_fim)}</b>
+    <span id="restante"></span>`;
+  $('#abas').hidden = false;
+  $('#abas').innerHTML = ABAS.map(([k,l])=>{
+    const n = k==='avaliar' ? avaliadosDe().length : k==='sala' ? (m.candidatos||[]).filter(c=>c.compareceu===true).length : 0;
+    return `<button class="${M.aba===k?'on':''}" onclick="M.aba='${k}';pinta()">${l}${n?` · ${n}`:''}</button>`;
+  }).join('');
+  ({roteiro:abaRoteiro, sala:abaSala, registros:abaRegistros, avaliar:abaAvaliar}[M.aba])();
+  relogio();
+}
+
+function relogio(){
+  const m = M.mesa; if(!m) return;
+  const el = $('#restante'); if(!el) return;
+  const fim = new Date(m.fecha_em).getTime();
+  const dif = Math.max(0, Math.round((fim - Date.now())/60000));
+  el.textContent = dif > 0 ? `fecha em ${dif} min` : 'fechando';
+}
+setInterval(relogio, 30000);
+
+/* ---------- bloco atual, pelo relógio da sala ---------- */
+function blocoAtual(){
+  const m = M.mesa; if(!m) return {i:-1, ini:[]};
+  const [h0,m0] = String(m.janela.hora_inicio||'00:00').split(':').map(Number);
+  const agora = new Date(); const dec = (agora.getHours()*60+agora.getMinutes()) - (h0*60+m0);
+  let t = 0, i = -1; const ini = [];
+  (m.blocos||[]).forEach((b,k)=>{ ini.push(t);
+    if(dec >= t && dec < t + (Number(b.minutos)||0)) i = k;
+    t += Number(b.minutos)||0; });
+  return {i, ini, dec};
+}
+const relDe = (min)=>{
+  const m = M.mesa; const [h0,m0] = String(m.janela.hora_inicio||'00:00').split(':').map(Number);
+  const x = h0*60 + m0 + min;
+  return `${String(Math.floor(x/60)%24).padStart(2,'0')}:${String(x%60).padStart(2,'0')}`;
+};
+
+/* ============================================================
+   ABA 1 · ROTEIRO
+   ============================================================ */
+function abaRoteiro(){
+  const m = M.mesa, {i:atual, ini, dec} = blocoAtual();
+  if(M.aberto === null) M.aberto = atual >= 0 ? atual : 0;
+  $('#app').innerHTML = `
+    <div class="card naoimp" style="display:flex;gap:12px;align-items:center">
+      <div style="flex:1">
+        <div class="eyebrow">Código da sala</div>
+        <div style="font-family:var(--fd);font-weight:700;font-size:30px;letter-spacing:.14em;color:var(--syn)">
+          ${esc(m.janela.codigo)}</div>
+        <div class="tiny muted">${esc(m.janela.local||'')} · ${(m.candidatos||[]).length} agendados</div>
+      </div>
+      <div style="display:grid;gap:7px">
+        <a class="btn sm" href="dinamica-painel.html#${esc(m.janela.codigo)}" target="_blank" rel="noopener">Abrir painel</a>
+        <button class="btn sm" onclick="window.print()">Imprimir</button>
+      </div>
+    </div>
+
+    ${atual < 0 && dec < 0 ? `<div class="aviso a-warn">Ainda faltam <b>${-dec} min</b> para o horário de início.
+      Use o tempo para conferir a sala, o projetor e quem pediu acessibilidade na inscrição.</div>` : ''}
+
+    ${(m.blocos||[]).map((b,k)=>{
+      const fim = k < atual;
+      return `<div class="bloco ${k===atual?'on':''} ${fim?'fim':''}">
+        <div class="cab" onclick="M.aberto=${M.aberto===k?-1:k};abaRoteiro()">
+          <span class="h">${relDe(ini[k])}</span>
+          <span class="nm">${esc(b.nome||'')}</span>
+          <span class="mi">${b.minutos} min</span>
+        </div>
+        ${M.aberto===k ? `<div class="corpo">
+          <ul>${(b.fala||[]).map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+          ${b.projetor ? `<div class="proj"><b>No projetor</b><br>${esc(b.projetor)}</div>`:''}
+          ${b.corte ? `<div class="proj"><b>Se atrasar</b><br>${esc(b.corte)}</div>`:''}
+        </div>`:''}
+      </div>`;
+    }).join('') || '<div class="empty muted">Nenhum bloco cadastrado. SOMA → Seleção → Dinâmica.</div>'}
+
+    <div class="card" style="margin-top:14px">
+      <h3>O desafio de hoje</h3>
+      <p class="small muted">${esc(m.config?.desafio_contexto||'')}</p>
+      <div style="margin-top:11px">${(m.casos||[]).map(c=>`
+        <div style="border-top:1px solid var(--line);padding-top:10px;margin-top:10px">
+          <b style="font-family:var(--fd);font-size:14px">${esc(c.titulo||'')}</b>
+          <p class="tiny muted" style="margin-top:3px">${esc(c.pessoa||'')}</p>
+          ${c.pista ? `<p class="tiny" style="color:var(--syn);margin-top:5px">Se travar: ${esc(c.pista)}</p>`:''}
+        </div>`).join('')}</div>
+    </div>`;
+}
+
+/* ============================================================
+   ABA 2 · SALA (presença e formação dos grupos)
+   ============================================================ */
+function abaSala(){
+  const m = M.mesa;
+  const cands = m.candidatos||[];
+  const grupos = m.grupos||[];
+  const presentes = cands.filter(c=>c.compareceu === true);
+  const tam = m.config?.tam_grupo || 5;
+  const sugerido = Math.max(1, Math.min(LETRAS.length, Math.ceil((presentes.length||cands.length)/tam)));
+
+  const grupoDe = id => (grupos.find(g=>(g.membros||[]).includes(id))||{}).letra || '';
+  const semGrupo = presentes.filter(c=>!grupoDe(c.id)).length;
+  const acess = cands.filter(c=>(c.acessibilidade||'').trim());
+
+  $('#app').innerHTML = `
+    ${acess.length ? `<div class="aviso a-warn"><b>Acessibilidade pedida na inscrição</b>
+      ${acess.map(c=>`<p class="small" style="margin-top:5px">${esc(c.nome)}: ${esc(c.acessibilidade)}</p>`).join('')}</div>`:''}
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <h3 style="flex:1;margin:0">Presença e grupos</h3>
+        <span class="mono tiny muted">${presentes.length}/${cands.length}</span>
+      </div>
+      <p class="tiny muted" style="margin-bottom:10px">Marque quem chegou e toque na letra do grupo.
+        ${presentes.length ? `Com ${presentes.length} presentes, <b>${sugerido} grupo${sugerido>1?'s':''}</b> de ~${Math.ceil(presentes.length/sugerido)}.` : ''}</p>
+
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px" class="naoimp">
+        <button class="btn sm" onclick="montaGrupos(${sugerido})">Dividir em ${sugerido} grupo${sugerido>1?'s':''}</button>
+        ${grupos.length ? `<button class="btn sm" onclick="salvaGrupos()">Salvar grupos</button>` : ''}
+        <button class="btn sm" onclick="avulso()">+ Alguém fora da lista</button>
+      </div>
+
+      ${cands.map(c=>`<div class="pes">
+        <div class="nm"><b>${esc(c.nome)}</b>
+          <span>${esc(c.curso||'—')}${c.periodo?' · '+esc(c.periodo)+'º':''} · ${esc(c.protocolo||'')}</span></div>
+        <div class="seg naoimp">
+          <button class="${c.compareceu===true?'on':''}" onclick="presenca('${c.id}',true)">veio</button>
+          <button class="no ${c.compareceu===false?'on':''}" onclick="presenca('${c.id}',false)">faltou</button>
+        </div>
+        ${c.compareceu===true ? `<div class="gsel naoimp">${
+          Array.from({length: Math.max(grupos.length, sugerido)}, (_,k)=>LETRAS[k]).map(L=>
+            `<button class="gl ${grupoDe(c.id)===L?'on':''}" onclick="poeNoGrupo('${c.id}','${L}')">${L}</button>`).join('')
+        }</div>`:''}
+      </div>`).join('') || '<p class="small muted">Nenhum candidato agendado nesta janela.</p>'}
+
+      ${semGrupo ? `<div class="aviso a-warn" style="margin-top:12px">
+        <b>${semGrupo} presente${semGrupo>1?'s':''} sem grupo.</b> Toque na letra ao lado do nome.</div>`:''}
+    </div>
+
+    ${grupos.map(g=>{
+      const nomes = (g.membros||[]).map(id=>(cands.find(c=>c.id===id)||{}).nome).filter(Boolean);
+      return `<div class="gcard">
+        <div class="top">
+          <span class="letra">${esc(g.letra)}</span>
+          <span class="meta"><b>Grupo ${esc(g.letra)}</b>
+            <span>${nomes.concat(g.avulsos||[]).join(' · ') || 'ninguém ainda'}</span></span>
+        </div>
+        <div class="campo naoimp" style="margin:0">
+          <label>Caso do grupo</label>
+          <select onchange="poeCaso('${g.letra}', this.value)">
+            <option value="">— escolher —</option>
+            ${(m.casos||[]).map(c=>`<option value="${c.id}" ${g.caso_id===c.id?'selected':''}>${esc(c.titulo)}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
+    }).join('')}
+
+    ${grupos.length ? `<button class="btn solid w naoimp" onclick="salvaGrupos()">Salvar grupos e casos</button>`:''}`;
+}
+
+async function presenca(id, veio){
+  const c = (M.mesa.candidatos||[]).find(x=>x.id===id);
+  if(c) c.compareceu = veio;              /* pinta na hora; o banco confirma depois */
+  abaSala();
+  try{
+    const {data, error} = await sb.rpc('ps_din_presenca', {p_slot:M.slot, p_candidato:id, p_veio:veio});
+    if(error || data?.status !== 'ok') throw error || new Error(data?.status);
+  }catch(e){ toast('Não gravei a presença. Tente de novo.', true); }
+}
+
+function montaGrupos(n){
+  const m = M.mesa;
+  const presentes = (m.candidatos||[]).filter(c=>c.compareceu === true);
+  if(!presentes.length){ toast('Marque a presença antes de dividir.', true); return; }
+  /* embaralha para não juntar sempre quem sentou junto, e distribui em
+     rodízio — assim os grupos saem do mesmo tamanho */
+  const ordem = presentes.map(c=>c.id);
+  for(let i=ordem.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [ordem[i],ordem[j]]=[ordem[j],ordem[i]]; }
+  const casos = m.casos||[];
+  m.grupos = Array.from({length:n}, (_,k)=>({
+    letra: LETRAS[k], caso_id: casos[k % Math.max(1,casos.length)]?.id || null,
+    membros: ordem.filter((_,i)=>i % n === k), avulsos: [], registro:{}, versao:0
+  }));
+  abaSala();
+  toast('Grupos montados. Confira e toque em salvar.');
+}
+
+function poeNoGrupo(id, L){
+  const m = M.mesa;
+  if(!(m.grupos||[]).length) m.grupos = [];
+  let g = m.grupos.find(x=>x.letra===L);
+  if(!g){ g = {letra:L, caso_id:(m.casos||[])[m.grupos.length]?.id||null, membros:[], avulsos:[], registro:{}, versao:0};
+          m.grupos.push(g); m.grupos.sort((a,b)=>a.letra.localeCompare(b.letra)); }
+  m.grupos.forEach(x=>{ x.membros = (x.membros||[]).filter(v=>v!==id); });
+  if(!(g.membros||[]).includes(id)) g.membros.push(id);
+  abaSala();
+}
+
+function poeCaso(L, casoId){
+  const g = (M.mesa.grupos||[]).find(x=>x.letra===L);
+  if(g) g.caso_id = casoId || null;
+}
+
+function avulso(){
+  const nome = prompt('Nome de quem apareceu sem estar na lista:');
+  if(!nome || !nome.trim()) return;
+  const L = prompt('Em qual grupo? (letra)','A');
+  if(!L) return;
+  const m = M.mesa;
+  let g = (m.grupos||[]).find(x=>x.letra===L.trim().toUpperCase());
+  if(!g){ g = {letra:L.trim().toUpperCase(), caso_id:null, membros:[], avulsos:[], registro:{}, versao:0};
+          (m.grupos = m.grupos||[]).push(g); }
+  g.avulsos = (g.avulsos||[]).concat(nome.trim());
+  abaSala();
+  toast('Anotado. Depois da dinâmica, confira com essa pessoa se a inscrição saiu.');
+}
+
+async function salvaGrupos(){
+  const payload = (M.mesa.grupos||[]).map(g=>({
+    letra:g.letra, caso_id:g.caso_id||null, membros:g.membros||[], avulsos:g.avulsos||[]}));
+  try{
+    const {data, error} = await sb.rpc('ps_din_grupos_salvar', {p_slot:M.slot, p_grupos:payload});
+    if(error) throw error;
+    if(data.status !== 'ok') throw new Error(data.status);
+    toast('Grupos salvos. Já aparecem no celular dos candidatos.');
+    await carregaMesa();
+  }catch(e){ console.error(e); toast('Não consegui salvar os grupos.', true); }
+}
+
+/* ============================================================
+   ABA 3 · REGISTROS (o que os grupos estão escrevendo)
+   ============================================================ */
+function abaRegistros(){
+  const m = M.mesa, campos = m.campos||[], grupos = m.grupos||[];
+  $('#app').innerHTML = `
+    <p class="small muted naoimp" style="margin-bottom:12px">Atualiza sozinho a cada 20 segundos.
+      Use na hora das apresentações. Não corrija o texto de ninguém por aqui.</p>
+    ${grupos.map(g=>{
+      const r = g.registro||{};
+      const nomes = (g.membros||[]).map(id=>(m.candidatos.find(c=>c.id===id)||{}).nome).filter(Boolean)
+                    .concat(g.avulsos||[]);
+      const caso = (m.casos||[]).find(c=>c.id===g.caso_id);
+      return `<div class="gcard">
+        <div class="top">
+          <span class="letra">${esc(g.letra)}</span>
+          <span class="meta"><b>${caso ? esc(caso.titulo) : 'Grupo '+esc(g.letra)}</b>
+            <span>${nomes.join(' · ')||'—'}</span></span>
+          <span class="tiny muted" style="text-align:right;flex:0 0 auto">${
+            g.versao ? 'v'+g.versao+'<br>'+hm(g.atualizado_em) : 'nada gravado'}</span>
+        </div>
+        <dl>${campos.map(f=>`<div><dt>${esc(f.rotulo||f.chave)}</dt>
+          <dd>${esc(r[f.chave]||'—')}</dd></div>`).join('')}</dl>
+      </div>`;
+    }).join('') || '<p class="small muted">Nenhum grupo formado ainda. Vá para a aba Sala.</p>'}
+    <button class="btn w naoimp" onclick="carregaMesa()">Atualizar agora</button>`;
+}
+
+/* ============================================================
+   ABA 4 · AVALIAR
+   ============================================================ */
+const avaliadosDe = ()=> (M.mesa?.minhas_avaliacoes||[]);
+const minhaAval = id => avaliadosDe().find(a=>a.candidato_id===id);
+
+function abaAvaliar(){
+  const m = M.mesa;
+  if(M.avaliando) return fichaAvaliacao();
+  const presentes = (m.candidatos||[]).filter(c=>c.compareceu !== false);
+  const grupoDe = id => ((m.grupos||[]).find(g=>(g.membros||[]).includes(id))||{}).letra || '';
+  const faltam = presentes.filter(c=>!minhaAval(c.id)).length;
+  $('#app').innerHTML = `
+    <div class="aviso ${faltam?'a-warn':'a-ok'}">
+      ${faltam ? `<b>Faltam ${faltam} de ${presentes.length}.</b> Lance a nota ainda na sala:
+        depois de duas janelas ninguém lembra quem era quem.`
+      : `<b>Todos avaliados.</b> Fecha com a mesa antes de sair. Cinco minutos de calibração
+         valem mais que uma hora de discussão amanhã.`}
+    </div>
+    <div class="lista-c">
+      ${presentes.map(c=>{ const a = minhaAval(c.id); const L = grupoDe(c.id);
+        return `<button class="itemc ${a?'feito':''}" onclick="M.avaliando='${c.id}';M.rascunho={};pinta()">
+          <span class="gl ${L?'on':''}">${esc(L||'—')}</span>
+          <span class="nm"><b>${esc(c.nome)}</b><span>${esc(c.curso||'')}</span></span>
+          ${a ? `<span class="nota">${Number(a.nota||0).toFixed(1)}</span>`
+              : `<span class="nada">avaliar</span>`}
+        </button>`; }).join('') || '<p class="small muted">Ninguém presente ainda.</p>'}
+    </div>
+    <p class="tiny muted" style="margin-top:14px">A nota é a média dos critérios. Ela e o parecer
+      entram na ficha do candidato no SOMA, na fase dinâmica, com o seu nome.</p>`;
+}
+
+function fichaAvaliacao(){
+  const m = M.mesa;
+  const c = (m.candidatos||[]).find(x=>x.id===M.avaliando);
+  if(!c){ M.avaliando = null; return abaAvaliar(); }
+  const a = minhaAval(c.id) || {};
+  const r = M.rascunho.id === c.id ? M.rascunho
+          : (M.rascunho = {id:c.id, criterios:{...(a.criterios||{})}, parecer:a.parecer||'', rec:a.recomendacao||''});
+  const L = ((m.grupos||[]).find(g=>(g.membros||[]).includes(c.id))||{}).letra || '';
+
+  $('#app').innerHTML = `
+    <button class="btn sm naoimp" style="margin-bottom:12px" onclick="M.avaliando=null;pinta()">← Voltar à lista</button>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:11px">
+        <span class="gl on" style="width:38px;height:38px;font-size:17px">${esc(L||'—')}</span>
+        <div style="flex:1;min-width:0">
+          <h2 style="margin:0">${esc(c.nome)}</h2>
+          <p class="tiny muted">${esc(c.curso||'—')}${c.periodo?' · '+esc(c.periodo)+'º período':''} ·
+            ${esc(c.protocolo||'')}</p>
+        </div>
+      </div>
+      ${(c.areas||[]).length ? `<p class="tiny muted" style="margin-top:9px">Interesse: ${
+        c.areas.map(x=>esc(x)).join(' · ')}</p>`:''}
+    </div>
+
+    <div class="card">
+      ${(m.criterios||[]).map(k=>`<div class="crit">
+        <div class="nm">${esc(k.nome)}</div>
+        <div class="escala">${[1,2,3,4,5].map(n=>
+          `<button class="${String(r.criterios[k.nome])===String(n)?'on':''}"
+            onclick="nota('${esc(k.nome).replace(/'/g,'&#39;')}',${n})">${n}</button>`).join('')}</div>
+        <div class="anc"><b>1</b> ${esc(k.a1||'')}<br><b>3</b> ${esc(k.a3||'')}<br><b>5</b> ${esc(k.a5||'')}</div>
+      </div>`).join('')}
+    </div>
+
+    <div class="card">
+      <div class="campo"><label>Parecer</label>
+        <textarea id="av-par" placeholder="Um fato observado, não uma impressão. O que a pessoa fez, e quando."
+          maxlength="1200">${esc(r.parecer)}</textarea>
+        <p class="tiny muted" style="margin-top:5px">Escreva o comportamento, não o rótulo:
+          "reorganizou o grupo aos 10 min e distribuiu as partes" diz mais que "é proativa".</p>
+      </div>
+      <label style="font-family:var(--fd);font-weight:600;font-size:13.5px">Recomendação</label>
+      <div class="rec">
+        <button class="${r.rec==='aprovar'?'on-a':''}"   onclick="rec('aprovar')">Aprovar</button>
+        <button class="${r.rec==='em_duvida'?'on-d':''}" onclick="rec('em_duvida')">Em dúvida</button>
+        <button class="${r.rec==='reprovar'?'on-r':''}"  onclick="rec('reprovar')">Reprovar</button>
+      </div>
+    </div>
+
+    <button class="btn solid w naoimp" onclick="salvaAvaliacao()">Gravar avaliação</button>`;
+
+  const t = $('#av-par');
+  t.addEventListener('input', ()=>{ M.rascunho.parecer = t.value; });
+}
+
+function nota(crit, n){ M.rascunho.criterios[crit] = n; fichaAvaliacao(); }
+function rec(v){ M.rascunho.rec = M.rascunho.rec === v ? '' : v; fichaAvaliacao(); }
+
+async function salvaAvaliacao(){
+  const r = M.rascunho;
+  if(!Object.keys(r.criterios||{}).length){ toast('Dê pelo menos uma nota antes de gravar.', true); return; }
+  try{
+    const {data, error} = await sb.rpc('ps_din_avaliar', {
+      p_slot:M.slot, p_candidato:r.id, p_criterios:r.criterios,
+      p_parecer:r.parecer||null, p_recomendacao:r.rec||null});
+    if(error) throw error;
+    if(data.status === 'fechada'){ toast('A janela fechou. Lance esta avaliação no SOMA.', true); return; }
+    if(data.status !== 'ok') throw new Error(data.status);
+    toast(`Avaliação gravada. Nota ${Number(data.nota||0).toFixed(1)}.`);
+    M.avaliando = null; M.rascunho = {};
+    await carregaMesa();
+  }catch(e){ console.error(e); toast('Não consegui gravar. O texto continua na tela, tente de novo.', true); }
+}
+
+/* ============================================================
+   INÍCIO
+   ============================================================ */
+(async function init(){
+  $('#logo').src = LOGO_URL;
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ M.sessao = session; await carregaJanelas(); }
+  else telaLogin();
+  sb.auth.onAuthStateChange((ev)=>{ if(ev === 'SIGNED_OUT') location.reload(); });
+})();
+</script>
+</body>
+</html>

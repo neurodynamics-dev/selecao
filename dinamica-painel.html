@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Painel projetado da dinâmica em grupo do processo seletivo da NeuroDynamics.">
+<meta name="theme-color" content="#050807">
+<title>Painel da dinâmica | NeuroDynamics</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050807; --ink:#F5F5F7; --muted:#9FAAA6; --dim:#6E7A76;
+  --line:rgba(245,245,247,.1); --line2:rgba(245,245,247,.2);
+  --cortex:#00352F; --axon:#00594F; --soma:#0B7D6E; --syn:#CEDC00;
+  --ambar:#FBBF24; --bad:#F1806F; --ok:#4ADE97;
+  --card:rgba(255,255,255,.045);
+  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  /* tudo escala pela menor dimensão da tela: o mesmo desenho serve
+     o projetor 4:3 velho da sala e o telão 16:9 do auditório */
+  --u:1vmin;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);
+  -webkit-font-smoothing:antialiased;cursor:default}
+body.limpo{cursor:none}
+h1,h2,h3{font-family:var(--fd);letter-spacing:-.02em;line-height:1.05}
+[hidden]{display:none!important}
+
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(115% 85% at 72% -12%, #0A1F1B 0%, var(--bg) 58%)}
+#bg::after{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(245,245,247,.028) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(245,245,247,.028) 1px,transparent 1px);
+  background-size:9vmin 9vmin;
+  -webkit-mask-image:radial-gradient(85% 62% at 50% 26%, #000 0%, transparent 100%);
+          mask-image:radial-gradient(85% 62% at 50% 26%, #000 0%, transparent 100%)}
+.blob{position:fixed;border-radius:50%;filter:blur(14vmin);opacity:.4;z-index:-1}
+.b1{width:70vmin;height:70vmin;left:-20vmin;top:-24vmin;
+  background:radial-gradient(circle,var(--axon) 0%,transparent 70%)}
+.b2{width:52vmin;height:52vmin;right:-18vmin;bottom:-16vmin;opacity:.22;
+  background:radial-gradient(circle,var(--soma) 0%,transparent 70%)}
+
+/* ---------- moldura ---------- */
+#topo{position:fixed;top:0;left:0;right:0;height:8vmin;display:flex;align-items:center;
+  gap:2.4vmin;padding:0 4vmin;z-index:20}
+#topo img{height:2.4vmin;filter:brightness(0) invert(1)}
+#topo .ed{font-family:var(--fm);font-size:1.5vmin;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+#topo .dir{margin-left:auto;display:flex;align-items:center;gap:2vmin}
+#topo .cod{font-family:var(--fd);font-weight:700;font-size:2vmin;letter-spacing:.16em;
+  background:var(--syn);color:var(--cortex);border-radius:1vmin;padding:.5vmin 1.4vmin}
+#topo .rel{font-family:var(--fm);font-size:1.8vmin;color:var(--muted)}
+
+#palco{position:absolute;inset:8vmin 4vmin 7vmin;display:flex;flex-direction:column;justify-content:center}
+
+#rodape{position:fixed;bottom:0;left:0;right:0;height:7vmin;display:flex;align-items:center;
+  gap:2vmin;padding:0 4vmin;z-index:20;font-family:var(--fm);font-size:1.5vmin;color:var(--dim);
+  border-top:1px solid var(--line)}
+#rodape .prog{flex:1;height:.4vmin;background:rgba(245,245,247,.1);border-radius:1vmin;overflow:hidden}
+#rodape .prog i{display:block;height:100%;background:var(--syn);transition:width .3s}
+#ctrl{display:flex;gap:1vmin;opacity:0;transition:opacity .25s}
+body:not(.limpo) #ctrl{opacity:1}
+#ctrl button{font-family:var(--fm);font-size:1.4vmin;color:var(--muted);background:rgba(255,255,255,.05);
+  border:1px solid var(--line);border-radius:.8vmin;padding:.6vmin 1.2vmin;cursor:pointer}
+#ctrl button:hover{color:var(--ink);background:rgba(255,255,255,.1)}
+
+/* ---------- tipografia do palco ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:1.4vmin;font-family:var(--fm);font-size:1.7vmin;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--syn)}
+.eyebrow::before{content:'';width:1vmin;height:1vmin;background:var(--syn)}
+.tit{font-size:7.6vmin;font-weight:600;margin:2.4vmin 0 2vmin;max-width:88%}
+.tit.g{font-size:10vmin}
+.sub{font-size:2.6vmin;color:var(--muted);max-width:78%;line-height:1.45}
+
+.grade{display:grid;gap:2vmin;margin-top:1vmin}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.bloco{border:1px solid var(--line);border-radius:2vmin;background:var(--card);padding:2.8vmin}
+.bloco h3{font-size:2.7vmin;margin-bottom:1.2vmin}
+.bloco p{font-size:2vmin;color:var(--muted);line-height:1.45}
+.bloco .n{font-family:var(--fm);font-size:1.5vmin;color:var(--syn);letter-spacing:.14em;margin-bottom:1vmin}
+
+/* pessoas */
+.pessoas{display:flex;flex-wrap:wrap;gap:2.4vmin;margin-top:2vmin}
+.pessoa{flex:1 1 20vmin;max-width:32vmin;text-align:center}
+.pessoa .foto{width:16vmin;height:16vmin;margin:0 auto 1.6vmin;border-radius:50%;overflow:hidden;
+  background:linear-gradient(140deg,var(--axon),var(--cortex));display:grid;place-items:center;
+  border:.3vmin solid rgba(206,220,0,.3)}
+.pessoa .foto img{width:100%;height:100%;object-fit:cover}
+.pessoa .foto span{font-family:var(--fd);font-weight:700;font-size:5vmin;color:var(--syn)}
+.pessoa .nm{font-family:var(--fd);font-weight:600;font-size:2.4vmin}
+.pessoa .cg{font-size:1.8vmin;color:var(--syn);margin-top:.4vmin}
+.pessoa .fl{font-size:1.7vmin;color:var(--muted);margin-top:.8vmin;line-height:1.4}
+
+/* agenda */
+.agenda{display:flex;flex-direction:column;gap:1.2vmin;margin-top:2vmin}
+.linha{display:flex;align-items:center;gap:2vmin;border:1px solid var(--line);border-radius:1.4vmin;
+  padding:1.6vmin 2.4vmin;background:var(--card)}
+.linha.on{border-color:var(--syn);background:rgba(206,220,0,.09)}
+.linha .h{font-family:var(--fm);font-size:1.9vmin;color:var(--syn);width:9vmin;flex:0 0 9vmin}
+.linha .n{font-family:var(--fd);font-weight:600;font-size:2.4vmin;flex:1}
+.linha .m{font-family:var(--fm);font-size:1.8vmin;color:var(--dim)}
+
+/* regras */
+.regras{display:flex;flex-direction:column;gap:1.8vmin;margin-top:2.4vmin}
+.regra{display:flex;gap:2vmin;align-items:flex-start;font-size:2.8vmin;line-height:1.35;max-width:82%}
+.regra i{font-family:var(--fm);font-style:normal;color:var(--syn);font-size:2vmin;padding-top:.7vmin}
+
+/* QR */
+.qrbox{display:flex;align-items:center;gap:5vmin;margin-top:2vmin}
+.qrbox .qr{width:36vmin;height:36vmin;background:#fff;border-radius:2vmin;padding:1.6vmin;flex:0 0 auto}
+.qrbox .qr svg{width:100%;height:100%;display:block}
+.qrbox .lado{flex:1}
+.codigao{font-family:var(--fd);font-weight:700;font-size:14vmin;letter-spacing:.12em;color:var(--syn);
+  line-height:1;margin:1.4vmin 0}
+.enderec{font-family:var(--fm);font-size:2.4vmin;color:var(--muted)}
+.wifi{margin-top:2.6vmin;display:flex;gap:3vmin;font-family:var(--fm);font-size:1.9vmin;color:var(--muted)}
+.wifi b{color:var(--ink);font-family:var(--fd)}
+
+/* cronômetro */
+.crono{text-align:center}
+.crono .n{font-family:var(--fd);font-weight:700;font-size:34vmin;line-height:.9;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums}
+.crono.calmo .n{color:var(--ink)}
+.crono.atencao .n{color:var(--ambar)}
+.crono.fim .n{color:var(--bad);animation:pisca 1s steps(2,end) infinite}
+@keyframes pisca{50%{opacity:.35}}
+.crono .lb{font-family:var(--fm);font-size:2.2vmin;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.crono .dica{font-size:2.4vmin;color:var(--muted);margin-top:2.4vmin}
+
+/* grupo da vez */
+.gv{display:flex;gap:4vmin;height:100%;align-items:stretch;margin-top:1vmin}
+.gv .letra{flex:0 0 22vmin;border-radius:2.4vmin;background:linear-gradient(150deg,var(--axon),var(--cortex));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1px solid rgba(206,220,0,.25)}
+.gv .letra span{font-family:var(--fd);font-weight:700;font-size:16vmin;color:var(--syn);line-height:1}
+.gv .letra small{font-family:var(--fm);font-size:1.6vmin;letter-spacing:.2em;color:rgba(245,245,247,.65);
+  text-transform:uppercase;margin-top:1vmin}
+.gv .txt{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:1.4vmin}
+.gv .cp{border:1px solid var(--line);border-radius:1.4vmin;background:var(--card);padding:1.6vmin 2.2vmin}
+.gv .cp dt{font-family:var(--fm);font-size:1.4vmin;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--syn);margin-bottom:.5vmin}
+.gv .cp dd{font-size:2.1vmin;color:rgba(245,245,247,.92);line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.gv .nav{display:flex;gap:1vmin;margin-top:1vmin}
+.gv .nav button{font-family:var(--fd);font-weight:700;font-size:2vmin;width:5vmin;height:5vmin;
+  border-radius:1vmin;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer}
+.gv .nav button.on{background:var(--syn);color:var(--cortex);border-color:transparent}
+
+/* estados */
+.centro{text-align:center;margin:auto;max-width:70vmin}
+.centro .tit{margin-left:auto;margin-right:auto;max-width:none}
+.centro .sub{margin:0 auto;max-width:none}
+#codform{display:flex;gap:1.4vmin;justify-content:center;margin-top:3vmin}
+#codform input{font-family:var(--fd);font-weight:700;font-size:5vmin;letter-spacing:.2em;text-transform:uppercase;
+  width:22vmin;text-align:center;background:rgba(255,255,255,.06);border:1px solid var(--line2);
+  border-radius:1.4vmin;padding:1.4vmin;color:var(--ink);outline:none}
+#codform input:focus{border-color:var(--syn)}
+#codform button{font-family:var(--fd);font-weight:700;font-size:2.4vmin;padding:0 3vmin;
+  background:var(--syn);color:var(--cortex);border:none;border-radius:1.4vmin;cursor:pointer}
+.erro{color:var(--bad);font-size:2vmin;margin-top:2vmin}
+
+#ajuda{position:fixed;inset:0;z-index:40;background:rgba(5,8,7,.94);display:grid;place-items:center;padding:8vmin}
+#ajuda .cx{max-width:88vmin}
+#ajuda h2{font-size:4vmin;margin-bottom:3vmin}
+#ajuda table{width:100%;border-collapse:collapse;font-size:2.1vmin}
+#ajuda td{padding:1.1vmin 0;border-bottom:1px solid var(--line);color:var(--muted)}
+#ajuda td:first-child{width:22vmin;font-family:var(--fm);color:var(--syn)}
+</style>
+</head>
+<body>
+<div id="bg"></div><div class="blob b1"></div><div class="blob b2"></div>
+
+<div id="topo">
+  <img id="logo" alt="NeuroDynamics">
+  <span class="ed" id="t-ed"></span>
+  <div class="dir">
+    <span class="cod" id="t-cod" hidden></span>
+    <span class="rel" id="t-rel"></span>
+  </div>
+</div>
+
+<div id="palco"></div>
+
+<div id="rodape">
+  <span id="r-nome"></span>
+  <span class="prog"><i id="r-prog" style="width:0"></i></span>
+  <span id="r-num"></span>
+  <span id="ctrl">
+    <button onclick="vai(-1)">←</button>
+    <button onclick="vai(1)">→</button>
+    <button onclick="crono.toggle()" id="b-crono">Cronômetro</button>
+    <button onclick="telaCheia()">Tela cheia</button>
+    <button onclick="$('#ajuda').hidden=false">?</button>
+  </span>
+</div>
+
+<div id="ajuda" hidden onclick="this.hidden=true">
+  <div class="cx">
+    <h2>Comandos do painel</h2>
+    <table>
+      <tr><td>→ · espaço</td><td>Próxima tela</td></tr>
+      <tr><td>←</td><td>Tela anterior</td></tr>
+      <tr><td>1 … 9</td><td>Pula direto para a tela</td></tr>
+      <tr><td>T</td><td>Liga e pausa o cronômetro</td></tr>
+      <tr><td>R</td><td>Zera o cronômetro do bloco</td></tr>
+      <tr><td>+ · −</td><td>Ajusta o cronômetro em 1 minuto</td></tr>
+      <tr><td>G</td><td>Troca o grupo em exibição na tela de apresentações</td></tr>
+      <tr><td>F</td><td>Tela cheia</td></tr>
+      <tr><td>Esc</td><td>Fecha esta ajuda</td></tr>
+    </table>
+    <p style="margin-top:3vmin;font-size:1.9vmin;color:var(--dim)">
+      O painel se atualiza sozinho a cada 20 segundos. Se a internet cair, ele continua
+      mostrando o que já carregou. Só o texto ao vivo dos grupos para de mudar.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   QR — codificador local (modo byte), sem dependência externa.
+   Devolve a matriz e um <svg> de caminho único, que sai nítido
+   na impressão em qualquer tamanho. Versões 1 a 10, níveis de
+   correção L/M/Q/H. Conferido módulo a módulo contra o segno.
+   ============================================================ */
+const QR = (() => {
+  const EXP = new Array(512), LOG = new Array(256);
+  for (let i = 0, x = 1; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 0x100) x ^= 0x11D; }
+  for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  const mul = (a, b) => (a === 0 || b === 0) ? 0 : EXP[LOG[a] + LOG[b]];
+
+  /* por versão: [cw de correção por bloco, blocos g1, dados g1, blocos g2, dados g2] */
+  const BLOCOS = {
+    L: [[7,1,19,0,0],[10,1,34,0,0],[15,1,55,0,0],[20,1,80,0,0],[26,1,108,0,0],
+        [18,2,68,0,0],[20,2,78,0,0],[24,2,97,0,0],[30,2,116,0,0],[18,2,68,2,69]],
+    M: [[10,1,16,0,0],[16,1,28,0,0],[26,1,44,0,0],[18,2,32,0,0],[24,2,43,0,0],
+        [16,4,27,0,0],[18,4,31,0,0],[22,2,38,2,39],[22,3,36,2,37],[26,4,43,1,44]],
+    Q: [[13,1,13,0,0],[22,1,22,0,0],[18,2,17,0,0],[26,2,24,0,0],[18,2,15,2,16],
+        [24,4,19,0,0],[18,2,14,4,15],[22,4,18,2,19],[20,4,16,4,17],[24,6,19,2,20]],
+    H: [[17,1,9,0,0],[28,1,16,0,0],[22,2,13,0,0],[16,4,9,0,0],[22,2,11,2,12],
+        [28,4,15,0,0],[26,4,13,1,14],[26,4,14,2,15],[24,4,12,4,13],[28,6,15,2,16]]
+  };
+  const ALINHAM = [[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50]];
+  const NIVEL_BITS = { L:1, M:0, Q:3, H:2 };
+
+  function geradorRS(n){
+    let g = [1];
+    for (let i = 0; i < n; i++){
+      const ng = new Array(g.length + 1).fill(0);
+      for (let j = 0; j < g.length; j++){
+        ng[j]     ^= g[j];
+        ng[j + 1] ^= mul(g[j], EXP[i]);
+      }
+      g = ng;
+    }
+    return g;
+  }
+  function restoRS(dados, nEc){
+    const g = geradorRS(nEc), r = new Array(nEc).fill(0);
+    for (const b of dados){
+      const f = b ^ r[0];
+      r.shift(); r.push(0);
+      for (let i = 0; i < nEc; i++) r[i] ^= mul(g[i + 1], f);
+    }
+    return r;
+  }
+
+  const bytesUtf8 = s => Array.from(new TextEncoder().encode(s));
+  const capacidade = (v, nivel) => {
+    const [, b1, d1, b2, d2] = BLOCOS[nivel][v - 1];
+    return b1 * d1 + b2 * d2;
+  };
+
+  function codewords(texto, versao, nivel){
+    const dados = bytesUtf8(texto);
+    const cap = capacidade(versao, nivel);
+    const bits = [];
+    const push = (val, n) => { for (let i = n - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+    push(0b0100, 4);                          /* modo byte */
+    push(dados.length, versao <= 9 ? 8 : 16); /* contador de caracteres */
+    for (const b of dados) push(b, 8);
+    for (let i = 0; i < 4 && bits.length < cap * 8; i++) bits.push(0);   /* terminador */
+    while (bits.length % 8) bits.push(0);                               /* alinha em byte */
+    const cw = [];
+    for (let i = 0; i < bits.length; i += 8){
+      let b = 0; for (let j = 0; j < 8; j++) b = (b << 1) | bits[i + j];
+      cw.push(b);
+    }
+    const PAD = [0xEC, 0x11];
+    for (let i = 0; cw.length < cap; i++) cw.push(PAD[i % 2]);
+
+    /* blocos, correção de erro e intercalação */
+    const [nEc, b1, d1, b2, d2] = BLOCOS[nivel][versao - 1];
+    const blocos = [], ecs = [];
+    let p = 0;
+    for (let i = 0; i < b1; i++){ blocos.push(cw.slice(p, p + d1)); p += d1; }
+    for (let i = 0; i < b2; i++){ blocos.push(cw.slice(p, p + d2)); p += d2; }
+    for (const bl of blocos) ecs.push(restoRS(bl, nEc));
+    const saida = [], maxD = Math.max(d1, d2);
+    for (let i = 0; i < maxD; i++) for (const bl of blocos) if (i < bl.length) saida.push(bl[i]);
+    for (let i = 0; i < nEc; i++) for (const e of ecs) saida.push(e[i]);
+    return saida;
+  }
+
+  function esqueleto(versao){
+    const n = versao * 4 + 17;
+    const m = Array.from({length:n}, () => new Array(n).fill(null));
+    const marca = (r, c, v) => { if (r >= 0 && r < n && c >= 0 && c < n) m[r][c] = v; };
+    for (const [br, bc] of [[0,0],[0,n-7],[n-7,0]])           /* localizadores e separadores */
+      for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++){
+        const dentro = r >= 0 && r <= 6 && c >= 0 && c <= 6;
+        const anel = r === 0 || r === 6 || c === 0 || c === 6;
+        const miolo = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+        marca(br + r, bc + c, dentro ? (anel || miolo ? 1 : 0) : 0);
+      }
+    const pos = ALINHAM[versao - 1];                          /* alinhamento */
+    for (const r of pos) for (const c of pos){
+      if ((r <= 7 && c <= 7) || (r <= 7 && c >= n - 8) || (r >= n - 8 && c <= 7)) continue;
+      for (let dr = -2; dr <= 2; dr++) for (let dc = -2; dc <= 2; dc++)
+        marca(r + dr, c + dc, (Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0)) ? 1 : 0);
+    }
+    for (let i = 8; i < n - 8; i++){                          /* temporizadores */
+      marca(6, i, i % 2 === 0 ? 1 : 0); marca(i, 6, i % 2 === 0 ? 1 : 0);
+    }
+    marca(n - 8, 8, 1);                                       /* módulo escuro */
+    for (let i = 0; i < 9; i++){                              /* reserva do formato */
+      if (m[8][i] === null) marca(8, i, 0);
+      if (m[i][8] === null) marca(i, 8, 0);
+    }
+    for (let i = 0; i < 8; i++){ marca(8, n - 1 - i, 0); marca(n - 1 - i, 8, 0); }
+    if (versao >= 7)                                          /* reserva da versão */
+      for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++){
+        marca(n - 11 + j, i, 0); marca(i, n - 11 + j, 0);
+      }
+    return m;
+  }
+
+  function preenche(m, cw, versao){
+    const n = m.length;
+    const reservado = esqueleto(versao).map(l => l.map(v => v !== null));
+    const bits = [];
+    for (const b of cw) for (let i = 7; i >= 0; i--) bits.push((b >> i) & 1);
+    let i = 0, subindo = true;
+    for (let col = n - 1; col > 0; col -= 2){
+      if (col === 6) col--;                                   /* pula a coluna do temporizador */
+      for (let k = 0; k < n; k++){
+        const linha = subindo ? n - 1 - k : k;
+        for (const c of [col, col - 1]){
+          if (reservado[linha][c]) continue;
+          m[linha][c] = i < bits.length ? bits[i] : 0;
+          i++;
+        }
+      }
+      subindo = !subindo;
+    }
+    return reservado;
+  }
+
+  const MASCARAS = [
+    (r,c) => (r + c) % 2 === 0,
+    (r) => r % 2 === 0,
+    (r,c) => c % 3 === 0,
+    (r,c) => (r + c) % 3 === 0,
+    (r,c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+    (r,c) => (r * c) % 2 + (r * c) % 3 === 0,
+    (r,c) => (((r * c) % 2 + (r * c) % 3) % 2) === 0,
+    (r,c) => (((r + c) % 2 + (r * c) % 3) % 2) === 0
+  ];
+
+  function bitsFormato(nivel, mascara){
+    const v = (NIVEL_BITS[nivel] << 3) | mascara;
+    let d = v << 10;
+    for (let i = 4; i >= 0; i--) if (d & (1 << (i + 10))) d ^= 0x537 << i;
+    return ((v << 10) | d) ^ 0x5412;
+  }
+  function bitsVersao(versao){
+    let d = versao << 12;
+    for (let i = 5; i >= 0; i--) if (d & (1 << (i + 12))) d ^= 0x1F25 << i;
+    return (versao << 12) | d;
+  }
+  function aplicaFormato(m, nivel, mascara){
+    const n = m.length, f = bitsFormato(nivel, mascara), bit = i => (f >> i) & 1;
+    for (let i = 0; i <= 5; i++) m[i][8] = bit(i);
+    m[7][8] = bit(6);
+    m[8][8] = bit(7);
+    m[8][7] = bit(8);
+    for (let i = 9; i <= 14; i++) m[8][14 - i] = bit(i);
+    for (let i = 0; i <= 7; i++)  m[8][n - 1 - i] = bit(i);
+    for (let i = 8; i <= 14; i++) m[n - 15 + i][8] = bit(i);
+    m[n - 8][8] = 1;
+  }
+  function aplicaVersao(m, versao){
+    if (versao < 7) return;
+    const n = m.length, v = bitsVersao(versao);
+    for (let i = 0; i < 18; i++){
+      const b = (v >> i) & 1, lin = Math.floor(i / 3), col = i % 3;
+      m[n - 11 + col][lin] = b;
+      m[lin][n - 11 + col] = b;
+    }
+  }
+
+  function penalidade(m){
+    const n = m.length; let p = 0;
+    const conta = linha => {
+      let run = 1;
+      for (let i = 1; i < n; i++){
+        if (linha[i] === linha[i - 1]) run++;
+        else { if (run >= 5) p += run - 2; run = 1; }
+      }
+      if (run >= 5) p += run - 2;
+    };
+    for (let r = 0; r < n; r++) conta(m[r]);
+    for (let c = 0; c < n; c++) conta(m.map(l => l[c]));
+    for (let r = 0; r < n - 1; r++) for (let c = 0; c < n - 1; c++)
+      if (m[r][c] === m[r][c+1] && m[r][c] === m[r+1][c] && m[r][c] === m[r+1][c+1]) p += 3;
+    /* padrão 1:1:3:1:1 com área clara de 4 módulos antes ou depois */
+    const ALVO = [1,0,1,1,1,0,1];
+    const acha = (v, de) => {
+      for (let i = de; i + 7 <= n; i++) if (ALVO.every((x, k) => v[i + k] === x)) return i;
+      return -1;
+    };
+    const claro = (v, a, b) => {
+      for (let i = Math.max(a, 0); i < Math.min(b, n); i++) if (v[i]) return false;
+      return true;
+    };
+    const ocorrencias = v => {
+      let c = 0, i = acha(v, 0);
+      while (i !== -1){
+        let prox = i + 7;
+        if (i === 0 || i === n - 7 || claro(v, i - 4, i) || claro(v, prox, prox + 4)) c += 40;
+        else prox = i + 4;
+        i = acha(v, prox);
+      }
+      return c;
+    };
+    for (let r = 0; r < n; r++){ p += ocorrencias(m[r]); p += ocorrencias(m.map(l => l[r])); }
+    let escuros = 0;
+    for (const l of m) for (const v of l) escuros += v;
+    p += Math.floor(Math.abs(escuros * 100 / (n * n) - 50) / 5) * 10;
+    return p;
+  }
+
+  function matriz(texto, opc = {}){
+    const nivel = opc.nivel || 'Q';
+    const bytes = bytesUtf8(texto).length;
+    let versao = opc.versao || 0;
+    if (!versao){
+      for (let v = 1; v <= 10; v++){
+        const cabecalho = v <= 9 ? 2 : 3;      /* modo + contador, em bytes */
+        if (capacidade(v, nivel) >= bytes + cabecalho){ versao = v; break; }
+      }
+      if (!versao) throw new Error('Conteúdo longo demais para o QR (máximo: versão 10).');
+    }
+    const cw = codewords(texto, versao, nivel);
+    const mascaras = opc.mascara != null ? [opc.mascara] : [0,1,2,3,4,5,6,7];
+    let melhor = null;
+    for (const k of mascaras){
+      const m = esqueleto(versao);
+      const reservado = preenche(m, cw, versao);
+      for (let r = 0; r < m.length; r++) for (let c = 0; c < m.length; c++)
+        if (!reservado[r][c] && MASCARAS[k](r, c)) m[r][c] ^= 1;
+      /* a avaliação roda antes de gravar formato e versão (ISO/IEC 18004, 7.8) */
+      const p = mascaras.length === 1 ? 0 : penalidade(m);
+      if (!melhor || p < melhor.p) melhor = { m, p, k };
+    }
+    aplicaFormato(melhor.m, nivel, melhor.k);
+    aplicaVersao(melhor.m, versao);
+    return { matriz: melhor.m, versao, mascara: melhor.k, nivel };
+  }
+
+  /* SVG de caminho único, em viewBox de módulos */
+  function svg(texto, opc = {}){
+    const { matriz: m } = matriz(texto, opc);
+    const n = m.length, q = opc.silencio == null ? 4 : opc.silencio, lado = n + q * 2;
+    let d = '';
+    for (let r = 0; r < n; r++){
+      let c = 0;
+      while (c < n){
+        if (!m[r][c]){ c++; continue; }
+        let fim = c; while (fim + 1 < n && m[r][fim + 1]) fim++;
+        d += `M${c + q} ${r + q}h${fim - c + 1}v1h-${fim - c + 1}z`;
+        c = fim + 1;
+      }
+    }
+    const fundo = opc.fundo === false ? '' : `<rect width="${lado}" height="${lado}" fill="${opc.fundo || '#fff'}"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${lado} ${lado}" shape-rendering="crispEdges" role="img" aria-label="QR code para a inscrição">`
+         + `${fundo}<path d="${d}" fill="${opc.cor || '#000'}"/></svg>`;
+  }
+
+  return { matriz, svg };
+})();
+</script>
+<script>
+/* ============================================================
+   PAINEL DA DINÂMICA — o que vai no projetor.
+
+   Um avaliador abre esta página no notebook ligado ao projetor,
+   digita o código de quatro letras da janela e conduz com as
+   setas do teclado. Tudo que aparece aqui é editado em
+   SOMA → Seleção → Dinâmica: os cartões da equipe, os
+   avaliadores da janela, os blocos do roteiro, as regras e o
+   desafio. Nada disso mora neste arquivo.
+
+   As telas, na ordem em que se usa:
+     1 abertura      quem somos e o código da sala
+     2 a equipe      os cartões de apresentação
+     3 quem avalia   as pessoas que estão na sala
+     4 como funciona a agenda dos 75 minutos
+     5 regras        o combinado da sala
+     6 o desafio     briefing e os campos do registro
+     7 registro      QR grande e o código
+     8 cronômetro    o bloco de trabalho em grupo
+     9 apresentações o grupo da vez, com o texto dele ao vivo
+    10 fechamento    o que vem depois
+
+   Fora do horário da janela a página não mostra nada: quem
+   decide é o banco, não o navegador.
+   ============================================================ */
+
+const CONFIG = {
+  SUPABASE_URL: 'https://rxzmkyjttzzpwtodqkve.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_MJFR-aaQqTS1BthxYJG2kg_5XGhs9wg'
+};
+const LOGO_URL = 'https://raw.githubusercontent.com/matheusmarcondes1/nro/refs/heads/main/imagotipo%20preto.png';
+const URL_CANDIDATO = location.origin.includes('http')
+  ? location.href.replace(/dinamica-painel\.html.*$/,'dinamica.html')
+  : 'https://selecao.neurodynamics.dev/dinamica.html';
+
+const sb = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+const $ = s => document.querySelector(s);
+const esc = v => v == null ? '' : String(v).replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iniciais = n => String(n||'').trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase();
+
+const P = { codigo:'', sala:null, tela:0, grupo:0, timer:null };
+
+/* ============================================================
+   CRONÔMETRO — conta para trás o bloco de trabalho em grupo.
+   Fica no relógio da máquina, não no servidor: se a internet
+   cair no meio do bloco, o cronômetro não para.
+   ============================================================ */
+const crono = {
+  total: 25*60, restante: 25*60, rodando:false, t:null,
+  toggle(){ this.rodando ? this.pausa() : this.liga(); },
+  liga(){
+    if(this.rodando) return;
+    this.rodando = true; this.fim = Date.now() + this.restante*1000;
+    this.t = setInterval(()=>{
+      this.restante = Math.max(0, Math.round((this.fim - Date.now())/1000));
+      if(this.restante === 0){ this.pausa(); }
+      if(P.tela === 7) pinta();
+      $('#b-crono').textContent = this.rodando ? 'Pausar' : 'Cronômetro';
+    }, 250);
+    $('#b-crono').textContent = 'Pausar';
+    if(P.tela === 7) pinta();
+  },
+  pausa(){ this.rodando = false; clearInterval(this.t); $('#b-crono').textContent = 'Cronômetro'; if(P.tela===7) pinta(); },
+  zera(m){ this.pausa(); this.total = (m||this.total/60)*60; this.restante = this.total; if(P.tela===7) pinta(); },
+  ajusta(min){ this.restante = Math.max(0, this.restante + min*60);
+    if(this.rodando) this.fim = Date.now() + this.restante*1000;
+    if(P.tela===7) pinta(); },
+  mmss(){ const m = Math.floor(this.restante/60), s = this.restante%60;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; },
+  estado(){ return this.restante === 0 ? 'fim'
+          : this.restante <= 300 ? 'atencao' : 'calmo'; }
+};
+
+/* ============================================================
+   ENTRADA
+   ============================================================ */
+function telaCodigo(erro){
+  $('#t-cod').hidden = true;
+  $('#palco').innerHTML = `
+    <div class="centro">
+      <span class="eyebrow">Painel da dinâmica</span>
+      <h1 class="tit" style="font-size:6vmin">Código da janela</h1>
+      <p class="sub" style="font-size:2.2vmin">Está em SOMA → Seleção → Dinâmica, na janela de hoje.
+        Também aparece na mesa do avaliador.</p>
+      <form id="codform" onsubmit="event.preventDefault();abrir()">
+        <input id="cod" maxlength="6" autocomplete="off" autocapitalize="characters"
+               spellcheck="false" placeholder="————">
+        <button type="submit">Abrir</button>
+      </form>
+      ${erro ? `<p class="erro">${erro}</p>` : ''}
+    </div>`;
+  const i = $('#cod');
+  i.addEventListener('input', ()=>{ i.value = i.value.toUpperCase().replace(/[^A-Z0-9]/g,''); });
+  setTimeout(()=>i.focus(), 120);
+}
+
+async function abrir(){
+  const c = ($('#cod')?.value||'').trim().toUpperCase();
+  if(c.length < 4) return telaCodigo('O código tem quatro letras.');
+  P.codigo = c;
+  await carrega(true);
+}
+
+async function carrega(primeira){
+  try{
+    const {data, error} = await sb.rpc('ps_din_sala', {p_codigo:P.codigo});
+    if(error) throw error;
+    if(!data || data.status === 'nao_encontrada'){
+      return telaCodigo('Não achei nenhuma janela com esse código.');
+    }
+    if(data.status === 'fechada'){ return telaFechada(data); }
+    P.sala = data;
+    if(primeira){
+      P.tela = 0;
+      const bloco = (data.blocos||[]).find(b=>/trabalho/i.test(b.nome||''));
+      crono.zera(bloco?.minutos || 25);
+      location.hash = '#'+P.codigo;
+      if(!P.timer) P.timer = setInterval(()=>carrega(false), 20000);
+      puxaRegistros();   /* a tela de apresentação já abre com o texto dos grupos */
+    }
+    $('#t-ed').textContent = (data.edicao?.nome||'') + (data.janela?.local ? ' · '+data.janela.local : '');
+    $('#t-cod').hidden = false; $('#t-cod').textContent = data.janela.codigo;
+    pinta();
+  }catch(e){
+    console.error(e);
+    if(primeira) telaCodigo('Não consegui falar com o servidor. Confira a internet do notebook.');
+    /* atualização de rotina que falhou: mantém o que já está na tela */
+  }
+}
+
+function telaFechada(d){
+  $('#t-cod').hidden = true;
+  clearInterval(P.timer); P.timer = null;
+  const antes = d.abre_em && new Date(d.agora||Date.now()) < new Date(d.abre_em);
+  const hm = x => new Date(x).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  $('#palco').innerHTML = `
+    <div class="centro">
+      <span class="eyebrow">Fora da janela</span>
+      <h1 class="tit" style="font-size:5.4vmin">${antes ? 'Esta janela ainda não abriu' : 'Esta janela já fechou'}</h1>
+      <p class="sub" style="font-size:2.2vmin">
+        ${antes ? `O painel abre às <b>${hm(d.abre_em)}</b>.` : `Fechou às <b>${hm(d.fecha_em)}</b>.`}
+        Enquanto isso, o roteiro inteiro está em SOMA → Seleção → Dinâmica.</p>
+      <div style="margin-top:3vmin"><button onclick="location.hash='';location.reload()"
+        style="font-family:var(--fd);font-weight:700;font-size:2vmin;padding:1.2vmin 3vmin;
+        background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line2);
+        border-radius:1.2vmin;cursor:pointer">Outro código</button></div>
+    </div>`;
+}
+
+/* ============================================================
+   AS TELAS
+   ============================================================ */
+const TELAS = [
+  {nome:'Abertura',      render:tAbertura},
+  {nome:'A equipe',      render:tEquipe},
+  {nome:'Quem avalia',   render:tAvaliadores},
+  {nome:'Como funciona', render:tAgenda},
+  {nome:'Regras da sala',render:tRegras},
+  {nome:'O desafio',     render:tDesafio},
+  {nome:'Registro',      render:tQR},
+  {nome:'Trabalho',      render:tCrono},
+  {nome:'Apresentações', render:tGrupo},
+  {nome:'Fechamento',    render:tFim}
+];
+
+function pinta(){
+  if(!P.sala) return;
+  const t = TELAS[P.tela];
+  $('#palco').innerHTML = t.render();
+  $('#r-nome').textContent = t.nome;
+  $('#r-num').textContent = `${P.tela+1} / ${TELAS.length}`;
+  $('#r-prog').style.width = ((P.tela+1)/TELAS.length*100)+'%';
+}
+function vai(d){
+  if(!P.sala) return;
+  P.tela = Math.max(0, Math.min(TELAS.length-1, P.tela + d));
+  pinta();
+}
+
+function tAbertura(){
+  const c = P.sala.config, j = P.sala.janela;
+  return `
+    <span class="eyebrow">${esc(P.sala.edicao?.nome||'Processo seletivo')}</span>
+    <h1 class="tit g">${esc(c.titulo||'Dinâmica em grupo')}</h1>
+    <p class="sub">${esc(c.subtitulo||'')}</p>
+    <div style="display:flex;gap:5vmin;align-items:flex-end;margin-top:5vmin">
+      <div><div class="eyebrow" style="color:var(--dim)">Código da sala</div>
+        <div class="codigao" style="font-size:11vmin">${esc(j.codigo)}</div></div>
+      ${c.wifi_rede ? `<div style="padding-bottom:3vmin"><div class="eyebrow" style="color:var(--dim)">Wi-Fi</div>
+        <div style="font-family:var(--fm);font-size:2.6vmin;margin-top:1.4vmin">${esc(c.wifi_rede)}${
+          c.wifi_senha ? ' · '+esc(c.wifi_senha) : ''}</div></div>` : ''}
+    </div>
+    ${c.aviso_lgpd ? `<p style="font-size:1.8vmin;color:var(--dim);margin-top:4vmin;max-width:70%">${esc(c.aviso_lgpd)}</p>`:''}`;
+}
+
+function tEquipe(){
+  const cs = P.sala.cartoes||[];
+  return `
+    <span class="eyebrow">Quem somos</span>
+    <h1 class="tit" style="font-size:5.6vmin">A NeuroDynamics</h1>
+    ${P.sala.config.resumo_equipe ? `<p class="sub" style="font-size:2.3vmin;max-width:86%">${esc(P.sala.config.resumo_equipe)}</p>`:''}
+    <div class="grade ${cs.length>3?'g4':cs.length===3?'g3':'g2'}" style="margin-top:3.4vmin">
+      ${cs.map((c,i)=>`<div class="bloco">
+        <div class="n">${String(i+1).padStart(2,'0')}</div>
+        <h3>${esc(c.titulo||'')}</h3><p>${esc(c.texto||'')}</p></div>`).join('')
+      || '<div class="bloco"><p>Nenhum cartão cadastrado ainda. SOMA → Seleção → Dinâmica → Painel.</p></div>'}
+    </div>`;
+}
+
+function tAvaliadores(){
+  const av = P.sala.avaliadores||[];
+  return `
+    <span class="eyebrow">Quem está avaliando hoje</span>
+    <h1 class="tit" style="font-size:5.6vmin">A mesa</h1>
+    <div class="pessoas">
+      ${av.map(a=>`<div class="pessoa">
+        <div class="foto">${a.foto_url
+          ? `<img src="${esc(a.foto_url)}" alt="">`
+          : `<span>${esc(iniciais(a.nome))}</span>`}</div>
+        <div class="nm">${esc(a.nome||'')}</div>
+        ${a.cargo ? `<div class="cg">${esc(a.cargo)}</div>`:''}
+        ${a.curso ? `<div class="fl">${esc(a.curso)}</div>`:''}
+        ${a.fala  ? `<div class="fl">${esc(a.fala)}</div>`:''}
+      </div>`).join('')
+      || '<p class="sub">Cadastre a mesa desta janela em SOMA → Seleção → Dinâmica → Janelas.</p>'}
+    </div>`;
+}
+
+function tAgenda(){
+  const bs = P.sala.blocos||[], j = P.sala.janela;
+  let t = 0;
+  const [h0,m0] = String(j.hora_inicio||'00:00').split(':').map(Number);
+  const rel = min => {
+    const x = h0*60 + m0 + min;
+    return `${String(Math.floor(x/60)%24).padStart(2,'0')}:${String(x%60).padStart(2,'0')}`;
+  };
+  const agora = new Date();
+  const decorrido = (agora.getHours()*60 + agora.getMinutes()) - (h0*60 + m0);
+  return `
+    <span class="eyebrow">Como funcionam os ${esc(P.sala.config.minutos_total||75)} minutos</span>
+    <h1 class="tit" style="font-size:5.2vmin">O que acontece hoje</h1>
+    <div class="agenda">
+      ${bs.map(b=>{ const ini = t; t += Number(b.minutos)||0;
+        const on = decorrido >= ini && decorrido < t;
+        return `<div class="linha ${on?'on':''}">
+          <span class="h">${rel(ini)}</span>
+          <span class="n">${esc(b.nome||'')}</span>
+          <span class="m">${b.minutos} min</span></div>`; }).join('')
+      || '<div class="linha"><span class="n">Nenhum bloco cadastrado.</span></div>'}
+    </div>`;
+}
+
+function tRegras(){
+  const rs = P.sala.regras||[];
+  return `
+    <span class="eyebrow">O combinado</span>
+    <h1 class="tit" style="font-size:5.6vmin">Como a gente joga aqui</h1>
+    <div class="regras">
+      ${rs.map((r,i)=>`<div class="regra"><i>0${i+1}</i><span>${esc(r.texto||'')}</span></div>`).join('')
+      || '<div class="regra"><span>Nenhuma regra cadastrada.</span></div>'}
+    </div>`;
+}
+
+function tDesafio(){
+  const c = P.sala.config, cps = P.sala.campos||[];
+  return `
+    <span class="eyebrow">O desafio</span>
+    <h1 class="tit" style="font-size:6vmin">${esc(c.desafio_titulo||'')}</h1>
+    ${c.desafio_contexto ? `<p class="sub" style="max-width:82%">${esc(c.desafio_contexto)}</p>`:''}
+    <div class="grade ${cps.length>4?'g3':'g2'}" style="margin-top:3.4vmin">
+      ${cps.map((f,i)=>`<div class="bloco" style="padding:2.2vmin">
+        <div class="n">${String(i+1).padStart(2,'0')}</div>
+        <h3 style="font-size:2.3vmin">${esc(f.rotulo||'')}</h3>
+        <p style="font-size:1.8vmin">${esc(f.ajuda||'')}</p></div>`).join('')}
+    </div>`;
+}
+
+function tQR(){
+  const j = P.sala.janela;
+  const alvo = URL_CANDIDATO + '#' + j.codigo;
+  let svg = '';
+  try{ svg = QR.svg(alvo, {nivel:'Q', silencio:2}); }
+  catch(e){ svg = '<div style="padding:2vmin;color:#333;font-size:1.6vmin">QR indisponível. Digitem o endereço.</div>'; }
+  return `
+    <span class="eyebrow">Onde registrar o desafio</span>
+    <div class="qrbox">
+      <div class="qr">${svg}</div>
+      <div class="lado">
+        <div class="eyebrow" style="color:var(--dim)">Código da sala</div>
+        <div class="codigao">${esc(j.codigo)}</div>
+        <div class="enderec">selecao.neurodynamics.dev/dinamica</div>
+        <p class="sub" style="font-size:2vmin;margin-top:2.4vmin;max-width:none">
+          Um celular por grupo. Aponte a câmera para o QR ou digite o código.
+          Depois é só tocar na letra do seu grupo.</p>
+        ${P.sala.config.wifi_rede ? `<div class="wifi">
+          <span>Wi-Fi <b>${esc(P.sala.config.wifi_rede)}</b></span>
+          ${P.sala.config.wifi_senha ? `<span>senha <b>${esc(P.sala.config.wifi_senha)}</b></span>`:''}
+        </div>`:''}
+      </div>
+    </div>`;
+}
+
+function tCrono(){
+  const bloco = (P.sala.blocos||[]).find(b=>/trabalho/i.test(b.nome||''));
+  const g = P.sala.grupos||[];
+  const gravados = g.filter(x=>x.versao>0).length;
+  return `
+    <div class="crono ${crono.estado()}">
+      <div class="lb">${esc(bloco?.nome||'Trabalho em grupo')}</div>
+      <div class="n">${crono.mmss()}</div>
+      <div class="dica">${
+        crono.restante === 0 ? 'Tempo. Fechem o registro e gravem.'
+        : crono.restante <= 60 ? 'Último minuto. Gravem agora.'
+        : crono.restante <= 300 ? 'Cinco minutos. Comecem a fechar.'
+        : !crono.rodando ? 'Aperte T para começar.'
+        : `${gravados} de ${g.length||'—'} grupos já gravaram`}</div>
+    </div>`;
+}
+
+function tGrupo(){
+  const g = P.sala.grupos||[];
+  if(!g.length) return `<div class="centro"><span class="eyebrow">Apresentações</span>
+    <h1 class="tit" style="font-size:5vmin">Os grupos ainda não foram formados</h1></div>`;
+  P.grupo = Math.min(P.grupo, g.length-1);
+  const at = g[P.grupo];
+  const cps = P.sala.campos||[];
+  return `
+    <span class="eyebrow">Apresentações · 3 minutos por grupo</span>
+    <div class="gv">
+      <div class="letra">
+        <span>${esc(at.letra)}</span>
+        <small>${at.caso?.titulo ? esc(at.caso.titulo) : 'grupo'}</small>
+      </div>
+      <div class="txt">
+        ${cps.slice(0,4).map(f=>`<div class="cp">
+          <dt>${esc(f.rotulo||'')}</dt>
+          <dd>${esc(registroDe(at, f.chave) || '—')}</dd></div>`).join('')}
+        <div class="nav">
+          ${g.map((x,i)=>`<button class="${i===P.grupo?'on':''}" onclick="P.grupo=${i};pinta()">${esc(x.letra)}</button>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+/* o painel lê a sala pela função pública, que não devolve o texto
+   dos grupos — a tela de apresentação usa o que o próprio grupo
+   publicou na chamada de registro, buscada sob demanda */
+const CACHE_REG = {};
+function registroDe(g, chave){ return (CACHE_REG[g.id]||{})[chave] || ''; }
+async function puxaRegistros(){
+  if(!P.sala) return;
+  for(const g of (P.sala.grupos||[])){
+    if(!g.versao) continue;
+    try{
+      const {data} = await sb.rpc('ps_din_registro', {p_codigo:P.codigo, p_grupo:g.id});
+      if(data?.status === 'ok') CACHE_REG[g.id] = data.dados||{};
+    }catch(e){ /* segue com o que tiver em cache */ }
+  }
+  if(P.tela === 8) pinta();
+}
+
+function tFim(){
+  return `
+    <span class="eyebrow">Obrigado por vir</span>
+    <h1 class="tit" style="font-size:6.4vmin">O que acontece a partir de agora</h1>
+    <div class="grade g3" style="margin-top:3vmin">
+      <div class="bloco"><div class="n">01</div><h3>Resultado</h3>
+        <p>Sai na página <b>Edital e resultados</b> do site. Você também consulta a sua
+           situação em <b>Acompanhar</b>, com protocolo e e-mail.</p></div>
+      <div class="bloco"><div class="n">02</div><h3>Entrevista</h3>
+        <p>Quem seguir agenda a entrevista individual pelo próprio site, no horário que
+           couber na sua semana.</p></div>
+      <div class="bloco"><div class="n">03</div><h3>Trainee</h3>
+        <p>Depois da entrevista começa o período trainee, com um desafio em grupo
+           acompanhado pela equipe até a apresentação final.</p></div>
+    </div>
+    <p class="sub" style="margin-top:3.4vmin;font-size:2.2vmin">
+      selecao.neurodynamics.dev</p>`;
+}
+
+/* ============================================================
+   TECLADO E TELA
+   ============================================================ */
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName === 'INPUT') return;
+  if(e.key === 'Escape'){ $('#ajuda').hidden = true; return; }
+  if(!P.sala) return;
+  switch(e.key){
+    case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); vai(1); break;
+    case 'ArrowLeft':  case 'PageUp':            e.preventDefault(); vai(-1); break;
+    case 't': case 'T': crono.toggle(); break;
+    case 'r': case 'R': crono.zera(); break;
+    case '+': case '=': crono.ajusta(1); break;
+    case '-': case '_': crono.ajusta(-1); break;
+    case 'f': case 'F': telaCheia(); break;
+    case 'g': case 'G': {
+      const n = (P.sala.grupos||[]).length;
+      if(n){ P.grupo = (P.grupo+1) % n; if(P.tela===8) pinta(); }
+      break;
+    }
+    case '?': $('#ajuda').hidden = false; break;
+    default:
+      if(/^[1-9]$/.test(e.key)){ P.tela = Math.min(TELAS.length-1, Number(e.key)-1); pinta(); }
+      if(e.key === '0'){ P.tela = 9; pinta(); }
+  }
+});
+function telaCheia(){
+  if(document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen?.().catch(()=>{});
+}
+/* cursor some sozinho: ninguém quer uma setinha parada no telão */
+let limpaT;
+document.addEventListener('mousemove', ()=>{
+  document.body.classList.remove('limpo');
+  clearTimeout(limpaT); limpaT = setTimeout(()=>document.body.classList.add('limpo'), 2600);
+});
+
+setInterval(()=>{ $('#t-rel').textContent =
+  new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }, 1000);
+setInterval(puxaRegistros, 20000);
+
+(function init(){
+  $('#logo').src = LOGO_URL;
+  $('#t-rel').textContent = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const h = (location.hash||'').replace(/^#/,'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(h.length >= 4){ P.codigo = h; carrega(true); }
+  else telaCodigo();
+})();
+</script>
+</body>
+</html>

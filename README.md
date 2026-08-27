@@ -11,6 +11,9 @@ repositório) no SQL Editor do Supabase. Sem elas o site continua no ar com
 o conteúdo de reserva (cronograma fixo), mas inscrição/acompanhamento
 ficam indisponíveis.
 
+A dinâmica em grupo (`dinamica*.html`) pede também a **`soma_v12.sql`**,
+que está no repositório `nro-pessoal` junto das demais migrações do SOMA.
+
 ## A página "A NeuroDynamics"
 
 Tudo dela sai do bloco `SOBRE`, no topo do `<script>` de `index.html`:
@@ -219,11 +222,117 @@ Publique a imagem no tamanho gerado: Instagram e LinkedIn recomprimem o
 que sobe, e mandar já no tamanho certo evita a segunda compressão, que é
 a que borra o texto. Nada de tirar print da prévia.
 
+## Dinâmica em grupo (`dinamica*.html`)
+
+A primeira fase presencial tem três páginas e um roteiro. O roteiro é o
+documento **NRO-PES-020 ROTEIRO DA DINÂMICA EM GRUPO** (pasta
+`documentos/`), escrito para ser lido em cinco minutos por quem vai
+avaliar. As três páginas são estas:
+
+| Arquivo | Quem usa | Quando abre |
+|---|---|---|
+| `dinamica.html` | um celular por grupo de candidatos | durante a janela |
+| `dinamica-painel.html` | o avaliador que opera o projetor | durante a janela |
+| `dinamica-avaliador.html` | cada avaliador, no próprio celular | durante a janela, com login do SOMA |
+
+Todas dependem da migração **`soma_v12.sql`** (repositório `nro-pessoal`).
+Sem ela as páginas ficam no ar mas não têm de onde ler o conteúdo.
+
+### O código da janela
+
+Cada janela de dinâmica (um slot de `ps_slots` com `fase = 'dinamica'`,
+criado na aba **Agenda** do SOMA) ganha automaticamente um código de
+quatro caracteres. O alfabeto não usa `O`, `0`, `I`, `1`, `S` nem `5`,
+porque o código é lido de longe, num projetor, por gente com pressa.
+
+É o mesmo código nos três lugares: o candidato digita, o painel projeta e
+gera o QR (`dinamica.html#CODIGO`), e a mesa do avaliador identifica a
+janela. Janela criada antes da migração recebe o código pelo botão
+**Gerar código**, em Seleção → Dinâmica → Janelas.
+
+### A janela de tempo
+
+As três páginas só respondem entre `hora_inicio` menos a tolerância de
+entrada e `hora_fim` mais a tolerância de saída (30 minutos para cada
+lado, no padrão, ajustáveis em Seleção → Dinâmica → Roteiro). Fora desse
+intervalo as funções devolvem `fechada` e mais nada: sem lista de
+candidato, sem registro de grupo, sem roteiro, **nem para quem tem
+login**. A trava mora no banco, nas funções `security definer`, não no
+JavaScript da página.
+
+Quem precisa ler o roteiro antes lê o NRO-PES-020 ou abre a aba Dinâmica
+do SOMA, que é onde se prepara. A mesa do avaliador é a página do dia,
+não a de preparação.
+
+### O registro do candidato
+
+`dinamica.html` foi feita para celular numa sala com quinze pessoas no
+mesmo Wi-Fi e vinte e cinco minutos no relógio. As decisões que importam:
+
+- **Rascunho local.** Cada tecla vai para o `localStorage` do aparelho.
+  Fechar a aba, travar o navegador ou receber uma ligação no meio não
+  perde nada.
+- **Gravar é um botão.** Nada sobe sozinho: a barra de baixo diz sempre
+  em que estado a coisa está (nada gravado, alterações não gravadas,
+  gravado às tal hora, versão tal, por quem).
+- **Conflito não apaga ninguém.** Se duas pessoas do mesmo grupo gravam,
+  a segunda recebe as duas versões lado a lado e escolhe: manter a dela,
+  usar a do servidor ou juntar. A versão do registro sobe a cada
+  gravação, e é ela que detecta o conflito.
+- **Offline não trava.** Sem internet o botão avisa e o texto fica
+  guardado. A página também confere, ao voltar do bloqueio de tela, se
+  alguém do grupo gravou nesse meio-tempo.
+
+### O painel projetado
+
+Dez telas, na ordem em que se usa: abertura com o código, a equipe, a
+mesa de avaliadores, a agenda dos 75 minutos, as regras da sala, o
+desafio, o QR do registro, o cronômetro do trabalho em grupo, o grupo da
+vez com o texto dele ao vivo e o fechamento.
+
+Passa com as setas do teclado; `T` liga o cronômetro, `R` zera, `+` e `−`
+ajustam um minuto, `G` troca o grupo em exibição, `F` põe em tela cheia e
+`?` mostra a lista inteira. O QR é gerado no próprio arquivo, sem CDN, e
+tudo escala por `vmin`, então o mesmo desenho serve o projetor 4:3 da
+sala e o telão 16:9 do auditório. O cronômetro roda no relógio da
+máquina: se a internet cair no meio do bloco, ele não para.
+
+### A mesa do avaliador
+
+Quatro abas na ordem do que acontece na sala: **Roteiro** (o bloco da vez
+já aberto, com o que falar e o que cortar se atrasar), **Sala** (presença,
+formação dos grupos e os pedidos de acessibilidade da inscrição em
+destaque), **Registros** (o que cada grupo está escrevendo, atualizado
+sozinho) e **Avaliar** (nota de 1 a 5 por critério, com as âncoras à
+vista, parecer e recomendação).
+
+A avaliação cai na mesma tabela `ps_avaliacoes` que o SOMA já usa, com
+`fase = 'dinamica'`, então a nota aparece na ficha do candidato sem
+nenhuma ponte manual. A página imprime: com o Wi-Fi fora do ar, o roteiro
+e a ficha de avaliação saem em papel pelo próprio navegador.
+
+### O que se edita, e onde
+
+Tudo em **SOMA → Seleção → Dinâmica**, sem tocar em código:
+
+- **Painel** — título, subtítulo, resumo da equipe, aviso de imagem,
+  Wi-Fi da sala, os cartões de apresentação e as regras.
+- **Roteiro** — duração da janela, tamanho do grupo, as duas tolerâncias
+  de horário e os blocos (nome, minutos, o que o avaliador faz, o que vai
+  no projetor e o que cortar se atrasar). O SOMA soma os minutos e avisa
+  quando o roteiro não cabe na janela.
+- **Desafio** — o briefing, os casos e os campos do registro.
+- **Critérios** — os cinco critérios com as âncoras de nota 1, 3 e 5. O
+  SOMA avisa se algum não bater com os critérios da aba Avaliação.
+- **Janelas** — o código, os atalhos para as três páginas e a mesa de
+  avaliadores de cada janela (quem aparece na tela "Quem avalia").
+
 ## Como publicar
 
 Publicados junto com o site, os geradores ficam em
 `selecao.neurodynamics.dev/cartazes.html` e
-`selecao.neurodynamics.dev/redes.html`. Nenhum dos dois tem nada
+`selecao.neurodynamics.dev/redes.html`. As três páginas da dinâmica
+seguem o mesmo caminho e também vão com `noindex`. Nenhum dos dois tem nada
 sensível, mas os dois são material interno: já vão com `noindex`, e se a
 preferência for não deixá-los no ar, basta não subir os arquivos — eles
 funcionam igual abertos do disco.
@@ -243,7 +352,16 @@ já usa `pessoal.neurodynamics.dev`. Duas opções:
 
 O site usa apenas a chave `anon` do Supabase e conversa com o banco
 exclusivamente pelas funções `security definer` da migração
-(`ps_site`, `ps_inscrever`, `ps_acompanhar`, `ps_horarios`, `ps_agendar`).
+(`ps_site`, `ps_inscrever`, `ps_acompanhar`, `ps_horarios`, `ps_agendar`)
+e, na dinâmica, `ps_din_sala`, `ps_din_registro` e `ps_din_gravar`. As
+três da dinâmica conferem o horário da janela antes de devolver qualquer
+coisa, e nenhuma delas expõe nome de candidato: o candidato entra com o
+código da sala, escolhe a letra do grupo e escreve.
+
+A mesa do avaliador (`ps_din_janelas`, `ps_din_mesa`, `ps_din_presenca`,
+`ps_din_grupos_salvar`, `ps_din_avaliar`) exige sessão autenticada com
+papel de comitê (`eh_comite()`) **e** a janela aberta. As duas condições
+são verificadas no banco a cada chamada.
 Nenhuma tabela do módulo tem política de leitura/escrita para `anon`;
 o candidato se identifica por **protocolo + e-mail**, sem senha.
 O controle do processo é feito pelo Comitê de Seleção na página
