@@ -325,7 +325,13 @@ Tudo em **SOMA → Seleção → Dinâmica**, sem tocar em código:
 - **Critérios** — os cinco critérios com as âncoras de nota 1, 3 e 5. O
   SOMA avisa se algum não bater com os critérios da aba Avaliação.
 - **Janelas** — o código, os atalhos para as três páginas e a mesa de
-  avaliadores de cada janela (quem aparece na tela "Quem avalia").
+  avaliadores de cada janela (quem aparece na tela "Quem avalia"). A mesa
+  é montada escolhendo do quadro de membros: nome, cargo, curso e foto
+  vêm da ficha da pessoa. O que fica gravado é uma cópia, não uma
+  junção, então o painel, que é público, nunca toca em `membros` nem em
+  `dados_pessoais`. Mudou o cargo de alguém depois de montar a mesa? O
+  botão **Atualizar pela ficha** relê os dados sem apagar a linha de
+  apresentação que você escreveu.
 
 ## Como publicar
 
