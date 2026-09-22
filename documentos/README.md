@@ -22,7 +22,7 @@ de uma forte. Ele calibra o avaliador, não corrige o grupo, e é lido na
 preparação e nos cinco minutos de calibração da mesa, nunca durante o
 trabalho em grupo.
 
-Os dois descrevem conteúdo que mora no banco e é editado em SOMA →
+Os dois descrevem conteúdo que mora no banco e é editado no portal, em
 Seleção → Dinâmica. Mudou um caso, um campo do registro ou um critério
 por lá? Confira se os dois documentos continuam batendo, e revise os
 dois na mesma revisão.

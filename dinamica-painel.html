@@ -503,7 +503,7 @@ const QR = (() => {
    Um avaliador abre esta página no notebook ligado ao projetor,
    digita o código de quatro letras da janela e conduz com as
    setas do teclado. Tudo que aparece aqui é editado em
-   SOMA → Seleção → Dinâmica: os cartões da equipe, os
+   portal → Seleção → Dinâmica: os cartões da equipe, os
    avaliadores da janela, os blocos do roteiro, as regras e o
    desafio. Nada disso mora neste arquivo.
 
@@ -580,7 +580,7 @@ function telaCodigo(erro){
     <div class="centro">
       <span class="eyebrow">Painel da dinâmica</span>
       <h1 class="tit" style="font-size:6vmin">Código da janela</h1>
-      <p class="sub" style="font-size:2.2vmin">Está em SOMA → Seleção → Dinâmica, na janela de hoje.
+      <p class="sub" style="font-size:2.2vmin">Está no portal, em Seleção → Dinâmica, na janela de hoje.
         Também aparece na mesa do avaliador.</p>
       <form id="codform" onsubmit="event.preventDefault();abrir()">
         <input id="cod" maxlength="6" autocomplete="off" autocapitalize="characters"
@@ -639,7 +639,7 @@ function telaFechada(d){
       <h1 class="tit" style="font-size:5.4vmin">${antes ? 'Esta janela ainda não abriu' : 'Esta janela já fechou'}</h1>
       <p class="sub" style="font-size:2.2vmin">
         ${antes ? `O painel abre às <b>${hm(d.abre_em)}</b>.` : `Fechou às <b>${hm(d.fecha_em)}</b>.`}
-        Enquanto isso, o roteiro inteiro está em SOMA → Seleção → Dinâmica.</p>
+        Enquanto isso, o roteiro inteiro está no portal, em Seleção → Dinâmica.</p>
       <div style="margin-top:3vmin"><button onclick="location.hash='';location.reload()"
         style="font-family:var(--fd);font-weight:700;font-size:2vmin;padding:1.2vmin 3vmin;
         background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line2);
@@ -703,7 +703,7 @@ function tEquipe(){
       ${cs.map((c,i)=>`<div class="bloco">
         <div class="n">${String(i+1).padStart(2,'0')}</div>
         <h3>${esc(c.titulo||'')}</h3><p>${esc(c.texto||'')}</p></div>`).join('')
-      || '<div class="bloco"><p>Nenhum cartão cadastrado ainda. SOMA → Seleção → Dinâmica → Painel.</p></div>'}
+      || '<div class="bloco"><p>Nenhum cartão cadastrado ainda. Portal → Seleção → Dinâmica → Painel.</p></div>'}
     </div>`;
 }
 
@@ -721,7 +721,7 @@ function tAvaliadores(){
         ${a.curso ? `<div class="fl">${esc(a.curso)}</div>`:''}
         ${a.fala  ? `<div class="fl">${esc(a.fala)}</div>`:''}
       </div>`).join('')
-      || '<p class="sub">Cadastre a mesa desta janela em SOMA → Seleção → Dinâmica → Janelas.</p>'}
+      || '<p class="sub">Cadastre a mesa desta janela no portal, em Seleção → Dinâmica → Janelas.</p>'}
     </div>`;
 }
 
