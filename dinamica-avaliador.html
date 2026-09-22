@@ -196,20 +196,20 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
    MESA DO AVALIADOR — a página que só existe durante a janela.
 
    Duas travas, as duas no banco, não aqui:
-     1. login do SOMA com papel de comitê (eh_comite);
+     1. login do portal com papel de comitê (eh_comite);
      2. horário: as funções ps_din_* só respondem entre
         (início − tolerância) e (fim + tolerância) da janela.
    Fora disso a página não mostra candidato, grupo, registro
    nem roteiro — nem para quem tem a senha. Quem precisa ler o
    roteiro antes lê no documento NRO-PES-020 ou em
-   SOMA → Seleção → Dinâmica, que é onde se prepara.
+   portal → Seleção → Dinâmica, que é onde se prepara.
 
    As quatro abas seguem a ordem do que acontece na sala:
    Roteiro (o que falar agora), Sala (presença e formação dos
    grupos), Registros (o que os grupos estão escrevendo) e
    Avaliar (a nota de cada candidato, com as âncoras à vista).
 
-   A avaliação cai na mesma tabela ps_avaliacoes que o SOMA já
+   A avaliação cai na mesma tabela ps_avaliacoes que o portal já
    usa, com fase 'dinamica' — a nota aparece na ficha do
    candidato sem nenhuma ponte manual.
    ============================================================ */
@@ -244,7 +244,7 @@ function telaLogin(erro){
     <div class="login">
       <span class="eyebrow">Dinâmica em grupo</span>
       <h1>Mesa do avaliador</h1>
-      <p class="small muted" style="margin-bottom:18px">Entre com a mesma conta do SOMA.
+      <p class="small muted" style="margin-bottom:18px">Entre com a mesma conta do portal da equipe.
         A página só abre durante o horário da janela.</p>
       ${erro ? `<div class="aviso a-bad">${erro}</div>`:''}
       <div class="campo"><label>E-mail</label>
@@ -289,7 +289,7 @@ async function carregaJanelas(){
         <h2 style="font-size:20px;margin-bottom:8px">Acesso restrito ao Comitê de Seleção</h2>
         <p class="small muted" style="max-width:420px;margin:0 auto">Sua conta existe, mas não está
           no comitê desta edição. Peça ao Departamento de Pessoal para incluir você em
-          SOMA → Seleção → Configurações.</p>
+          portal → Seleção → Configurações.</p>
         <div style="max-width:220px;margin:20px auto 0"><button class="btn w" onclick="sair()">Sair</button></div></div>`;
       return;
     }
@@ -311,7 +311,7 @@ function telaSemJanela(msg){
         ${msg ? esc(msg)+'<br><br>' : ''}
         Esta página abre sozinha alguns minutos antes de cada janela e fecha depois que ela termina.
         Para preparar a dinâmica (roteiro, casos, critérios, mesa de avaliadores),
-        vá em <b>SOMA → Seleção → Dinâmica</b>.</p>
+        vá em <b>portal → Seleção → Dinâmica</b>.</p>
       <div style="max-width:260px;margin:22px auto 0;display:grid;gap:8px">
         <button class="btn w" onclick="carregaJanelas()">Conferir de novo</button>
         <button class="btn w" onclick="sair()">Sair</button>
@@ -435,7 +435,7 @@ function abaRoteiro(){
           ${b.corte ? `<div class="proj"><b>Se atrasar</b><br>${esc(b.corte)}</div>`:''}
         </div>`:''}
       </div>`;
-    }).join('') || '<div class="empty muted">Nenhum bloco cadastrado. SOMA → Seleção → Dinâmica.</div>'}
+    }).join('') || '<div class="empty muted">Nenhum bloco cadastrado. Portal → Seleção → Dinâmica.</div>'}
 
     <div class="card" style="margin-top:14px">
       <h3>O desafio de hoje</h3>
@@ -649,7 +649,7 @@ function abaAvaliar(){
         </button>`; }).join('') || '<p class="small muted">Ninguém presente ainda.</p>'}
     </div>
     <p class="tiny muted" style="margin-top:14px">A nota é a média dos critérios. Ela e o parecer
-      entram na ficha do candidato no SOMA, na fase dinâmica, com o seu nome.</p>`;
+      entram na ficha do candidato no portal, na fase dinâmica, com o seu nome.</p>`;
 }
 
 function fichaAvaliacao(){
@@ -718,7 +718,7 @@ async function salvaAvaliacao(){
       p_slot:M.slot, p_candidato:r.id, p_criterios:r.criterios,
       p_parecer:r.parecer||null, p_recomendacao:r.rec||null});
     if(error) throw error;
-    if(data.status === 'fechada'){ toast('A janela fechou. Lance esta avaliação no SOMA.', true); return; }
+    if(data.status === 'fechada'){ toast('A janela fechou. Lance esta avaliação no portal, em Seleção › Avaliação.', true); return; }
     if(data.status !== 'ok') throw new Error(data.status);
     toast(`Avaliação gravada. Nota ${Number(data.nota||0).toFixed(1)}.`);
     M.avaliando = null; M.rascunho = {};

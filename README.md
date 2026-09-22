@@ -6,13 +6,13 @@ Arquivo único (`index.html`), no mesmo padrão dos demais apps do SOMA.
 
 ## Pré-requisitos
 
-Aplicar as migrações **`soma_v6.sql`** e **`soma_v7.sql`** (na raiz deste
-repositório) no SQL Editor do Supabase. Sem elas o site continua no ar com
-o conteúdo de reserva (cronograma fixo), mas inscrição/acompanhamento
-ficam indisponíveis.
+Aplicar as migrações **`soma_v06_selecao.sql`** e **`soma_v07_selecao_slots.sql`**
+(em `membro/db/aplicadas/`) no SQL Editor do Supabase — já aplicadas no banco
+da equipe. Sem elas o site continua no ar com o conteúdo de reserva
+(cronograma fixo), mas inscrição/acompanhamento ficam indisponíveis.
 
-A dinâmica em grupo (`dinamica*.html`) pede também a **`soma_v12.sql`**,
-que está no repositório `nro-pessoal` junto das demais migrações do SOMA.
+A dinâmica em grupo (`dinamica*.html`) pede também a
+**`soma_v12_ps_dinamica.sql`**, no mesmo lugar.
 
 ## A página "A NeuroDynamics"
 
@@ -54,10 +54,11 @@ O endereço do site institucional fica na constante
 `SITE_INSTITUCIONAL`, usada nos direcionamentos espalhados pelo site
 (início, esta página, FAQ, menu e rodapé).
 
-## FAQ e competências (editados pelo SOMA)
+## FAQ e competências (editados no portal)
 
-Depois da migração **`soma_v11.sql`** (repositório `nro-pessoal`), duas
-coisas saem do código e passam a ser editadas em **SOMA → Seleção**:
+Depois da migração **`soma_v11_ps_faq.sql`** (em `membro/db/aplicadas/`), duas
+coisas saem do código e passam a ser editadas no portal, em **Seleção**
+([membro.neurodynamics.dev/#/selecao](https://membro.neurodynamics.dev/#/selecao)):
 
 - **As perguntas frequentes** da página inicial, na aba **FAQ**: pergunta,
   resposta, ordem, publicar/ocultar e o escopo (uma edição específica ou
@@ -245,15 +246,15 @@ As três páginas são estas:
 |---|---|---|
 | `dinamica.html` | um celular por grupo de candidatos | durante a janela |
 | `dinamica-painel.html` | o avaliador que opera o projetor | durante a janela |
-| `dinamica-avaliador.html` | cada avaliador, no próprio celular | durante a janela, com login do SOMA |
+| `dinamica-avaliador.html` | cada avaliador, no próprio celular | durante a janela, com login do portal |
 
-Todas dependem da migração **`soma_v12.sql`** (repositório `nro-pessoal`).
+Todas dependem da migração **`soma_v12_ps_dinamica.sql`** (em `membro/db/aplicadas/`).
 Sem ela as páginas ficam no ar mas não têm de onde ler o conteúdo.
 
 ### O código da janela
 
 Cada janela de dinâmica (um slot de `ps_slots` com `fase = 'dinamica'`,
-criado na aba **Agenda** do SOMA) ganha automaticamente um código de
+criado na aba **Agenda** da Seleção, no portal) ganha automaticamente um código de
 quatro caracteres. O alfabeto não usa `O`, `0`, `I`, `1`, `S` nem `5`,
 porque o código é lido de longe, num projetor, por gente com pressa.
 
@@ -273,7 +274,7 @@ login**. A trava mora no banco, nas funções `security definer`, não no
 JavaScript da página.
 
 Quem precisa ler o roteiro antes lê o NRO-PES-020 ou abre a aba Dinâmica
-do SOMA, que é onde se prepara. A mesa do avaliador é a página do dia,
+da Seleção, no portal, que é onde se prepara. A mesa do avaliador é a página do dia,
 não a de preparação.
 
 ### O registro do candidato
@@ -318,25 +319,27 @@ destaque), **Registros** (o que cada grupo está escrevendo, atualizado
 sozinho) e **Avaliar** (nota de 1 a 5 por critério, com as âncoras à
 vista, parecer e recomendação).
 
-A avaliação cai na mesma tabela `ps_avaliacoes` que o SOMA já usa, com
+A avaliação cai na mesma tabela `ps_avaliacoes` que o portal já usa, com
 `fase = 'dinamica'`, então a nota aparece na ficha do candidato sem
 nenhuma ponte manual. A página imprime: com o Wi-Fi fora do ar, o roteiro
 e a ficha de avaliação saem em papel pelo próprio navegador.
 
 ### O que se edita, e onde
 
-Tudo em **SOMA → Seleção → Dinâmica**, sem tocar em código:
+Tudo no portal, em **Seleção → Dinâmica**
+([membro.neurodynamics.dev/#/selecao/dinamica](https://membro.neurodynamics.dev/#/selecao/dinamica)),
+sem tocar em código:
 
 - **Painel** — título, subtítulo, resumo da equipe, aviso de imagem,
   Wi-Fi da sala, os cartões de apresentação e as regras.
 - **Roteiro** — duração da janela, tamanho do grupo, as duas tolerâncias
   de horário e os blocos (nome, minutos, o que o avaliador faz, o que vai
-  no projetor e o que cortar se atrasar). O SOMA soma os minutos e avisa
+  no projetor e o que cortar se atrasar). O portal soma os minutos e avisa
   quando o roteiro não cabe na janela.
 - **Desafio** — o briefing, os casos (situação, decisão, as três opções e
   a frase da pessoa) e os campos do registro.
 - **Critérios** — os cinco critérios com as âncoras de nota 1, 3 e 5. O
-  SOMA avisa se algum não bater com os critérios da aba Avaliação.
+  portal avisa se algum não bater com os critérios da aba Avaliação.
 - **Janelas** — o código, os atalhos para as três páginas e a mesa de
   avaliadores de cada janela (quem aparece na tela "Quem avalia"). A mesa
   é montada escolhendo do quadro de membros: nome, cargo, curso e foto
@@ -384,4 +387,4 @@ são verificadas no banco a cada chamada.
 Nenhuma tabela do módulo tem política de leitura/escrita para `anon`;
 o candidato se identifica por **protocolo + e-mail**, sem senha.
 O controle do processo é feito pelo Comitê de Seleção na página
-**Seleção** do SOMA · Gestão (papel `selecao` no banco).
+**Seleção** do portal da equipe (papel `selecao` no banco).

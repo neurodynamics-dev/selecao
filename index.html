@@ -728,8 +728,8 @@ const SOBRE = {
 const SITE_INSTITUCIONAL = 'https://neurodynamics.dev';
 
 /* ============================================================
-   FAQ — as perguntas vêm do SOMA (Seleção → FAQ, migração
-   soma_v11.sql). Esta lista é o conteúdo de reserva: entra no
+   FAQ — as perguntas vêm do portal (Seleção → FAQ, migração
+   soma_v11_ps_faq.sql). Esta lista é o conteúdo de reserva: entra no
    ar enquanto a migração não for aplicada, ou se o banco não
    responder. Vale manter as duas mais ou menos em sincronia.
    ============================================================ */
@@ -762,7 +762,7 @@ const FAQ_RESERVA = [
 
 /* ============================================================
    COMPETÊNCIAS — o catálogo de etiquetas do formulário também
-   vem do SOMA. Reserva usada enquanto a migração não roda.
+   vem do portal. Reserva usada enquanto a migração não roda.
    ============================================================ */
 const COMPETENCIAS_RESERVA = [
   ['P&D · Software', ['Programação de firmware','Sistemas embarcados','Processamento de sinais','Visão computacional',
@@ -815,7 +815,7 @@ const state = { site:null, online:false, ident:null, acomp:null, agenda:null, de
 /* ---------------- utilidades ---------------- */
 const $ = s=>document.querySelector(s);
 const esc = v=> v==null ? '' : String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-/* marcação mínima dos textos editáveis (SOBRE e FAQ do SOMA):
+/* marcação mínima dos textos editáveis (SOBRE e o FAQ do portal):
    *negrito*, [texto](https://link) e quebras de linha. Escapa
    antes de tudo — o que vem do banco nunca entra como HTML. */
 function rico(t){
