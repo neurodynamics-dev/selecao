@@ -604,6 +604,10 @@ const LOGO_URL = 'https://raw.githubusercontent.com/matheusmarcondes1/nro/refs/h
    SOBRE — conteúdo da página "A NeuroDynamics".
    EDITE os textos, vídeos, matérias e fotos abaixo. Nada além
    deste bloco precisa ser alterado para atualizar a página.
+   - videos e materias: desde a migração 23.0, a lista que vale é
+     a do banco, editada no portal (Studio › Configurações ›
+     Imprensa) — a mesma do site institucional. As daqui ficam de
+     reserva, para quando o banco não responder.
    - videos: o carrossel de reportagens. Cada item leva só o ID
      do YouTube (o que vem depois de "v=" ou de "youtu.be/").
      O "titulo" é opcional: sem ele, quem rotula o clipe é o
@@ -875,6 +879,7 @@ const TIPO_PUB = {edital:['Edital','#CEDC00'], aviso:['Aviso','#60A5FA'],
 
 /* ---------------- dados ---------------- */
 async function carregarSite(){
+  const imprensa = carregarImprensa();
   try{
     const {data, error} = await sb.rpc('ps_site');
     if(error) throw error;
@@ -884,6 +889,20 @@ async function carregarSite(){
     console.warn('Sem conexão com o sistema. Usando conteúdo local.', e);
     state.site = FALLBACK; state.online = false;
   }
+  await imprensa;
+}
+/* A imprensa (vídeos e matérias) mora no banco desde a migração 23.0,
+   e é editada no portal, em Studio › Configurações › Imprensa — a mesma
+   lista do site institucional. Sem o banco, ficam as listas do SOBRE. */
+async function carregarImprensa(){
+  try{
+    const {data, error} = await sb.rpc('site_imprensa_publico');
+    if(error || !Array.isArray(data?.videos)) return;
+    SOBRE.videos = data.videos.filter(v => v.youtube)
+      .map(v => ({ titulo:v.titulo || '', veiculo:v.veiculo || '', ano:v.ano || '', youtube:v.youtube, url:v.url || '' }));
+    SOBRE.materias = (data.materias || [])
+      .map(m => ({ titulo:m.titulo, veiculo:m.veiculo || '', ano:m.ano || '', url:m.url }));
+  }catch(e){ /* fica o conteúdo local */ }
 }
 const ed = ()=> state.site.edicao;
 const etapas = ()=> state.site.etapas || [];

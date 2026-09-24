@@ -19,6 +19,14 @@ A dinâmica em grupo (`dinamica*.html`) pede também a
 Tudo dela sai do bloco `SOBRE`, no topo do `<script>` de `index.html`:
 os textos, as fotos e as duas listas da seção de imprensa.
 
+> **A imprensa mora no banco desde a migração 23.0.** Os vídeos e as
+> matérias são editados no portal do membro, em **Studio › Configurações ›
+> Imprensa do site** — a mesma lista do site institucional, lida por
+> `site_imprensa_publico()` antes de a página desenhar. `SOBRE.videos` e
+> `SOBRE.materias` continuam aqui só como reserva, para quando o banco não
+> responder. O que está abaixo sobre os campos continua valendo; muda onde se
+> preenche.
+
 - **`videos`** é o carrossel de reportagens. Cada item leva só o **id do
   YouTube** — o que vem depois de `watch?v=` ou de `youtu.be/`, jogando
   fora tudo a partir do `&`. O `titulo` é opcional: sem ele, quem rotula
@@ -46,9 +54,8 @@ os textos, as fotos e as duas listas da seção de imprensa.
   rótulo *Também escreveram sobre*: `{ titulo, veiculo, ano, url }`.
 
 Lista vazia não aparece; vazias as duas, a seção de imprensa some por
-inteiro. Os mesmos vídeos e matérias estão no site institucional, no
-repositório `neurodynamics-dev/website` — ao acrescentar um, vale
-atualizar os dois.
+inteiro. Os mesmos vídeos e matérias aparecem no site institucional — e,
+desde a 23.0, vêm do mesmo lugar: editar no Studio atualiza os dois.
 
 O endereço do site institucional fica na constante
 `SITE_INSTITUCIONAL`, usada nos direcionamentos espalhados pelo site
