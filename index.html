@@ -471,6 +471,10 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
   padding:16px 20px;margin-top:18px}
 .ag-conf .info{font-size:14px}
 .ag-conf .info b{color:var(--syn)}
+.ag-sub{font-size:13px;color:var(--muted)}
+.ag-link{margin-top:12px;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.ag-url{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-family:var(--fd);cursor:pointer;word-break:break-all}
+.ag-url .ic{width:14px;height:14px}
 
 /* ============ FAQ / BAND / FOOTER ============ */
 .faq{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
@@ -856,6 +860,7 @@ const ICONS = {
   down:'<path d="M12 4v11M6.5 10.5 12 16l5.5-5.5M5 20h14"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
   copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 14.5V6a2 2 0 0 1 2-2h8.5"/>',
+  video:'<rect x="3" y="6.5" width="12.5" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3"/>',
   search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
   fora:'<path d="M7 17 17 7M9 7h8v8"/>',
   play:'<path d="M7.5 4.8 19 12 7.5 19.2V4.8Z"/>',
@@ -1842,7 +1847,12 @@ const FASE_IDX = {inscrito:0, indeferido:0, deferido:1, reprovado_dinamica:1, ap
   reprovado_entrevista:2, aprovado_entrevista:3, trainee:3, reprovado_final:4, aprovado_final:4, integrado:4, desistente:0};
 
 function pagAcompanhar(){
-  const salvo = JSON.parse(localStorage.getItem('ps_ident')||'null');
+  /* o link dos e-mails da entrevista traz a inscrição:
+     #/acompanhar?protocolo=PS26-0001&email=voce@exemplo.com */
+  const q = new URLSearchParams(location.hash.split('?')[1] || '');
+  const doLink = q.get('protocolo') && q.get('email') ? {protocolo:q.get('protocolo').toUpperCase(), email:q.get('email')} : null;
+  let salvo = doLink;
+  try{ salvo = salvo || JSON.parse(localStorage.getItem('ps_ident')||'null'); }catch(e){}
   $('#main').innerHTML = `
   <div class="pg-head" style="text-align:center">
     <span class="eyebrow" style="justify-content:center">Área do candidato</span>
@@ -1907,22 +1917,30 @@ function renderSituacao(){
         const cls = i<idx ? 'ok' : i===idx ? (falhas.includes(a.situacao)?'falha':'on') : '';
         return `<div class="sp ${cls}"><span class="pt"></span><span class="lb">${f}</span></div>`;}).join('')}</div>
       <div class="sit-card ${s.cls}"><h3>${s.t}</h3><p>${s.p}</p></div>
-      ${outros.map(x=>`<div class="aviso ok">${icone('check')} <b>${x.fase==='dinamica'?'Dinâmica':'Entrevista'}</b>: ${fmtLongo(x.data)}, ${x.hora_inicio} às ${x.hora_fim}${x.local?', '+esc(x.local):''}</div>`).join('')}
+      ${outros.map(x=>`<div class="aviso ok">${icone('check')} <b>${x.fase==='dinamica'?'Dinâmica':'Entrevista'}</b>: ${fmtLongo(x.data)}, ${x.hora_inicio} às ${x.hora_fim}${agOnde(x)}
+        ${x.link?` <a href="${esc(x.link)}" target="_blank" rel="noopener">Entrar na chamada</a>`:''}</div>`).join('')}
       ${agFase ? renderBlocoAgenda(agFase, agAtual) : ''}
     </div>
     <div id="agendador" style="margin-top:18px"></div>`;
 }
+/* ", online" ou ", no local": a entrevista é por chamada desde a v31 */
+const agOnde = x => x.online ? ', online' : x.local ? ', ' + esc(x.local) : '';
 function renderBlocoAgenda(fase, atual){
   const nomeF = fase==='dinamica' ? 'dinâmica em grupo' : 'entrevista individual';
   if(atual) return `
     <div class="ag-conf">
       <div class="info">${icone('cal')} <b>${nomeF[0].toUpperCase()+nomeF.slice(1)} agendada:</b><br>
-        ${fmtLongo(atual.data)}, <b>${atual.hora_inicio} às ${atual.hora_fim}</b>${atual.local?', '+esc(atual.local):''}</div>
+        ${fmtLongo(atual.data)}, <b>${atual.hora_inicio} às ${atual.hora_fim}</b>${agOnde(atual)}
+        ${atual.responsavel?`<br><span class="ag-sub">Com ${esc(atual.responsavel)}</span>`:''}</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="cta ghost" onclick="baixarICS('${fase}','${atual.data}','${atual.hora_inicio}','${atual.hora_fim}','${esc(atual.local||'')}')">${icone('down')} Salvar na agenda</button>
+        ${atual.link?`<a class="cta" href="${esc(atual.link)}" target="_blank" rel="noopener">${icone('video')} Entrar na chamada</a>`:''}
+        <button class="cta ghost" onclick="baixarICSDe('${fase}')">${icone('down')} Salvar na agenda</button>
         <button class="cta ghost" onclick="abrirAgendador()">Reagendar</button>
       </div>
-    </div>`;
+    </div>
+    ${atual.link?`<div class="ag-link">A entrevista é online, pelo Google Meet. Link da chamada:
+      <span class="ag-url" onclick="copiar('${esc(atual.link)}')" title="Copiar">${esc(atual.link.replace(/^https?:\/\//,''))} ${icone('copy')}</span>
+      <br>Enviamos o link para o seu e-mail. Entre alguns minutos antes, com câmera e microfone testados.</div>`:''}`;
   return `
     <div class="ag-conf">
       <div class="info">${icone('cal')} <b>Próximo passo:</b> agendar sua ${nomeF}.</div>
@@ -1968,7 +1986,7 @@ function renderAgendador(){
           const cheio = s.vagas<=0 && !s.meu;
           return `<button class="ag-hora ${ag.slot===s.id?'on':''} ${cheio?'cheio':''}" onclick="agSlot('${s.id}')">
             <div class="h">${s.hora_inicio}</div>
-            <div class="v">${s.meu?'<span class="meu-tag">seu horário atual</span>':cheio?'lotado':`até ${s.hora_fim}${s.local?', '+esc(s.local):''}`}</div>
+            <div class="v">${s.meu?'<span class="meu-tag">seu horário atual</span>':cheio?'lotado':`até ${s.hora_fim}${agOnde(s)}`}</div>
           </button>`;}).join('')}</div>
         <div id="ag-confirma"></div>
       </div>
@@ -1981,7 +1999,8 @@ window.agSlot = function(id){
   const s = state.agenda.slots.find(x=>x.id===id);
   $('#ag-confirma').innerHTML = `
     <div class="ag-conf" style="margin-top:14px">
-      <div class="info"><b>${fmtLongo(s.data)}</b>, ${s.hora_inicio} às ${s.hora_fim}${s.local?', '+esc(s.local):''}</div>
+      <div class="info"><b>${fmtLongo(s.data)}</b>, ${s.hora_inicio} às ${s.hora_fim}${agOnde(s)}
+        ${s.online?'<br><span class="ag-sub">O link da chamada chega por e-mail e fica nesta página.</span>':''}</div>
       <button class="cta" id="ag-btn" onclick="confirmarAg()">${s.meu?'Manter este horário':'Confirmar horário'} ${icone('check')}</button>
     </div>`;
 };
@@ -1991,7 +2010,7 @@ window.confirmarAg = async function(){
     const {data, error} = await sb.rpc('ps_agendar', {p_protocolo:state.ident.protocolo, p_email:state.ident.email, p_slot:state.agenda.slot});
     if(error) throw error;
     if(data.status==='ok'){
-      toast('Horário confirmado.');
+      toast(data.email ? 'Horário confirmado. O link da chamada foi para o seu e-mail.' : 'Horário confirmado.');
       $('#agendador').innerHTML='';
       await consultar();
       window.scrollTo({top:0,behavior:'smooth'});
@@ -2001,14 +2020,21 @@ window.confirmarAg = async function(){
   }catch(e){ console.error(e); toast('Falha ao agendar. Tente de novo.', true);
     btn.disabled=false; btn.innerHTML='Confirmar horário '+icone('check'); }
 };
-window.baixarICS = function(fase, data, hi, hf, local){
+/* o agendamento da fase, no calendário: a entrevista online leva o link */
+window.baixarICSDe = function(fase){
+  const a = (state.acomp?.agendamentos||[]).find(x=>x.fase===fase); if(!a) return;
+  baixarICS(fase, a.data, a.hora_inicio, a.hora_fim, a.local||'', a.link||'');
+};
+window.baixarICS = function(fase, data, hi, hf, local, link){
   const t = fase==='dinamica' ? 'Dinâmica em grupo, NeuroDynamics' : 'Entrevista, NeuroDynamics';
   const d = data.replace(/-/g,'');
+  const icsTxt = x => String(x||'').replace(/([,;\\])/g,'\\$1');
   const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//NeuroDynamics//PS//PT','BEGIN:VEVENT',
     `UID:${Date.now()}@selecao.neurodynamics.dev`,
     `DTSTART:${d}T${hi.replace(':','')}00`,`DTEND:${d}T${hf.replace(':','')}00`,
-    `SUMMARY:${t}`, local?`LOCATION:${local}`:'',
-    'DESCRIPTION:Processo Seletivo NeuroDynamics. Chegue com 10 minutos de antecedência.',
+    `SUMMARY:${t}`, link?`LOCATION:${icsTxt(link)}`:local?`LOCATION:${icsTxt(local)}`:'', link?`URL:${link}`:'',
+    link ? `DESCRIPTION:Processo Seletivo NeuroDynamics. Entrevista online pelo Google Meet: ${icsTxt(link)}`
+         : 'DESCRIPTION:Processo Seletivo NeuroDynamics. Chegue com 10 minutos de antecedência.',
     'END:VEVENT','END:VCALENDAR'].filter(Boolean).join('\r\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));

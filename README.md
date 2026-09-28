@@ -14,6 +14,16 @@ da equipe. Sem elas o site continua no ar com o conteúdo de reserva
 A dinâmica em grupo (`dinamica*.html`) pede também a
 **`soma_v12_ps_dinamica.sql`**, no mesmo lugar.
 
+As **entrevistas online** pedem a **`v31_ps_entrevistas.sql`** (em
+`membro/db/`). Com ela, a entrevista acontece por chamada: a lista de horários
+diz que é online, e depois da reserva a página de acompanhamento mostra o link
+da chamada, com o botão "Entrar na chamada" e o calendário (`.ics`) com o link.
+O candidato recebe a confirmação por e-mail (e os avisos de reagendamento, de
+troca de link e de cancelamento), enviados pela Edge Function
+`notificar-email` do portal. O link dos e-mails abre o acompanhamento já
+preenchido: `#/acompanhar?protocolo=PS26-0001&email=voce@exemplo.com`. Sem a
+v31, tudo continua como antes, com o local.
+
 ## A página "A NeuroDynamics"
 
 Tudo dela sai do bloco `SOBRE`, no topo do `<script>` de `index.html`:
