@@ -5,24 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Mesa do avaliador na dinâmica em grupo do processo seletivo da NeuroDynamics.">
-<meta name="theme-color" content="#060A09">
+<meta name="theme-color" content="#060A09"> <!-- auditar: ok, theme-color exige valor literal -->
 <title>Mesa do avaliador | NeuroDynamics</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ds/tokens.css">
 <style>
 :root{
-  --bg:#060A09; --ink:#F5F5F7; --muted:#9FAAA6; --dim:#6E7A76;
-  --line:rgba(245,245,247,.09); --line2:rgba(245,245,247,.18);
-  --deep:#00352F; --green:#00594F; --syn:#CEDC00;
-  --ambar:#FBBF24; --bad:#F1806F; --ok:#4ADE97; --azul:#7FA7F2;
-  --card:rgba(255,255,255,.045); --glass:rgba(10,17,15,.9);
-  --r:16px; --max:900px;
-  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  --fm:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
+  /* tokens, papéis e tipo vêm de ds/tokens.css; aqui só o que é desta página */
+  --r:16px;
+  --max:900px;
   --safe:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -33,9 +28,9 @@ a{color:var(--syn)}
 button{font-family:inherit;cursor:pointer;color:inherit;border:none;background:none;font-size:15px}
 input,textarea,select{font-family:inherit;font-size:16px;color:var(--ink)}
 [hidden]{display:none!important}
-::selection{background:var(--syn);color:var(--deep)}
+::selection{background:rgba(var(--tom),.12);color:var(--ink)}
 
-#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(120% 80% at 70% -10%, #0A1F1B 0%, var(--bg) 55%)}
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(120% 80% at 70% -10%, var(--painel) 0%, var(--bg) 55%)}
 
 header{position:sticky;top:0;z-index:30;background:var(--glass);
   backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
@@ -43,7 +38,7 @@ header{position:sticky;top:0;z-index:30;background:var(--glass);
 .hd{max-width:var(--max);margin:0 auto;padding:10px 15px;display:flex;align-items:center;gap:10px}
 .hd img{height:17px;filter:brightness(0) invert(1)}
 .hd .tag{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--syn);
-  border:1px solid rgba(206,220,0,.35);border-radius:999px;padding:3px 8px}
+  border:1px solid var(--syn-borda);border-radius:var(--r-chip);padding:3px 8px}
 .hd .rel{margin-left:auto;font-family:var(--fm);font-size:12.5px;color:var(--muted);text-align:right;line-height:1.3}
 .hd .rel b{display:block;color:var(--ink);font-family:var(--fd);font-size:13px}
 
@@ -55,7 +50,7 @@ header{position:sticky;top:0;z-index:30;background:var(--glass);
 .abas button.on{background:rgba(206,220,0,.13);color:var(--syn)}
 
 main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe))}
-.eyebrow{font-family:var(--fm);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.eyebrow{font-family:var(--fd);font-weight:600;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 .card{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px;margin-bottom:12px}
 .card h2{font-size:18px;margin-bottom:7px}
 .card h3{font-size:15px;margin-bottom:6px}
@@ -65,7 +60,7 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 17px;
   border-radius:12px;font-family:var(--fd);font-weight:700;font-size:14.5px;
   border:1px solid var(--line2);background:rgba(255,255,255,.05)}
-.btn.solid{background:var(--syn);color:var(--deep);border-color:transparent}
+.btn.solid{background:rgba(var(--tom),.12);color:var(--ink);border-color:transparent}
 .btn.w{width:100%}
 .btn.sm{min-height:36px;font-size:13px;padding:0 12px;border-radius:10px}
 .btn:disabled{opacity:.5;cursor:default}
@@ -98,7 +93,7 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .bloco .corpo ul{margin:11px 0 0 17px}
 .bloco .corpo li{font-size:14px;margin-bottom:6px;color:rgba(245,245,247,.9)}
 .bloco .proj{font-size:12.5px;color:var(--muted);margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
-.bloco .proj b{color:var(--syn);font-family:var(--fm);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.bloco .proj b{color:var(--syn);font-family:var(--fd);font-weight:600;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
 
 /* ---- presença e grupos ---- */
 .pes{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -108,30 +103,30 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .pes .nm span{font-size:12px;color:var(--muted)}
 .seg{display:flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden;flex:0 0 auto}
 .seg button{font-size:12.5px;font-weight:600;padding:7px 11px;color:var(--muted);min-width:42px}
-.seg button.on{background:var(--syn);color:var(--deep)}
-.seg button.no.on{background:var(--bad);color:#2b0a06}
+.seg button.on{background:rgba(var(--tom),.12);color:var(--ink)}
+.seg button.no.on{background:var(--bad);color:var(--void)}
 .gl{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;
   font-family:var(--fd);font-weight:700;font-size:15px;background:rgba(255,255,255,.07);color:var(--muted);
   border:1px solid var(--line2);flex:0 0 auto}
-.gl.on{background:var(--syn);color:var(--deep);border-color:transparent}
+.gl.on{background:rgba(var(--tom),.12);color:var(--ink);border-color:transparent}
 .gsel{display:flex;gap:5px;flex-wrap:wrap;flex:0 0 auto}
 
 .gcard{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px;margin-bottom:10px}
 .gcard .top{display:flex;align-items:center;gap:11px;margin-bottom:9px}
-.gcard .letra{width:38px;height:38px;border-radius:11px;background:var(--syn);color:var(--deep);
+.gcard .letra{width:38px;height:38px;border-radius:11px;background:rgba(var(--tom),.12);color:var(--ink);
   display:grid;place-items:center;font-family:var(--fd);font-weight:700;font-size:18px;flex:0 0 auto}
 .gcard .meta{flex:1;min-width:0}
 .gcard .meta b{font-family:var(--fd);font-size:15px;display:block}
 .gcard .meta span{font-size:12px;color:var(--muted)}
 .gcard dl{display:grid;gap:9px;margin-top:4px}
-.gcard dt{font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--syn)}
+.gcard dt{font-family:var(--fd);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--syn)}
 .gcard dd{font-size:13.5px;color:rgba(245,245,247,.9);white-space:pre-wrap}
 
 /* ---- avaliação ---- */
 .escala{display:flex;gap:6px;margin:7px 0 3px}
 .escala button{flex:1;min-height:44px;border-radius:11px;border:1px solid var(--line2);
   background:rgba(255,255,255,.04);font-family:var(--fd);font-weight:700;font-size:16px;color:var(--muted)}
-.escala button.on{background:var(--syn);color:var(--deep);border-color:transparent}
+.escala button.on{background:rgba(var(--tom),.12);color:var(--ink);border-color:transparent}
 .anc{font-size:12px;color:var(--dim);line-height:1.45;margin-top:5px}
 .anc b{color:var(--muted)}
 .crit{padding:13px 0;border-bottom:1px solid var(--line)}
@@ -141,7 +136,7 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .rec button{flex:1;min-height:44px;border-radius:11px;border:1px solid var(--line2);
   background:rgba(255,255,255,.04);font-family:var(--fd);font-weight:600;font-size:13.5px;color:var(--muted)}
 .rec button.on-a{background:rgba(74,222,151,.2);border-color:var(--ok);color:var(--ok)}
-.rec button.on-d{background:rgba(251,191,36,.18);border-color:var(--ambar);color:var(--ambar)}
+.rec button.on-d{background:rgba(251,191,36,.18);border-color:var(--warn);color:var(--warn)}
 .rec button.on-r{background:rgba(241,128,111,.18);border-color:var(--bad);color:var(--bad)}
 
 .lista-c{display:flex;flex-direction:column;gap:8px}
@@ -155,7 +150,7 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .itemc .nada{font-size:12px;color:var(--dim)}
 
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + var(--safe));z-index:60;
-  background:#12201D;border:1px solid var(--line2);border-radius:12px;padding:11px 17px;font-size:14px;
+  background:var(--painel);border:1px solid var(--line2);border-radius:12px;padding:11px 17px;font-size:14px;
   box-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;
   max-width:calc(100vw - 30px)}
 #toast.on{opacity:1}
@@ -163,14 +158,14 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 .centro{text-align:center;padding:9vh 15px}
 
 @media print{
-  body{background:#fff;color:#000;font-size:11pt}
+  body{background:var(--paper);color:var(--void);font-size:11pt}
   #bg,header,.abas,#toast,.naoimp{display:none!important}
   main{padding:0;max-width:none}
-  .card,.bloco,.gcard{border:1px solid #bbb;background:#fff;break-inside:avoid;margin-bottom:8pt}
-  .muted,.tiny,.small,.anc{color:#444}
-  .eyebrow,.bloco .h,.gcard dt{color:#005}
-  h1,h2,h3{color:#000}
-  .escala button{border:1px solid #999;color:#000;min-height:26pt}
+  .card,.bloco,.gcard{border:1px solid var(--pia-dark);background:var(--paper);break-inside:avoid;margin-bottom:8pt}
+  .muted,.tiny,.small,.anc{color:var(--sulco-light)}
+  .eyebrow,.bloco .h,.gcard dt{color:var(--sulco-primary)}
+  h1,h2,h3{color:var(--void)}
+  .escala button{border:1px solid var(--pia-dark);color:var(--void);min-height:26pt}
   .linha-esc{display:flex;gap:4pt}
 }
 </style>
@@ -193,14 +188,14 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 /* ============================================================
-   MESA DO AVALIADOR — a página que só existe durante a janela.
+   MESA DO AVALIADOR, a página que só existe durante a janela.
 
    Duas travas, as duas no banco, não aqui:
      1. login do portal com papel de comitê (eh_comite);
      2. horário: as funções ps_din_* só respondem entre
         (início − tolerância) e (fim + tolerância) da janela.
    Fora disso a página não mostra candidato, grupo, registro
-   nem roteiro — nem para quem tem a senha. Quem precisa ler o
+   nem roteiro, nem para quem tem a senha. Quem precisa ler o
    roteiro antes lê no documento NRO-PES-020 ou em
    portal → Seleção → Dinâmica, que é onde se prepara.
 
@@ -210,7 +205,7 @@ main{max-width:var(--max);margin:0 auto;padding:16px 15px calc(40px + var(--safe
    Avaliar (a nota de cada candidato, com as âncoras à vista).
 
    A avaliação cai na mesma tabela ps_avaliacoes que o portal já
-   usa, com fase 'dinamica' — a nota aparece na ficha do
+   usa, com fase 'dinamica', a nota aparece na ficha do
    candidato sem nenhuma ponte manual.
    ============================================================ */
 
@@ -361,12 +356,12 @@ const ABAS = [['roteiro','Roteiro'],['sala','Sala'],['registros','Registros'],['
 function pinta(){
   const m = M.mesa; if(!m) return;
   const j = m.janela;
-  $('#rel').innerHTML = `<b>${esc(j.codigo)} · ${esc(j.hora_inicio)}–${esc(j.hora_fim)}</b>
+  $('#rel').innerHTML = `<b>${esc(j.codigo)}, ${esc(j.hora_inicio)}–${esc(j.hora_fim)}</b>
     <span id="restante"></span>`;
   $('#abas').hidden = false;
   $('#abas').innerHTML = ABAS.map(([k,l])=>{
     const n = k==='avaliar' ? avaliadosDe().length : k==='sala' ? (m.candidatos||[]).filter(c=>c.compareceu===true).length : 0;
-    return `<button class="${M.aba===k?'on':''}" onclick="M.aba='${k}';pinta()">${l}${n?` · ${n}`:''}</button>`;
+    return `<button class="${M.aba===k?'on':''}" onclick="M.aba='${k}';pinta()">${l}${n?`, ${n}`:''}</button>`;
   }).join('');
   ({roteiro:abaRoteiro, sala:abaSala, registros:abaRegistros, avaliar:abaAvaliar}[M.aba])();
   relogio();
@@ -399,7 +394,7 @@ const relDe = (min)=>{
 };
 
 /* ============================================================
-   ABA 1 · ROTEIRO
+   ABA 1, ROTEIRO
    ============================================================ */
 function abaRoteiro(){
   const m = M.mesa, {i:atual, ini, dec} = blocoAtual();
@@ -410,7 +405,7 @@ function abaRoteiro(){
         <div class="eyebrow">Código da sala</div>
         <div style="font-family:var(--fd);font-weight:700;font-size:30px;letter-spacing:.14em;color:var(--syn)">
           ${esc(m.janela.codigo)}</div>
-        <div class="tiny muted">${esc(m.janela.local||'')} · ${(m.candidatos||[]).length} agendados</div>
+        <div class="tiny muted">${esc(m.janela.local||'')}, ${(m.candidatos||[]).length} agendados</div>
       </div>
       <div style="display:grid;gap:7px">
         <a class="btn sm" href="dinamica-painel.html#${esc(m.janela.codigo)}" target="_blank" rel="noopener">Abrir painel</a>
@@ -453,7 +448,7 @@ function abaRoteiro(){
 }
 
 /* ============================================================
-   ABA 2 · SALA (presença e formação dos grupos)
+   ABA 2, SALA (presença e formação dos grupos)
    ============================================================ */
 function abaSala(){
   const m = M.mesa;
@@ -487,7 +482,7 @@ function abaSala(){
 
       ${cands.map(c=>`<div class="pes">
         <div class="nm"><b>${esc(c.nome)}</b>
-          <span>${esc(c.curso||'—')}${c.periodo?' · '+esc(c.periodo)+'º':''} · ${esc(c.protocolo||'')}</span></div>
+          <span>${esc(c.curso||'—')}${c.periodo?', '+esc(c.periodo)+'º':''}, ${esc(c.protocolo||'')}</span></div>
         <div class="seg naoimp">
           <button class="${c.compareceu===true?'on':''}" onclick="presenca('${c.id}',true)">veio</button>
           <button class="no ${c.compareceu===false?'on':''}" onclick="presenca('${c.id}',false)">faltou</button>
@@ -508,7 +503,7 @@ function abaSala(){
         <div class="top">
           <span class="letra">${esc(g.letra)}</span>
           <span class="meta"><b>Grupo ${esc(g.letra)}</b>
-            <span>${nomes.concat(g.avulsos||[]).join(' · ') || 'ninguém ainda'}</span></span>
+            <span>${nomes.concat(g.avulsos||[]).join(', ') || 'ninguém ainda'}</span></span>
         </div>
         <div class="campo naoimp" style="margin:0">
           <label>Caso do grupo</label>
@@ -538,7 +533,7 @@ function montaGrupos(n){
   const presentes = (m.candidatos||[]).filter(c=>c.compareceu === true);
   if(!presentes.length){ toast('Marque a presença antes de dividir.', true); return; }
   /* embaralha para não juntar sempre quem sentou junto, e distribui em
-     rodízio — assim os grupos saem do mesmo tamanho */
+     rodízio, assim os grupos saem do mesmo tamanho */
   const ordem = presentes.map(c=>c.id);
   for(let i=ordem.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [ordem[i],ordem[j]]=[ordem[j],ordem[i]]; }
   const casos = m.casos||[];
@@ -593,7 +588,7 @@ async function salvaGrupos(){
 }
 
 /* ============================================================
-   ABA 3 · REGISTROS (o que os grupos estão escrevendo)
+   ABA 3, REGISTROS (o que os grupos estão escrevendo)
    ============================================================ */
 function abaRegistros(){
   const m = M.mesa, campos = m.campos||[], grupos = m.grupos||[];
@@ -609,7 +604,7 @@ function abaRegistros(){
         <div class="top">
           <span class="letra">${esc(g.letra)}</span>
           <span class="meta"><b>${caso ? esc(caso.titulo) : 'Grupo '+esc(g.letra)}</b>
-            <span>${nomes.join(' · ')||'—'}</span></span>
+            <span>${nomes.join(', ')||'—'}</span></span>
           <span class="tiny muted" style="text-align:right;flex:0 0 auto">${
             g.versao ? 'v'+g.versao+'<br>'+hm(g.atualizado_em) : 'nada gravado'}</span>
         </div>
@@ -621,7 +616,7 @@ function abaRegistros(){
 }
 
 /* ============================================================
-   ABA 4 · AVALIAR
+   ABA 4, AVALIAR
    ============================================================ */
 const avaliadosDe = ()=> (M.mesa?.minhas_avaliacoes||[]);
 const minhaAval = id => avaliadosDe().find(a=>a.candidato_id===id);
@@ -668,12 +663,12 @@ function fichaAvaliacao(){
         <span class="gl on" style="width:38px;height:38px;font-size:17px">${esc(L||'—')}</span>
         <div style="flex:1;min-width:0">
           <h2 style="margin:0">${esc(c.nome)}</h2>
-          <p class="tiny muted">${esc(c.curso||'—')}${c.periodo?' · '+esc(c.periodo)+'º período':''} ·
+          <p class="tiny muted">${esc(c.curso||'—')}${c.periodo?', '+esc(c.periodo)+'º período':''},
             ${esc(c.protocolo||'')}</p>
         </div>
       </div>
       ${(c.areas||[]).length ? `<p class="tiny muted" style="margin-top:9px">Interesse: ${
-        c.areas.map(x=>esc(x)).join(' · ')}</p>`:''}
+        c.areas.map(x=>esc(x)).join(', ')}</p>`:''}
     </div>
 
     <div class="card">
