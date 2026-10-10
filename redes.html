@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Gerador local das publicações do processo seletivo da NeuroDynamics: carrossel, story, feed, LinkedIn, WhatsApp e as legendas.">
-<meta name="theme-color" content="#050807">
+<meta name="theme-color" content="#050807"> <!-- auditar: ok, theme-color exige valor literal -->
 <meta name="robots" content="noindex">
 <title>Redes | Processo Seletivo NeuroDynamics</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* paleta oficial — brand.neurodynamics.dev */
+  /* paleta oficial, brand.neurodynamics.dev */
   --cortex:#00352F; --axon:#00594F; --soma:#0B7D6E; --synapse:#CEDC00;
   --void:#050807; --painel:#0B1210; --blackout:#1D1D1F;
   --ink:#F5F5F7; --aura:#F8F7FF; --nevoa:#9AA5A1; --grafite:#616C68;
@@ -57,11 +57,11 @@ button{cursor:pointer;border:none;background:none}
 }
 .marca-app{display:flex;align-items:center;gap:11px;margin-bottom:4px}
 .marca-app .imagotipo{--logo-alt:17px}
-.tag{font-family:var(--fm);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+.tag{font-family:var(--fd);font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--synapse);border:1px solid rgba(206,220,0,.35);border-radius:999px;padding:2px 8px}
 .subtitulo{color:var(--nevoa);font-size:12.5px;margin:8px 0 18px;line-height:1.55}
 fieldset{border:none;margin:0 0 18px}
-legend,.rotulo{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+legend,.rotulo{font-family:var(--fd);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
   color:var(--grafite);margin-bottom:9px;display:block}
 .campo{margin-bottom:10px}
 .campo label{display:block;font-size:11.5px;color:var(--nevoa);margin-bottom:4px}
@@ -104,13 +104,13 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
 
 /* ---------- palco ---------- */
 #palco-topo{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
-.conta{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grafite)}
+.conta{font-family:var(--fd);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grafite)}
 #laminas{display:flex;flex-wrap:wrap;gap:26px 20px;align-items:flex-start}
 .lam{position:relative}
 .lam canvas{display:block;border-radius:10px;box-shadow:0 16px 44px rgba(0,0,0,.5);
   background:#0B1210;max-width:100%;height:auto}
 .lam .sob{display:flex;align-items:center;gap:8px;margin-top:9px}
-.lam .sob .num{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+.lam .sob .num{font-family:var(--fd);font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--grafite);margin-right:auto}
 .aviso-vazio{border:1px dashed var(--line2);border-radius:14px;padding:38px;color:var(--grafite);
   font-size:13px;max-width:540px;line-height:1.7}
@@ -138,7 +138,7 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
 .plano-col{padding:18px 20px}
 .plano-col+.plano-col{border-left:1px solid var(--line)}
 @media (max-width:900px){.plano-col+.plano-col{border-left:none;border-top:1px solid var(--line)}}
-.plano-col h3{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+.plano-col h3{font-family:var(--fd);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
   color:var(--grafite);margin-bottom:12px;font-weight:500}
 .crono{display:flex;flex-direction:column;gap:9px}
 .crono li{list-style:none;display:flex;gap:11px;font-size:12.5px;line-height:1.5}
@@ -161,7 +161,7 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
     <span class="imagotipo" role="img" aria-label="NeuroDynamics"></span>
     <span class="tag">Redes</span>
   </div>
-  <p class="subtitulo">Gera as publicações do processo seletivo — imagem no tamanho exato de cada
+  <p class="subtitulo">Gera as publicações do processo seletivo, imagem no tamanho exato de cada
     rede, mais a legenda e a mensagem para os grupos. Roda inteiro no navegador: nenhuma imagem
     sua é enviada para lugar nenhum.</p>
 
@@ -178,7 +178,7 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
     <div class="opcoes" id="op-momento" role="group" aria-label="Momento"></div>
     <p class="nota" style="margin-top:12px">A área troca o gancho da imagem e a abertura da
       mensagem; o momento troca o selo e o fecho. <b>Quadrado é o que aparece inteiro na
-      conversa</b> — no 1080 × 1350 o WhatsApp corta a prévia da bolha.</p>
+      conversa</b>, no 1080 × 1350 o WhatsApp corta a prévia da bolha.</p>
   </fieldset>
 
   <fieldset>
@@ -193,7 +193,7 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
   <fieldset>
     <legend>Foto</legend>
     <p class="nota" style="margin-bottom:10px">Entra na capa e no encerramento. <b>Foto da equipe
-      rende mais que foto de banco</b> — bancada, teste, competição, gente da equipe trabalhando.
+      rende mais que foto de banco</b>, bancada, teste, competição, gente da equipe trabalhando.
       Sem foto, a peça sai só com a linguagem da marca, que também funciona.</p>
     <div class="campo"><label for="f-arquivo">Imagem própria</label>
       <input type="file" id="f-arquivo" accept="image/*"></div>
@@ -249,7 +249,7 @@ input[type=range]{width:100%;accent-color:var(--synapse);padding:0}
 </div>
 <script>
 /* ============================================================
-   CAMPANHA — o que muda a cada edição. Os mesmos campos estão
+   CAMPANHA, o que muda a cada edição. Os mesmos campos estão
    editáveis no painel; aqui é só o valor inicial. As datas
    seguem o cronograma publicado em selecao.neurodynamics.dev.
    ============================================================ */
@@ -260,23 +260,23 @@ const CAMPANHA = {
   site:     'selecao.neurodynamics.dev',
   url:      'https://selecao.neurodynamics.dev',
   perfil:   '',
-  base:     'LABBIO · Escola de Engenharia · UFMG'
+  base:     'LABBIO, Escola de Engenharia, UFMG'
 };
 
 /* ============================================================
-   ROTEIROS — cada um é uma publicação inteira: as lâminas da
+   ROTEIROS, cada um é uma publicação inteira: as lâminas da
    imagem, a legenda do Instagram, a versão do LinkedIn, a
    mensagem para os grupos e o texto alternativo.
 
    O conteúdo sai do que o site já responde (FAQ, cronograma,
-   frentes e reportagens) — a ideia é publicar o que a pessoa
+   frentes e reportagens), a ideia é publicar o que a pessoa
    ia perguntar, não o que a gente gosta de dizer.
 
    Tipos de lâmina:
-     capa     — para o feed: título grande, aceita foto
-     lamina   — rótulo, título, texto e tópicos
-     numero   — um dado grande com o contexto embaixo
-     cta      — o encerramento com o endereço
+     capa, para o feed: título grande, aceita foto
+     lamina, rótulo, título, texto e tópicos
+     numero, um dado grande com o contexto embaixo
+     cta, o encerramento com o endereço
 
    Nos textos: {prazo} {prazo_curto} {abertura} {site} {url}
    {edicao} {perfil} {dias} são trocados na hora de gerar.
@@ -308,23 +308,23 @@ const ROTEIROS = {
     quando:'No primeiro dia das inscrições',
     cor:'#CEDC00',
     laminas:[
-      { tipo:'capa', foto:true, olho:'{edicao} · UFMG',
+      { tipo:'capa', foto:true, olho:'{edicao}, UFMG',
         titulo:'Inscrições\nabertas.',
-        sub:'Uma equipe da Escola de Engenharia da UFMG que constrói tecnologia para a saúde — e precisa de gente de todo curso.' },
+        sub:'Uma equipe da Escola de Engenharia da UFMG que constrói tecnologia para a saúde, e precisa de gente de todo curso.' },
       { tipo:'lamina', rotulo:'O que a gente faz',
         titulo:'O ciclo inteiro de um dispositivo',
         corpo:'Da primeira conversa com quem vai usar até o teste que vale: o uso real.',
-        itens:['Concepção — da ideia ao levantamento de requisitos',
-               'Software e firmware — a inteligência do dispositivo',
-               'Hardware — projeto, montagem e manutenção',
-               'Validação clínica — o teste com quem precisa dele'] },
-      { tipo:'numero', valor:'2024', rotulo:'Cybathlon · Suíça',
+        itens:['Concepção, da ideia ao levantamento de requisitos',
+               'Software e firmware, a inteligência do dispositivo',
+               'Hardware, projeto, montagem e manutenção',
+               'Validação clínica, o teste com quem precisa dele'] },
+      { tipo:'numero', valor:'2024', rotulo:'Cybathlon, Suíça',
         corpo:'Um atleta que treina com a gente foi às Olimpíadas Biônicas. Antes disso, um triciclo feito por alunos da UFMG fez um jovem tetraplégico pedalar.' },
       { tipo:'lamina', rotulo:'Quem pode entrar',
         titulo:'Qualquer curso.\nSem experiência.',
         corpo:'Avaliamos potencial, comprometimento e vontade de aprender.',
         itens:['Não exigimos curso nem período específicos',
-               'Nem que você seja da engenharia — são cinco departamentos',
+               'Nem que você seja da engenharia, são cinco departamentos',
                'Estudante de ensino técnico também entra',
                'O período trainee existe para dar a base'] },
       { tipo:'cta', foto:true, titulo:'Inscrições até\n{prazo}', sub:'Sem cadastro: você recebe um protocolo por e-mail.' }
@@ -332,21 +332,21 @@ const ROTEIROS = {
     legenda:{
       gancho:'Você não precisa ser da engenharia para construir tecnologia que devolve movimento a alguém.',
       corpo:['A NeuroDynamics é uma equipe de pesquisa, desenvolvimento e inovação da Escola de Engenharia da UFMG, dedicada a tecnologias para a saúde. A gente percorre o ciclo inteiro de um dispositivo: concepção, firmware, eletrônica, mecânica e validação clínica com quem vai usar.',
-             'São cinco departamentos — P&D, Clínica, Marketing, Relações Institucionais e Pessoal. Por isso a equipe tem gente da fisioterapia, do design, da administração, da psicologia e do direito trabalhando junto com a engenharia.',
+             'São cinco departamentos, P&D, Clínica, Marketing, Relações Institucionais e Pessoal. Por isso a equipe tem gente da fisioterapia, do design, da administração, da psicologia e do direito trabalhando junto com a engenharia.',
              'Não exigimos experiência prévia nem curso específico. O período trainee existe justamente para dar a base.'],
-      cta:'Inscrições até {prazo}, em {site} — sem criar conta, você recebe um protocolo por e-mail. Manda para alguém do seu curso que precisa ver isso.',
+      cta:'Inscrições até {prazo}, em {site}, sem criar conta, você recebe um protocolo por e-mail. Manda para alguém do seu curso que precisa ver isso.',
       tags:['#UFMG','#ProcessoSeletivo','#EscolaDeEngenhariaUFMG','#TecnologiaAssistiva','#EngenhariaBiomédica']
     },
     linkedin:{
       gancho:'Abrimos as inscrições para a próxima turma da NeuroDynamics.',
-      corpo:['Somos uma equipe de pesquisa, desenvolvimento e inovação da Escola de Engenharia da UFMG, sediada no LABBIO, dedicada a tecnologias para a saúde — do levantamento de requisitos com pacientes e profissionais até a validação clínica.',
+      corpo:['Somos uma equipe de pesquisa, desenvolvimento e inovação da Escola de Engenharia da UFMG, sediada no LABBIO, dedicada a tecnologias para a saúde, do levantamento de requisitos com pacientes e profissionais até a validação clínica.',
              'O trabalho é organizado em cinco departamentos e conduzido com metodologia ágil: sprints, entregas acordadas, avaliações periódicas e liderança próxima. Quem entra assume responsabilidade real sobre uma entrega desde o período trainee.',
-             'Procuramos estudantes de qualquer curso — engenharia, saúde, comunicação, gestão, humanas e ensino técnico. Não exigimos experiência prévia.'],
+             'Procuramos estudantes de qualquer curso, engenharia, saúde, comunicação, gestão, humanas e ensino técnico. Não exigimos experiência prévia.'],
       cta:'As inscrições vão até {prazo}. O endereço está no primeiro comentário.',
       tags:['#UFMG','#EngenhariaBiomédica','#TecnologiaAssistiva','#PesquisaEDesenvolvimento']
     },
     alt:'Cartaz com o texto “Inscrições abertas” sobre fundo verde escuro da NeuroDynamics, equipe de tecnologia para a saúde da Escola de Engenharia da UFMG, com a data limite de inscrição e o endereço do site.',
-    porque:'Abre com o que trava a maior parte das inscrições — a ideia de que é preciso ser da engenharia. O dado do Cybathlon no meio do carrossel segura quem chegou por curiosidade.'
+    porque:'Abre com o que trava a maior parte das inscrições, a ideia de que é preciso ser da engenharia. O dado do Cybathlon no meio do carrossel segura quem chegou por curiosidade.'
   },
 
   duvidas: {
@@ -357,9 +357,9 @@ const ROTEIROS = {
     laminas:[
       { tipo:'capa', foto:true, olho:'Perguntas frequentes',
         titulo:'As perguntas\nque você ia\nmandar no direct.',
-        sub:'Com as respostas honestas — inclusive a que ninguém gosta de dar.' },
+        sub:'Com as respostas honestas, inclusive a que ninguém gosta de dar.' },
       { tipo:'lamina', rotulo:'01', titulo:'“É pago?”',
-        corpo:'Não. A participação é voluntária e não remunerada — somos uma equipe universitária, e o que ela oferece não é salário.',
+        corpo:'Não. A participação é voluntária e não remunerada, somos uma equipe universitária, e o que ela oferece não é salário.',
         itens:['Responsabilidade real sobre uma entrega, desde o trainee',
                'Prática de equipe multidisciplinar, com prazo e método',
                'Contato com pesquisa, hospitais, parceiros e competições',
@@ -368,29 +368,29 @@ const ROTEIROS = {
         corpo:'Não. Avaliamos potencial, comprometimento e vontade de aprender. O período trainee existe justamente para dar a base necessária, com o acompanhamento dos membros da equipe.' },
       { tipo:'lamina', rotulo:'03', titulo:'“Tem que ser\nda engenharia?”',
         corpo:'Não. São cinco departamentos, e a maior parte do trabalho não é de engenharia.',
-        itens:['P&D — firmware, eletrônica, mecânica e software',
-               'Clínica — requisito, protocolo e validação com usuário',
-               'Marketing — vídeo, design, redação e imprensa',
-               'Relações Institucionais — editais, convênios e patentes',
-               'Pessoal — recrutamento, formação e gestão da equipe'] },
+        itens:['P&D, firmware, eletrônica, mecânica e software',
+               'Clínica, requisito, protocolo e validação com usuário',
+               'Marketing, vídeo, design, redação e imprensa',
+               'Relações Institucionais, editais, convênios e patentes',
+               'Pessoal, recrutamento, formação e gestão da equipe'] },
       { tipo:'lamina', rotulo:'04', titulo:'“Quanto tempo\nisso toma?”',
         corpo:'As reuniões gerais, normalmente uma por mês, são presenciais. Bancada, teste e validação acontecem no laboratório. O resto se resolve de onde você estiver: desde que a entrega saia no prazo combinado, o lugar onde você trabalha é escolha sua.' },
       { tipo:'lamina', rotulo:'05', titulo:'“Conta como AACC\nou estágio?”',
-        corpo:'O aproveitamento como AACC depende das normas do seu colegiado — vale procurar a coordenação do curso. Estágio, em geral, não: a equipe não tem registro que permita o vínculo formal. Para quem é do COLTEC costuma ser possível.' },
+        corpo:'O aproveitamento como AACC depende das normas do seu colegiado, vale procurar a coordenação do curso. Estágio, em geral, não: a equipe não tem registro que permita o vínculo formal. Para quem é do COLTEC costuma ser possível.' },
       { tipo:'lamina', rotulo:'06', titulo:'“Como eu\nme inscrevo?”',
         corpo:'Pelo site, sem criar conta. Você recebe um protocolo e acompanha tudo com ele: inscrição deferida, agendamento da dinâmica e da entrevista, e os resultados de cada fase.' },
       { tipo:'cta', foto:true, titulo:'Inscrições até\n{prazo}', sub:'O FAQ completo está no site.' }
     ],
     legenda:{
-      gancho:'A pergunta que mais recebemos é “é pago?”. A resposta é não — e vale explicar o que você leva no lugar.',
+      gancho:'A pergunta que mais recebemos é “é pago?”. A resposta é não, e vale explicar o que você leva no lugar.',
       corpo:['A participação é voluntária e não remunerada. Somos uma equipe universitária, e o que ela oferece não é salário: é responsabilidade real sobre uma entrega, dentro de projetos de tecnologia em saúde que vão do levantamento de requisitos à validação clínica.',
              'Junte a isso prática de trabalho em equipe multidisciplinar com metodologia ágil, contato com pesquisa, hospitais, parceiros e competições internacionais, e um portfólio que você defende em qualquer entrevista, porque foi você que construiu.',
              'Neste carrossel estão as outras cinco perguntas que mais chegam: experiência prévia, curso, tempo de dedicação, aproveitamento acadêmico e como se inscrever.'],
-      cta:'Inscrições até {prazo}, em {site}. Salva aí para não esquecer — e manda para quem está em dúvida.',
+      cta:'Inscrições até {prazo}, em {site}. Salva aí para não esquecer, e manda para quem está em dúvida.',
       tags:['#UFMG','#ProcessoSeletivo','#EquipeUniversitária','#TecnologiaAssistiva']
     },
     linkedin:{
-      gancho:'“É pago?” é a pergunta que mais recebemos no nosso processo seletivo. A resposta é não — e achamos que vale explicar por quê.',
+      gancho:'“É pago?” é a pergunta que mais recebemos no nosso processo seletivo. A resposta é não, e achamos que vale explicar por quê.',
       corpo:['A NeuroDynamics é uma equipe universitária da Escola de Engenharia da UFMG. A participação é voluntária e não remunerada, e preferimos dizer isso na primeira linha em vez de na última.',
              'O que a experiência oferece é outra coisa: responsabilidade real sobre entregas em projetos de tecnologia para a saúde, prática de equipe multidisciplinar com metodologia ágil, contato com pesquisa, hospitais, parceiros e competições internacionais, e um portfólio construído pela própria pessoa.',
              'Também respondemos, no material, as dúvidas sobre experiência prévia, curso de origem, carga de dedicação e aproveitamento acadêmico.'],
@@ -398,7 +398,7 @@ const ROTEIROS = {
       tags:['#UFMG','#EquipeUniversitária','#Extensão','#TecnologiaAssistiva']
     },
     alt:'Carrossel com as perguntas frequentes do processo seletivo da NeuroDynamics e suas respostas: se é pago, se precisa de experiência, se precisa ser da engenharia, quanto tempo exige, se conta como AACC e como se inscrever.',
-    porque:'Responder “é pago?” logo na capa, sem rodeio, é o que faz a publicação ser salva e reenviada — e tira da frente a objeção que mais derruba inscrição.'
+    porque:'Responder “é pago?” logo na capa, sem rodeio, é o que faz a publicação ser salva e reenviada, e tira da frente a objeção que mais derruba inscrição.'
   },
 
   areas: {
@@ -411,25 +411,25 @@ const ROTEIROS = {
         titulo:'Não é só\nengenharia.',
         sub:'Cinco frentes. A lista de cursos é um retrato de quem já passou por aqui, não uma exigência.' },
       { tipo:'lamina', rotulo:'Saúde e clínica', titulo:'Sem clínica, é só um protótipo bonito.',
-        corpo:'Quem entende do corpo humano traduz necessidade clínica em requisito de engenharia — e é quem diz se o que construímos funciona de verdade.',
-        itens:['Fisioterapia · Terapia Ocupacional · Educação Física',
-               'Medicina · Enfermagem · Fonoaudiologia · Biológicas'] },
+        corpo:'Quem entende do corpo humano traduz necessidade clínica em requisito de engenharia, e é quem diz se o que construímos funciona de verdade.',
+        itens:['Fisioterapia, Terapia Ocupacional, Educação Física',
+               'Medicina, Enfermagem, Fonoaudiologia, Biológicas'] },
       { tipo:'lamina', rotulo:'Engenharia e P&D', titulo:'Onde o dispositivo nasce.',
         corpo:'Firmware, software, eletrônica e mecânica, feitos pela mesma equipe que depois vai testá-los na bancada.',
-        itens:['Elétrica · Controle e Automação · Mecânica · Sistemas',
-               'Computação · Sistemas de Informação · Física · Matemática'] },
+        itens:['Elétrica, Controle e Automação, Mecânica, Sistemas',
+               'Computação, Sistemas de Informação, Física, Matemática'] },
       { tipo:'lamina', rotulo:'Comunicação', titulo:'A tecnologia já existe. Falta quem conte.',
         corpo:'Tecnologia em saúde que ninguém entende não chega a lugar nenhum. Esta é a frente que leva o que fazemos para fora do laboratório.',
-        itens:['Jornalismo · Publicidade · Relações Públicas',
-               'Design · Cinema · Artes Visuais · Letras'] },
+        itens:['Jornalismo, Publicidade, Relações Públicas',
+               'Design, Cinema, Artes Visuais, Letras'] },
       { tipo:'lamina', rotulo:'Parcerias e recursos', titulo:'Sem recurso, o protótipo não sai da bancada.',
-        corpo:'Nada disso acontece sem financiamento, convênio e gente disposta a apostar. Esta frente abre as portas — e presta contas depois.',
-        itens:['Administração · Economia · Contábeis · Direito',
-               'Relações Internacionais · Engenharia de Produção'] },
+        corpo:'Nada disso acontece sem financiamento, convênio e gente disposta a apostar. Esta frente abre as portas, e presta contas depois.',
+        itens:['Administração, Economia, Contábeis, Direito',
+               'Relações Internacionais, Engenharia de Produção'] },
       { tipo:'lamina', rotulo:'Gestão e pessoas', titulo:'Tecnologia é feita por gente.',
-        corpo:'A equipe é grande e multidisciplinar. Alguém precisa fazer as peças se encaixarem — e cuidar de quem faz.',
-        itens:['Administração · Psicologia · Pedagogia',
-               'Engenharia de Produção · Contábeis · Comunicação'] },
+        corpo:'A equipe é grande e multidisciplinar. Alguém precisa fazer as peças se encaixarem, e cuidar de quem faz.',
+        itens:['Administração, Psicologia, Pedagogia',
+               'Engenharia de Produção, Contábeis, Comunicação'] },
       { tipo:'cta', foto:true, titulo:'Inscrições até\n{prazo}', sub:'Se você se reconheceu em alguma delas, inscreva-se.' }
     ],
     legenda:{
@@ -447,7 +447,7 @@ const ROTEIROS = {
       cta:'Inscrições até {prazo}. Endereço no primeiro comentário.',
       tags:['#UFMG','#Multidisciplinar','#TecnologiaAssistiva','#Extensão']
     },
-    alt:'Carrossel apresentando as cinco frentes da NeuroDynamics — saúde e clínica, engenharia e P&D, comunicação, parcerias e recursos, gestão e pessoas — com os cursos de origem de cada uma.',
+    alt:'Carrossel apresentando as cinco frentes da NeuroDynamics, saúde e clínica, engenharia e P&D, comunicação, parcerias e recursos, gestão e pessoas, com os cursos de origem de cada uma.',
     porque:'É o roteiro que dá para mandar em grupo de curso que não é da engenharia sem soar deslocado: a lâmina da área daquele grupo fala diretamente com ele.'
   },
 
@@ -472,20 +472,20 @@ const ROTEIROS = {
     ],
     legenda:{
       gancho:'Antes de se inscrever, dá para saber exatamente no que você está entrando: as quatro fases e todas as datas.',
-      corpo:['Inscrição pelo site, sem cadastro. Depois, dinâmica em grupo e entrevista individual — as duas agendadas por você, no horário que couber na sua grade.',
+      corpo:['Inscrição pelo site, sem cadastro. Depois, dinâmica em grupo e entrevista individual, as duas agendadas por você, no horário que couber na sua grade.',
              'Quem passa entra no período trainee, que é quando você já atua dentro da equipe: um desafio multidisciplinar em grupo, acompanhado pelos membros, até a apresentação final.',
              'Todos os resultados são publicados na página de edital e resultados, e a sua situação individual você consulta com o protocolo.'],
       cta:'Inscrições até {prazo}, em {site}. O cronograma completo está lá.',
       tags:['#UFMG','#ProcessoSeletivo','#Cronograma']
     },
     linkedin:{
-      gancho:'Processo seletivo com todas as datas publicadas antes da inscrição — inclusive as dos resultados.',
+      gancho:'Processo seletivo com todas as datas publicadas antes da inscrição, inclusive as dos resultados.',
       corpo:['Inscrição sem cadastro, dinâmica em grupo e entrevista individual agendadas pelo próprio candidato, e um período trainee em que a pessoa já atua na equipe, com desafio multidisciplinar e acompanhamento até a apresentação final.',
              'Transparência de cronograma parece detalhe, mas é o que permite a alguém decidir se cabe na própria grade.'],
       cta:'Inscrições até {prazo}. Endereço no primeiro comentário.',
       tags:['#UFMG','#ProcessoSeletivo','#Extensão']
     },
-    alt:'Carrossel com as quatro fases do processo seletivo da NeuroDynamics — inscrição, dinâmica em grupo, entrevista individual e período trainee — com as datas de cada uma.',
+    alt:'Carrossel com as quatro fases do processo seletivo da NeuroDynamics, inscrição, dinâmica em grupo, entrevista individual e período trainee, com as datas de cada uma.',
     porque:'Cronograma aberto responde a dúvida silenciosa de quem tem medo de não dar conta da grade. É conteúdo de baixa emoção e alta conversão: publique quando já houver gente olhando.'
   },
 
@@ -505,9 +505,9 @@ const ROTEIROS = {
       { tipo:'cta', foto:true, titulo:'Último dia:\n{prazo}', sub:'{site}' }
     ],
     legenda:{
-      gancho:'Faltam {dias} para o fim das inscrições — e elas levam cinco minutos.',
+      gancho:'Faltam {dias} para o fim das inscrições, e elas levam cinco minutos.',
       corpo:['Sem prova de conhecimento específico e sem criar conta: você preenche seus dados, marca o que já sabe fazer e o que quer desenvolver, e recebe um protocolo por e-mail.',
-             'Se ficou alguma dúvida, o FAQ do site responde as principais — inclusive a de contrapartida, dedicação e aproveitamento acadêmico.'],
+             'Se ficou alguma dúvida, o FAQ do site responde as principais, inclusive a de contrapartida, dedicação e aproveitamento acadêmico.'],
       cta:'Até {prazo}, em {site}. Manda para aquela pessoa que disse que ia se inscrever e não se inscreveu.',
       tags:['#UFMG','#ProcessoSeletivo','#ÚltimosDias']
     },
@@ -530,7 +530,7 @@ const ROTEIROS = {
       { tipo:'capa', foto:true, olho:'O que já saiu daqui',
         titulo:'Um triciclo\nfez um jovem\ntetraplégico pedalar.',
         sub:'Feito por alunos da UFMG, no laboratório onde a equipe trabalha.' },
-      { tipo:'numero', valor:'2024', rotulo:'Cybathlon · Suíça',
+      { tipo:'numero', valor:'2024', rotulo:'Cybathlon, Suíça',
         corpo:'Um atleta que treina com a gente foi às Olimpíadas Biônicas, a competição internacional de tecnologia assistiva.' },
       { tipo:'lamina', rotulo:'Quem contou', titulo:'A imprensa já veio atrás.',
         corpo:'O trabalho da equipe já foi ao ar em veículos de alcance nacional.',
@@ -559,7 +559,7 @@ const ROTEIROS = {
 };
 
 /* ============================================================
-   GRUPOS — as mensagens de WhatsApp, uma por linha de
+   GRUPOS, as mensagens de WhatsApp, uma por linha de
    conhecimento, no mesmo espírito dos cartazes: o que muda é a
    abertura, porque o grupo é de um curso só.
    Formatação do WhatsApp: *negrito* e _itálico_.
@@ -568,20 +568,20 @@ const GRUPOS = [
   { id:'geral', nome:'Geral / República e moradia',
     olho:'Para quem estuda na UFMG', cor:'#CEDC00',
     titulo:'Não precisa ser\nda engenharia.',
-    apoio:'Uma equipe da UFMG que constrói tecnologia para a saúde — e precisa de gente de todo curso.',
+    apoio:'Uma equipe da UFMG que constrói tecnologia para a saúde, e precisa de gente de todo curso.',
     abertura:'Bom dia, gente! Passando rápido para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da Escola de Engenharia da UFMG.',
-    meio:'A gente desenvolve dispositivos do começo ao fim — o triciclo que fez um jovem tetraplégico pedalar saiu daqui, e a equipe já foi ao Cybathlon, na Suíça. *Aceita gente de qualquer curso* e não exige experiência.' },
+    meio:'A gente desenvolve dispositivos do começo ao fim, o triciclo que fez um jovem tetraplégico pedalar saiu daqui, e a equipe já foi ao Cybathlon, na Suíça. *Aceita gente de qualquer curso* e não exige experiência.' },
   { id:'eng', nome:'Engenharia, computação e exatas',
     olho:'Para quem é da engenharia, computação ou exatas', cor:'#CEDC00',
     titulo:'Você projeta.\nAlguém volta\na pedalar.',
-    apoio:'Firmware, placa, CAD e modelo — em dispositivos que só terminam quando funcionam no corpo de uma pessoa.',
+    apoio:'Firmware, placa, CAD e modelo, em dispositivos que só terminam quando funcionam no corpo de uma pessoa.',
     abertura:'Fala, pessoal! Passando para falar da *NeuroDynamics*, a equipe de tecnologia para a saúde aqui da Escola de Engenharia.',
     meio:'É firmware que lê sensor e comanda estímulo em tempo real, placa projetada e depurada na bancada, peça em CAD impressa e refeita, sinal fisiológico virando modelo. *O projeto termina em teste com paciente, não em relatório.*' },
   { id:'saude', nome:'Saúde e ciências da vida',
     olho:'Para quem é da saúde', cor:'#2DD4BF',
     titulo:'Sem clínica,\né só um protótipo\nbonito.',
     apoio:'A engenharia entrega o dispositivo. Quem diz se ele funciona no uso real é você.',
-    abertura:'Oi, gente! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG — e a parte de vocês é central no que a gente faz.',
+    abertura:'Oi, gente! Passando para falar da *NeuroDynamics*, equipe de tecnologia para a saúde da UFMG, e a parte de vocês é central no que a gente faz.',
     meio:'A engenharia entrega o dispositivo; quem traduz necessidade clínica em requisito, desenha o protocolo de teste e diz se aquilo funciona no uso real é quem entende do corpo humano. *Sem isso, é só um protótipo bonito.*' },
   { id:'comunicacao', nome:'Comunicação, artes e design',
     olho:'Para quem é da comunicação, artes ou design', cor:'#F5C36A',
@@ -604,29 +604,29 @@ const GRUPOS = [
 ];
 
 /* ============================================================
-   MOMENTOS — a mesma área, em três pontos da campanha. Muda o
+   MOMENTOS, a mesma área, em três pontos da campanha. Muda o
    selo da imagem, a nota e o fecho da mensagem.
    ============================================================ */
 const MOMENTOS = {
   abertura:{ rotulo:'Abertura', selo:'Inscrições abertas',
     prazo:'Inscrições até {prazo}',
     chamada:'As inscrições para a próxima turma *acabaram de abrir*.',
-    fecho:'*Inscrições até {prazo}* — {url}',
+    fecho:'*Inscrições até {prazo}*, {url}',
     remate:'Não precisa criar conta nem ter experiência prévia. Qualquer dúvida, é só chamar.' },
   durante:{ rotulo:'Durante', selo:'Inscrições abertas',
     prazo:'Até {prazo}',
     chamada:'As inscrições para a próxima turma *estão abertas*.',
-    fecho:'*As inscrições vão até {prazo}* — {url}',
+    fecho:'*As inscrições vão até {prazo}*, {url}',
     remate:'Leva cinco minutos e não pede cadastro: você recebe um protocolo por e-mail. Qualquer dúvida, é só chamar.' },
   reta:{ rotulo:'Reta final', selo:'Faltam {dias}',
     prazo:'Último dia: {prazo}',
     chamada:'As inscrições para a próxima turma *fecham em {dias}*.',
-    fecho:'*Último dia: {prazo}* — {url}',
+    fecho:'*Último dia: {prazo}*, {url}',
     remate:'A inscrição leva cinco minutos. Se você ficou de fazer e não fez, é agora.' }
 };
 
 /* ============================================================
-   PLANO — quando publicar o quê, e as práticas que fazem a
+   PLANO, quando publicar o quê, e as práticas que fazem a
    publicação circular. São práticas observadas, não garantias:
    as redes mudam o que priorizam sem avisar.
    ============================================================ */
@@ -637,7 +637,7 @@ const PLANO = {
     ['Abertura','Carrossel “Inscrições abertas”',
      'Entre 11h e 13h ou entre 19h e 21h, que é quando o público de campus está no celular. Fixe a publicação no perfil.'],
     ['Abertura','Mensagens nos grupos',
-     'Uma por linha de conhecimento, espalhadas ao longo do dia. Várias iguais de uma vez, do mesmo número, cheiram a spam — e são tratadas como tal.'],
+     'Uma por linha de conhecimento, espalhadas ao longo do dia. Várias iguais de uma vez, do mesmo número, cheiram a spam, e são tratadas como tal.'],
     ['Dia 2 ou 3','Carrossel “As perguntas do direct”',
      'É o que mais salva e mais reenvia, porque tira da frente a objeção que trava a inscrição.'],
     ['Dia 4 ao 7','Carrossel “Não é só engenharia”',
@@ -650,14 +650,14 @@ const PLANO = {
      'Manhã, meio-dia e começo da noite. É o dia em que a maior parte das inscrições entra.']
   ],
   regras:[
-    'O que leva a publicação a quem não segue o perfil é *envio no direct* e *salvamento* — não curtida. Peça isso: “manda para alguém do seu curso” funciona melhor que “curte aí”.',
+    'O que leva a publicação a quem não segue o perfil é *envio no direct* e *salvamento*, não curtida. Peça isso: “manda para alguém do seu curso” funciona melhor que “curte aí”.',
     'Os primeiros *125 caracteres* da legenda são os que aparecem antes do “mais”. O gancho vai ali; agradecimento e contexto vão depois.',
     'Carrossel dá mais de uma chance: quem não parou na capa pode receber a publicação de novo por outra lâmina. Por isso *toda última lâmina fecha com o endereço*.',
     'A capa precisa ser legível *em miniatura*: título curto, corpo grande, contraste alto. Se não dá para ler no polegar, não para o dedo.',
-    'No LinkedIn, link no corpo do texto costuma custar alcance. Deixe o endereço no *primeiro comentário* — o gerador já separa esse texto.',
+    'No LinkedIn, link no corpo do texto costuma custar alcance. Deixe o endereço no *primeiro comentário*, o gerador já separa esse texto.',
     'Responda comentário e direct *na primeira hora*. Conversa na publicação recém-postada é o que mais ajuda a distribuição dela.',
     'Publicar todo dia vale menos que publicar bem *três vezes na semana*. Peça repetida com informação nova é melhor que peça nova sem informação.',
-    'Toda peça precisa de *texto alternativo* — o gerador escreve um para cada roteiro. Além de acessibilidade, é o que a rede usa para entender do que a imagem trata.',
+    'Toda peça precisa de *texto alternativo*, o gerador escreve um para cada roteiro. Além de acessibilidade, é o que a rede usa para entender do que a imagem trata.',
     'Cheque como ficou *no celular*, não no monitor. É lá que a publicação vai ser vista.'
   ]
 };
@@ -723,7 +723,7 @@ const laminasDe = r => typeof r.laminas === 'function' ? r.laminas() : r.laminas
 const corDe = r => typeof r.cor_de === 'function' ? r.cor_de() : r.cor;
 
 /* ============================================================
-   IMAGOTIPO — o mesmo arquivo embutido dos cartazes, aqui
+   IMAGOTIPO, o mesmo arquivo embutido dos cartazes, aqui
    também usado no canvas: desenhado numa tela auxiliar e
    pintado com source-in, para sair na cor de cada fundo.
    ============================================================ */
@@ -779,7 +779,7 @@ function quebra(ctx, texto, maxL){
   return linhas;
 }
 /* Todo bloco de texto é posicionado pelo TOPO e devolve o próprio
-   rodapé — assim as pilhas de blocos são só somas de altura. */
+   rodapé, assim as pilhas de blocos são só somas de altura. */
 function preparaTexto(ctx, o){
   ctx.font = o.fonte;
   if ('letterSpacing' in ctx) ctx.letterSpacing = (o.esp || 0) + 'px';
@@ -1098,7 +1098,7 @@ function cta(ctx, cx, l, o){
 }
 
 /* ============================================================
-   TEXTO — troca dos marcadores da campanha
+   TEXTO, troca dos marcadores da campanha
    ============================================================ */
 const campanha = () => ({
   edicao:   $('#c-edicao').value.trim()  || CAMPANHA.edicao,
@@ -1174,7 +1174,7 @@ function desenhaTextos(){
         aria-pressed="${estado.grupo === g.id}">${esc(g.nome)}</button>`).join('')}</div>` : '';
     return `<div class="txt">
       <div class="txt-topo"><b>${esc(c.nome)}${c.grupos && dedicado
-        ? ' — ' + esc(grupoAtual().nome) + ' · ' + esc(MOMENTOS[estado.momento].rotulo) : ''}</b>
+        ? ', ' + esc(grupoAtual().nome) + ', ' + esc(MOMENTOS[estado.momento].rotulo) : ''}</b>
         ${c.limite ? `<span class="cnt">${v.length} / ${c.limite}</span>` : ''}
         <button class="btn ghost mini" data-copia="${c.id}">Copiar</button></div>
       ${abas}
@@ -1246,7 +1246,7 @@ async function desenha(){
     env.appendChild(cv);
     const sob = document.createElement('div');
     sob.className = 'sob';
-    sob.innerHTML = `<span class="num">${String(i + 1).padStart(2, '0')} · ${esc(lam.tipo)}</span>`;
+    sob.innerHTML = `<span class="num">${String(i + 1).padStart(2, '0')}, ${esc(lam.tipo)}</span>`;
     const bt = document.createElement('button');
     bt.className = 'btn ghost mini'; bt.textContent = 'Baixar';
     bt.onclick = () => baixa(cv, i);
@@ -1258,9 +1258,9 @@ async function desenha(){
 
   const W = Math.round(f.l * esc0), H = Math.round(f.a * esc0);
   $('#conta').textContent =
-    `${r.nome} · ${laminas.length} ${laminas.length === 1 ? 'peça' : 'peças'}`
-    + ` · ${estado.roteiro === 'grupos' ? 'WhatsApp: grupos de curso' : f.onde}`;
-  $('#dim').textContent = `${W} × ${H} px · ${estado.foto ? 'JPEG' : 'PNG'}`;
+    `${r.nome}, ${laminas.length} ${laminas.length === 1 ? 'peça' : 'peças'}`
+    + `, ${estado.roteiro === 'grupos' ? 'WhatsApp: grupos de curso' : f.onde}`;
+  $('#dim').textContent = `${W} × ${H} px, ${estado.foto ? 'JPEG' : 'PNG'}`;
   desenhaTextos();
 }
 
@@ -1354,7 +1354,7 @@ function desenhaPlano(){
       <div class="plano-col"><h3>O que faz circular</h3>
         <ul class="regras">${PLANO.regras.map(r => `<li>${rico(r)}</li>`).join('')}</ul>
         <p class="nota" style="margin-top:16px">São práticas observadas, não garantias: as redes
-          mudam o que priorizam sem avisar. O que não muda é o resto — responder rápido, publicar
+          mudam o que priorizam sem avisar. O que não muda é o resto, responder rápido, publicar
           no tamanho certo e dizer logo o que a pessoa quer saber.</p>
       </div>
     </div>`;
@@ -1422,7 +1422,7 @@ $('#f-unsplash').onchange = async e => {
   if (!r){ return; }
   if (r.pagina){
     alert('Esse é o endereço da página. Na foto aberta no Unsplash, clique com o botão direito '
-        + 'sobre a imagem e escolha "Copiar endereço da imagem" — ele começa com images.unsplash.com.');
+        + 'sobre a imagem e escolha "Copiar endereço da imagem", ele começa com images.unsplash.com.');
     return;
   }
   try{

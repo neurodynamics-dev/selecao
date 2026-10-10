@@ -5,24 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Painel projetado da dinâmica em grupo do processo seletivo da NeuroDynamics.">
-<meta name="theme-color" content="#050807">
+<meta name="theme-color" content="#050807"> <!-- auditar: ok, theme-color exige valor literal -->
 <title>Painel da dinâmica | NeuroDynamics</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ds/tokens.css">
 <style>
 :root{
-  --bg:#050807; --ink:#F5F5F7; --muted:#9FAAA6; --dim:#6E7A76;
-  --line:rgba(245,245,247,.1); --line2:rgba(245,245,247,.2);
-  --cortex:#00352F; --axon:#00594F; --soma:#0B7D6E; --syn:#CEDC00;
-  --ambar:#FBBF24; --bad:#F1806F; --ok:#4ADE97;
-  --card:rgba(255,255,255,.045);
-  --fd:'Archivo',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  --fm:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif;
-  /* tudo escala pela menor dimensão da tela: o mesmo desenho serve
-     o projetor 4:3 velho da sala e o telão 16:9 do auditório */
+  /* tokens, papéis e tipo vêm de ds/tokens.css; aqui só o que é desta página */
   --u:1vmin;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -33,27 +25,27 @@ body.limpo{cursor:none}
 h1,h2,h3{font-family:var(--fd);letter-spacing:-.02em;line-height:1.05}
 [hidden]{display:none!important}
 
-#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(115% 85% at 72% -12%, #0A1F1B 0%, var(--bg) 58%)}
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(115% 85% at 72% -12%, var(--painel) 0%, var(--bg) 58%)}
 #bg::after{content:'';position:absolute;inset:0;
   background-image:linear-gradient(rgba(245,245,247,.028) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(245,245,247,.028) 1px,transparent 1px);
   background-size:9vmin 9vmin;
-  -webkit-mask-image:radial-gradient(85% 62% at 50% 26%, #000 0%, transparent 100%);
-          mask-image:radial-gradient(85% 62% at 50% 26%, #000 0%, transparent 100%)}
+  -webkit-mask-image:radial-gradient(85% 62% at 50% 26%, var(--void) 0%, transparent 100%);
+          mask-image:radial-gradient(85% 62% at 50% 26%, var(--void) 0%, transparent 100%)}
 .blob{position:fixed;border-radius:50%;filter:blur(14vmin);opacity:.4;z-index:-1}
 .b1{width:70vmin;height:70vmin;left:-20vmin;top:-24vmin;
   background:radial-gradient(circle,var(--axon) 0%,transparent 70%)}
 .b2{width:52vmin;height:52vmin;right:-18vmin;bottom:-16vmin;opacity:.22;
-  background:radial-gradient(circle,var(--soma) 0%,transparent 70%)}
+  background:radial-gradient(circle,var(--axon) 0%,transparent 70%)}
 
 /* ---------- moldura ---------- */
 #topo{position:fixed;top:0;left:0;right:0;height:8vmin;display:flex;align-items:center;
   gap:2.4vmin;padding:0 4vmin;z-index:20}
 #topo img{height:2.4vmin;filter:brightness(0) invert(1)}
-#topo .ed{font-family:var(--fm);font-size:1.5vmin;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+#topo .ed{font-family:var(--fd);font-weight:600;font-size:1.5vmin;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 #topo .dir{margin-left:auto;display:flex;align-items:center;gap:2vmin}
 #topo .cod{font-family:var(--fd);font-weight:700;font-size:2vmin;letter-spacing:.16em;
-  background:var(--syn);color:var(--cortex);border-radius:1vmin;padding:.5vmin 1.4vmin}
+  background:rgba(var(--tom),.12);color:var(--ink);border-radius:1vmin;padding:.5vmin 1.4vmin}
 #topo .rel{font-family:var(--fm);font-size:1.8vmin;color:var(--muted)}
 
 #palco{position:absolute;inset:8vmin 4vmin 7vmin;display:flex;flex-direction:column;justify-content:center}
@@ -70,7 +62,7 @@ body:not(.limpo) #ctrl{opacity:1}
 #ctrl button:hover{color:var(--ink);background:rgba(255,255,255,.1)}
 
 /* ---------- tipografia do palco ---------- */
-.eyebrow{display:inline-flex;align-items:center;gap:1.4vmin;font-family:var(--fm);font-size:1.7vmin;
+.eyebrow{display:inline-flex;align-items:center;gap:1.4vmin;font-family:var(--fd);font-weight:600;font-size:1.7vmin;
   letter-spacing:.24em;text-transform:uppercase;color:var(--syn)}
 .eyebrow::before{content:'';width:1vmin;height:1vmin;background:var(--syn)}
 .tit{font-size:7.6vmin;font-weight:600;margin:2.4vmin 0 2vmin;max-width:88%}
@@ -114,7 +106,7 @@ body:not(.limpo) #ctrl{opacity:1}
 
 /* QR */
 .qrbox{display:flex;align-items:center;gap:5vmin;margin-top:2vmin}
-.qrbox .qr{width:36vmin;height:36vmin;background:#fff;border-radius:2vmin;padding:1.6vmin;flex:0 0 auto}
+.qrbox .qr{width:36vmin;height:36vmin;background:var(--paper);border-radius:2vmin;padding:1.6vmin;flex:0 0 auto}
 .qrbox .qr svg{width:100%;height:100%;display:block}
 .qrbox .lado{flex:1}
 .codigao{font-family:var(--fd);font-weight:700;font-size:14vmin;letter-spacing:.12em;color:var(--syn);
@@ -128,10 +120,10 @@ body:not(.limpo) #ctrl{opacity:1}
 .crono .n{font-family:var(--fd);font-weight:700;font-size:34vmin;line-height:.9;letter-spacing:-.02em;
   font-variant-numeric:tabular-nums}
 .crono.calmo .n{color:var(--ink)}
-.crono.atencao .n{color:var(--ambar)}
+.crono.atencao .n{color:var(--warn)}
 .crono.fim .n{color:var(--bad);animation:pisca 1s steps(2,end) infinite}
 @keyframes pisca{50%{opacity:.35}}
-.crono .lb{font-family:var(--fm);font-size:2.2vmin;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.crono .lb{font-family:var(--fd);font-weight:600;font-size:2.2vmin;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
 .crono .dica{font-size:2.4vmin;color:var(--muted);margin-top:2.4vmin}
 
 /* grupo da vez */
@@ -140,18 +132,18 @@ body:not(.limpo) #ctrl{opacity:1}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   border:1px solid rgba(206,220,0,.25)}
 .gv .letra span{font-family:var(--fd);font-weight:700;font-size:16vmin;color:var(--syn);line-height:1}
-.gv .letra small{font-family:var(--fm);font-size:1.6vmin;letter-spacing:.2em;color:rgba(245,245,247,.65);
+.gv .letra small{font-family:var(--fd);font-weight:600;font-size:1.6vmin;letter-spacing:.2em;color:rgba(245,245,247,.65);
   text-transform:uppercase;margin-top:1vmin}
 .gv .txt{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:1.4vmin}
 .gv .cp{border:1px solid var(--line);border-radius:1.4vmin;background:var(--card);padding:1.6vmin 2.2vmin}
-.gv .cp dt{font-family:var(--fm);font-size:1.4vmin;letter-spacing:.14em;text-transform:uppercase;
+.gv .cp dt{font-family:var(--fd);font-weight:600;font-size:1.4vmin;letter-spacing:.14em;text-transform:uppercase;
   color:var(--syn);margin-bottom:.5vmin}
 .gv .cp dd{font-size:2.1vmin;color:rgba(245,245,247,.92);line-height:1.35;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .gv .nav{display:flex;gap:1vmin;margin-top:1vmin}
 .gv .nav button{font-family:var(--fd);font-weight:700;font-size:2vmin;width:5vmin;height:5vmin;
   border-radius:1vmin;border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer}
-.gv .nav button.on{background:var(--syn);color:var(--cortex);border-color:transparent}
+.gv .nav button.on{background:rgba(var(--tom),.12);color:var(--ink);border-color:transparent}
 
 /* estados */
 .centro{text-align:center;margin:auto;max-width:70vmin}
@@ -163,7 +155,7 @@ body:not(.limpo) #ctrl{opacity:1}
   border-radius:1.4vmin;padding:1.4vmin;color:var(--ink);outline:none}
 #codform input:focus{border-color:var(--syn)}
 #codform button{font-family:var(--fd);font-weight:700;font-size:2.4vmin;padding:0 3vmin;
-  background:var(--syn);color:var(--cortex);border:none;border-radius:1.4vmin;cursor:pointer}
+  background:rgba(var(--tom),.12);color:var(--ink);border:none;border-radius:1.4vmin;cursor:pointer}
 .erro{color:var(--bad);font-size:2vmin;margin-top:2vmin}
 
 #ajuda{position:fixed;inset:0;z-index:40;background:rgba(5,8,7,.94);display:grid;place-items:center;padding:8vmin}
@@ -205,12 +197,12 @@ body:not(.limpo) #ctrl{opacity:1}
   <div class="cx">
     <h2>Comandos do painel</h2>
     <table>
-      <tr><td>→ · espaço</td><td>Próxima tela</td></tr>
+      <tr><td>→, espaço</td><td>Próxima tela</td></tr>
       <tr><td>←</td><td>Tela anterior</td></tr>
       <tr><td>1 … 9</td><td>Pula direto para a tela</td></tr>
       <tr><td>T</td><td>Liga e pausa o cronômetro</td></tr>
       <tr><td>R</td><td>Zera o cronômetro do bloco</td></tr>
-      <tr><td>+ · −</td><td>Ajusta o cronômetro em 1 minuto</td></tr>
+      <tr><td>+, −</td><td>Ajusta o cronômetro em 1 minuto</td></tr>
       <tr><td>G</td><td>Troca o grupo em exibição na tela de apresentações</td></tr>
       <tr><td>F</td><td>Tela cheia</td></tr>
       <tr><td>Esc</td><td>Fecha esta ajuda</td></tr>
@@ -224,7 +216,7 @@ body:not(.limpo) #ctrl{opacity:1}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 /* ============================================================
-   QR — codificador local (modo byte), sem dependência externa.
+   QR, codificador local (modo byte), sem dependência externa.
    Devolve a matriz e um <svg> de caminho único, que sai nítido
    na impressão em qualquer tamanho. Versões 1 a 10, níveis de
    correção L/M/Q/H. Conferido módulo a módulo contra o segno.
@@ -488,9 +480,9 @@ const QR = (() => {
         c = fim + 1;
       }
     }
-    const fundo = opc.fundo === false ? '' : `<rect width="${lado}" height="${lado}" fill="${opc.fundo || '#fff'}"/>`;
+    const fundo = opc.fundo === false ? '' : `<rect width="${lado}" height="${lado}" fill="${opc.fundo || 'var(--paper)'}"/>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${lado} ${lado}" shape-rendering="crispEdges" role="img" aria-label="QR code para a inscrição">`
-         + `${fundo}<path d="${d}" fill="${opc.cor || '#000'}"/></svg>`;
+         + `${fundo}<path d="${d}" fill="${opc.cor || 'var(--void)'}"/></svg>`;
   }
 
   return { matriz, svg };
@@ -498,7 +490,7 @@ const QR = (() => {
 </script>
 <script>
 /* ============================================================
-   PAINEL DA DINÂMICA — o que vai no projetor.
+   PAINEL DA DINÂMICA, o que vai no projetor.
 
    Um avaliador abre esta página no notebook ligado ao projetor,
    digita o código de quatro letras da janela e conduz com as
@@ -541,7 +533,7 @@ const iniciais = n => String(n||'').trim().split(/\s+/).slice(0,2).map(p=>p[0]||
 const P = { codigo:'', sala:null, tela:0, grupo:0, timer:null };
 
 /* ============================================================
-   CRONÔMETRO — conta para trás o bloco de trabalho em grupo.
+   CRONÔMETRO, conta para trás o bloco de trabalho em grupo.
    Fica no relógio da máquina, não no servidor: se a internet
    cair no meio do bloco, o cronômetro não para.
    ============================================================ */
@@ -618,7 +610,7 @@ async function carrega(primeira){
       if(!P.timer) P.timer = setInterval(()=>carrega(false), 20000);
       puxaRegistros();   /* a tela de apresentação já abre com o texto dos grupos */
     }
-    $('#t-ed').textContent = (data.edicao?.nome||'') + (data.janela?.local ? ' · '+data.janela.local : '');
+    $('#t-ed').textContent = (data.edicao?.nome||'') + (data.janela?.local ? ', '+data.janela.local : '');
     $('#t-cod').hidden = false; $('#t-cod').textContent = data.janela.codigo;
     pinta();
   }catch(e){
@@ -688,7 +680,7 @@ function tAbertura(){
         <div class="codigao" style="font-size:11vmin">${esc(j.codigo)}</div></div>
       ${c.wifi_rede ? `<div style="padding-bottom:3vmin"><div class="eyebrow" style="color:var(--dim)">Wi-Fi</div>
         <div style="font-family:var(--fm);font-size:2.6vmin;margin-top:1.4vmin">${esc(c.wifi_rede)}${
-          c.wifi_senha ? ' · '+esc(c.wifi_senha) : ''}</div></div>` : ''}
+          c.wifi_senha ? ', '+esc(c.wifi_senha) : ''}</div></div>` : ''}
     </div>
     ${c.aviso_lgpd ? `<p style="font-size:1.8vmin;color:var(--dim);margin-top:4vmin;max-width:70%">${esc(c.aviso_lgpd)}</p>`:''}`;
 }
@@ -779,7 +771,7 @@ function tQR(){
   const alvo = URL_CANDIDATO + '#' + j.codigo;
   let svg = '';
   try{ svg = QR.svg(alvo, {nivel:'Q', silencio:2}); }
-  catch(e){ svg = '<div style="padding:2vmin;color:#333;font-size:1.6vmin">QR indisponível. Digitem o endereço.</div>'; }
+  catch(e){ svg = '<div style="padding:2vmin;color:var(--sulco-medium);font-size:1.6vmin">QR indisponível. Digitem o endereço.</div>'; }
   return `
     <span class="eyebrow">Onde registrar o desafio</span>
     <div class="qrbox">
@@ -824,7 +816,7 @@ function tGrupo(){
   const at = g[P.grupo];
   const cps = P.sala.campos||[];
   return `
-    <span class="eyebrow">Apresentações · 3 minutos por grupo</span>
+    <span class="eyebrow">Apresentações, 3 minutos por grupo</span>
     <div class="gv">
       <div class="letra">
         <span>${esc(at.letra)}</span>
@@ -841,7 +833,7 @@ function tGrupo(){
     </div>`;
 }
 /* o painel lê a sala pela função pública, que não devolve o texto
-   dos grupos — a tela de apresentação usa o que o próprio grupo
+   dos grupos, a tela de apresentação usa o que o próprio grupo
    publicou na chamada de registro, buscada sob demanda */
 const CACHE_REG = {};
 function registroDe(g, chave){ return (CACHE_REG[g.id]||{})[chave] || ''; }

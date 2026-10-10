@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Processo Seletivo NeuroDynamics: inscrições, cronograma, edital, resultados e agendamento das fases.">
-<meta name="theme-color" content="#060A09">
+<meta name="theme-color" content="#060A09"> <!-- auditar: ok, theme-color exige valor literal -->
 <title>Processo Seletivo 2026 | NeuroDynamics</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -15,10 +15,7 @@
 <link rel="stylesheet" href="ds/casca.css">
 <style>
 :root{
-  /* papéis, tipo e forma vêm de ds/tokens.css; aqui só o que é do site
-     (os estados próprios saem na refatoração do site, Fase 6) */
-  --green:#00594F; --green2:#0B7D6E; --teal:#2DD4BF;
-  --roxo:#C084FC; --ambar:#FBBF24; --azul:#60A5FA; --bad:#F1806F; --ok:#4ADE97;
+  /* tokens, papéis e tipo vêm de ds/tokens.css; aqui só o que é desta página */
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -30,26 +27,26 @@ button{font-family:inherit;cursor:pointer;color:inherit;border:none;background:n
 input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
 img{max-width:100%}
 [hidden]{display:none!important}
-::selection{background:var(--syn);color:var(--deep)}
+::selection{background:rgba(var(--tom),.12);color:var(--ink)}
 
 /* ============ FUNDO ANIMADO ============ */
 #bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
-  radial-gradient(120% 90% at 70% -10%, #0A1F1B 0%, var(--bg) 55%)}
+  radial-gradient(120% 90% at 70% -10%, var(--painel) 0%, var(--bg) 55%)}
 #bg::after{content:'';position:absolute;inset:0;
   background-image:linear-gradient(rgba(245,245,247,.035) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(245,245,247,.035) 1px,transparent 1px);
   background-size:120px 120px;
-  -webkit-mask-image:radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 100%);
-          mask-image:radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 100%)}
+  -webkit-mask-image:radial-gradient(80% 60% at 50% 30%, var(--void) 0%, transparent 100%);
+          mask-image:radial-gradient(80% 60% at 50% 30%, var(--void) 0%, transparent 100%)}
 .blob{position:absolute;border-radius:50%;filter:blur(110px);will-change:transform;opacity:.55}
 .b1{width:58vmax;height:58vmax;left:-16vmax;top:-22vmax;
-  background:radial-gradient(circle, #00594F 0%, rgba(0,89,79,0) 70%);
+  background:radial-gradient(circle, var(--axon) 0%, rgba(0,89,79,0) 70%);
   animation:fl1 34s ease-in-out infinite alternate}
 .b2{width:44vmax;height:44vmax;right:-14vmax;top:4vmax;opacity:.4;
-  background:radial-gradient(circle, #0B7D6E 0%, rgba(11,125,110,0) 70%);
+  background:radial-gradient(circle, var(--axon) 0%, rgba(11,125,110,0) 70%);
   animation:fl2 28s ease-in-out infinite alternate}
 .b3{width:34vmax;height:34vmax;left:32vw;bottom:-20vmax;opacity:.14;
-  background:radial-gradient(circle, #CEDC00 0%, rgba(206,220,0,0) 70%);
+  background:radial-gradient(circle, var(--synapse) 0%, rgba(206,220,0,0) 70%);
   animation:fl3 40s ease-in-out infinite alternate}
 @keyframes fl1{from{transform:translate(0,0) scale(1)}to{transform:translate(9vw,7vh) scale(1.18)}}
 @keyframes fl2{from{transform:translate(0,0) scale(1.1)}to{transform:translate(-11vw,12vh) scale(.92)}}
@@ -60,10 +57,10 @@ img{max-width:100%}
 }
 
 /* ============ HEADER ============ */
-.cta{display:inline-flex;align-items:center;gap:8px;background:var(--syn);color:var(--deep);
+.cta{display:inline-flex;align-items:center;gap:8px;background:rgba(var(--tom),.12);color:var(--ink);
   font-family:var(--fd);font-weight:700;font-size:13.5px;border-radius:12px;padding:9px 18px;white-space:nowrap;
-  transition:transform .15s,box-shadow .15s;box-shadow:0 4px 22px rgba(206,220,0,.22)}
-.cta:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(206,220,0,.34)}
+  transition:transform .15s,box-shadow .15s}
+.cta:hover{transform:translateY(-1px)}
 .cta.ghost{background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line2);box-shadow:none}
 .cta.ghost:hover{background:rgba(255,255,255,.1)}
 .cta.lg{font-size:15px;padding:13px 26px;border-radius:14px}
@@ -80,11 +77,11 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .reveal.viu{opacity:1;transform:none}
 
 /* ============ HERO ============ */
-#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+#hero{min-height:56svh;display:flex;flex-direction:column;justify-content:center;
   padding:120px 0 40px;position:relative}
 #hero h1{font-size:clamp(40px,7.2vw,84px);font-weight:700;letter-spacing:-.02em;line-height:1.03;
   margin:18px 0 20px;max-width:900px}
-#hero h1 em{font-style:normal;background:linear-gradient(94deg,var(--syn) 10%,#7BE8C4 90%);
+#hero h1 em{font-style:normal;background:linear-gradient(94deg,var(--syn) 10%,var(--ion-medium) 90%);
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-sub{font-size:clamp(15px,1.6vw,18px);color:var(--muted);max-width:620px;margin-bottom:34px}
 .hero-acts{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:44px}
@@ -96,7 +93,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .cnt .n{font-family:var(--fd);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
 .cnt .l{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:5px}
 .status-chip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);
-  border-radius:999px;padding:7px 15px;font-size:12.5px;font-weight:600;color:var(--muted)}
+  border-radius:var(--r-chip);padding:7px 15px;font-size:12.5px;font-weight:600;color:var(--muted)}
 .status-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--syn);
   box-shadow:0 0 0 0 rgba(206,220,0,.5);animation:pulsa 2s infinite}
 @keyframes pulsa{0%{box-shadow:0 0 0 0 rgba(206,220,0,.45)}70%{box-shadow:0 0 0 9px rgba(206,220,0,0)}100%{box-shadow:0 0 0 0 rgba(206,220,0,0)}}
@@ -116,7 +113,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .dcard .mini{position:absolute;left:0;right:0;bottom:0;padding:20px;z-index:2;
   display:flex;flex-direction:column;gap:10px;transition:opacity .35s}
 .dcard .mini .ic{width:26px;height:26px;color:rgba(255,255,255,.9)}
-.dcard .mini .t{font-family:var(--fd);font-size:13.5px;font-weight:700;line-height:1.3;color:#fff}
+.dcard .mini .t{font-family:var(--fd);font-size:13.5px;font-weight:700;line-height:1.3;color:var(--paper)}
 .dcard.on .mini{opacity:0;pointer-events:none}
 .dcard .body{position:absolute;inset:0;padding:30px;z-index:2;display:flex;flex-direction:column;
   justify-content:flex-end;gap:12px;opacity:0;transform:translateY(14px);
@@ -124,8 +121,8 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .dcard.on .body{opacity:1;transform:none;pointer-events:auto}
 .dcard .body .fase-pill{align-self:flex-start;font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.14em;
   text-transform:uppercase;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.22);
-  color:#fff;border-radius:999px;padding:4px 12px;backdrop-filter:blur(4px)}
-.dcard .body h3{font-size:clamp(22px,2.6vw,32px);font-weight:700;line-height:1.1;color:#fff}
+  color:var(--paper);border-radius:var(--r-chip);padding:4px 12px;backdrop-filter:blur(4px)}
+.dcard .body h3{font-size:clamp(22px,2.6vw,32px);font-weight:700;line-height:1.1;color:var(--paper)}
 .dcard .body .dt{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--syn)}
 .dcard .body p{font-size:13.5px;color:rgba(255,255,255,.85);max-width:440px;line-height:1.6}
 .dcard .prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14);z-index:3;opacity:0;transition:opacity .3s}
@@ -182,10 +179,10 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 
 /* ============ FRENTES (abas por área do conhecimento) ============ */
 .fr-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.fr-tabs button{border:1px solid var(--line2);border-radius:999px;padding:9px 17px;font-size:13.5px;
+.fr-tabs button{border:1px solid var(--line2);border-radius:var(--r-chip);padding:9px 17px;font-size:13.5px;
   font-weight:600;color:var(--muted);background:rgba(255,255,255,.03);transition:all .15s}
 .fr-tabs button:hover{color:var(--ink);border-color:var(--dim)}
-.fr-tabs button.on{background:var(--syn);border-color:var(--syn);color:var(--deep)}
+.fr-tabs button.on{background:rgba(var(--tom),.12);color:var(--ink)}
 .fr-corpo{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;
   display:grid;grid-template-columns:1.25fr 1fr;gap:26px}
 @media (max-width:820px){.fr-corpo{grid-template-columns:1fr;gap:20px;padding:22px 20px}}
@@ -200,7 +197,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .fr-cursos h4{font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.12em;
   text-transform:uppercase;color:var(--dim);margin-bottom:11px}
 .fr-cursos .lista{display:flex;flex-wrap:wrap;gap:7px}
-.fr-cursos .lista span{border:1px solid var(--line2);border-radius:999px;padding:6px 12px;font-size:12.5px;
+.fr-cursos .lista span{border:1px solid var(--line2);border-radius:var(--r-chip);padding:6px 12px;font-size:12.5px;
   color:var(--muted);background:rgba(255,255,255,.03)}
 .fr-nota{margin-top:14px;font-size:13px;color:var(--dim);line-height:1.6}
 .faq .resp p + p{margin-top:11px}
@@ -212,10 +209,10 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .foto{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--card);position:relative}
 .foto img{width:100%;height:240px;object-fit:cover;display:block}
-.foto .lg{position:absolute;left:0;right:0;bottom:0;padding:24px 16px 12px;font-size:12.5px;color:#fff;
+.foto .lg{position:absolute;left:0;right:0;bottom:0;padding:24px 16px 12px;font-size:12.5px;color:var(--paper);
   background:linear-gradient(transparent, rgba(0,0,0,.72))}
 .areas-chips{display:flex;flex-wrap:wrap;gap:9px}
-.areas-chips span{border:1px solid var(--line2);border-radius:999px;padding:8px 16px;font-size:13px;
+.areas-chips span{border:1px solid var(--line2);border-radius:var(--r-chip);padding:8px 16px;font-size:13px;
   font-weight:600;color:var(--muted);background:rgba(255,255,255,.03)}
 .nota{margin-top:16px;max-width:820px;padding-left:15px;border-left:2px solid rgba(206,220,0,.55);
   font-size:13.5px;color:var(--muted);line-height:1.65}
@@ -227,9 +224,9 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 /* ============ IMPRENSA (carrossel de vídeos + matérias) ============ */
 .imp{max-width:900px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
   overflow:hidden;backdrop-filter:blur(6px)}
-.imp-palco{position:relative;aspect-ratio:16/9;background:#000}
+.imp-palco{position:relative;aspect-ratio:16/9;background:var(--void)}
 .imp-palco video,.imp-palco iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
-  display:block;object-fit:contain;background:#000}
+  display:block;object-fit:contain;background:var(--void)}
 .imp-frame{position:absolute;inset:0}
 .imp-gate{position:absolute;inset:0;width:100%;display:none;align-items:center;justify-content:center;
   background:rgba(6,10,9,.5);backdrop-filter:blur(2px);color:var(--ink)}
@@ -267,7 +264,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .imp-it .tt{font-size:13.5px;font-weight:600;color:var(--muted);line-height:1.35}
 .imp-it .vc{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 .imp-it.on{background:rgba(255,255,255,.06)}
-.imp-it.on::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--syn)}
+.imp-it.on::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--ink)}
 .imp-it.on .no{color:var(--syn)}
 .imp-it.on .tt{color:var(--ink)}
 @media (min-width:901px){.imp-it{flex:1 1 0;min-width:0}}
@@ -291,7 +288,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .tl-it .no{position:absolute;left:-34px;top:4px;width:20px;height:20px;border-radius:50%;
   background:var(--bg);border:2px solid var(--line2);display:flex;align-items:center;justify-content:center}
 .tl-it.feito .no{border-color:var(--syn);background:var(--syn)}
-.tl-it.feito .no svg{width:11px;height:11px;stroke:var(--deep);stroke-width:3;fill:none}
+.tl-it.feito .no svg{width:11px;height:11px;stroke:var(--cortex);stroke-width:3;fill:none}
 .tl-it.agora .no{border-color:var(--syn)}
 .tl-it.agora .no::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--syn);
   animation:pulsa 2s infinite}
@@ -300,11 +297,11 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
   border-radius:8px;padding:3px 10px;margin-bottom:7px}
 .tl-it.agora .dt-badge{color:var(--syn);border-color:rgba(206,220,0,.4)}
 .tl-it h3{font-size:17px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.tl-it .tag{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;
+.tl-it .tag{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--r-chip);
   padding:2.5px 10px;background:color-mix(in srgb,var(--tc) 16%,transparent);color:var(--tc);
   border:1px solid color-mix(in srgb,var(--tc) 35%,transparent)}
-.tl-it .agora-lbl{font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--deep);
-  background:var(--syn);border-radius:999px;padding:2.5px 10px;text-transform:uppercase}
+.tl-it .agora-lbl{font-family:var(--fd);font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--cortex);
+  background:var(--syn);border-radius:var(--r-chip);padding:2.5px 10px;text-transform:uppercase}
 .tl-it p{font-size:13.5px;color:var(--muted);margin-top:5px;max-width:560px}
 .tl-it.feito h3{color:var(--muted)}
 
@@ -316,7 +313,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
   transition:transform .18s,border-color .18s;display:flex;flex-direction:column;gap:10px}
 .pub:hover{transform:translateY(-3px);border-color:var(--line2)}
 .pub .tp{align-self:flex-start;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  border-radius:999px;padding:3px 11px;background:color-mix(in srgb,var(--tc) 16%,transparent);
+  border-radius:var(--r-chip);padding:3px 11px;background:color-mix(in srgb,var(--tc) 16%,transparent);
   color:var(--tc);border:1px solid color-mix(in srgb,var(--tc) 35%,transparent)}
 .pub h3{font-size:16.5px;font-weight:700;line-height:1.3}
 .pub .dt{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
@@ -335,8 +332,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .steps .st.ok{background:var(--syn)}
 .steps .st.on{background:linear-gradient(90deg,var(--syn) 55%,var(--line2) 55%)}
 .st-title{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--syn);margin-bottom:4px}
-.fcard{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:30px;
-  box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.fcard{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);padding:30px}
 .fcard h3{font-size:21px;font-weight:700;margin-bottom:4px}
 .fcard .hint{font-size:13px;color:var(--muted);margin-bottom:22px}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
@@ -357,12 +353,12 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .fld.erro input,.fld.erro select,.fld.erro textarea{border-color:var(--bad)}
 .fld.erro .err-msg{display:block}
 .chips-sel{display:flex;flex-wrap:wrap;gap:9px}
-.chips-sel .ch{border:1px solid var(--line2);border-radius:999px;padding:8px 16px;font-size:13px;
+.chips-sel .ch{border:1px solid var(--line2);border-radius:var(--r-chip);padding:8px 16px;font-size:13px;
   font-weight:600;color:var(--muted);transition:all .15s;background:rgba(255,255,255,.03)}
-.chips-sel .ch.on{background:var(--syn);border-color:var(--syn);color:var(--deep)}
+.chips-sel .ch.on{background:rgba(var(--tom),.12);color:var(--ink)}
 /* etiquetas de competência: um clique marca o que já se tem,
    outro passa para o que se quer desenvolver, o terceiro solta */
-.chips-sel .ch.quero{border-color:var(--teal);color:var(--teal);background:rgba(45,212,191,.08)}
+.chips-sel .ch.quero{border-color:var(--ion);color:var(--ion);background:rgba(45,212,191,.08)}
 .chips-sel .ch.quero::before{content:'+ ';font-weight:700}
 .comp-grupo{margin-bottom:16px}
 .comp-grupo > h4{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.12em;
@@ -371,7 +367,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .legenda span{display:inline-flex;align-items:center;gap:7px}
 .legenda i{width:13px;height:13px;border-radius:4px;flex-shrink:0}
 .legenda i.tem{background:var(--syn)}
-.legenda i.quer{border:1.5px solid var(--teal);background:rgba(45,212,191,.12)}
+.legenda i.quer{border:1.5px solid var(--ion);background:rgba(45,212,191,.12)}
 .check-l{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;color:var(--muted);
   padding:13px 14px;border:1px solid var(--line2);border-radius:12px;cursor:pointer;margin-bottom:10px;
   transition:border-color .15s;line-height:1.55}
@@ -390,9 +386,9 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .protocolo-box .p-num{font-family:var(--fd);font-size:clamp(30px,6vw,44px);font-weight:700;letter-spacing:.04em;color:var(--syn);
   font-variant-numeric:tabular-nums;margin:8px 0}
 .aviso{border-radius:14px;padding:14px 17px;font-size:13.5px;line-height:1.6;border:1px solid;margin-bottom:16px}
-.aviso.err{background:rgba(241,128,111,.09);border-color:rgba(241,128,111,.35);color:#F5B0A5}
-.aviso.ok{background:rgba(74,222,151,.08);border-color:rgba(74,222,151,.3);color:#8FEBBE}
-.aviso.info{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.3);color:#A9CDF8}
+.aviso.err{background:color-mix(in srgb,var(--bad) 9%,transparent);border-color:color-mix(in srgb,var(--bad) 35%,transparent);color:var(--bad-tx)}
+.aviso.ok{background:color-mix(in srgb,var(--ok) 8%,transparent);border-color:color-mix(in srgb,var(--ok) 30%,transparent);color:var(--ok-tx)}
+.aviso.info{background:color-mix(in srgb,var(--info) 8%,transparent);border-color:color-mix(in srgb,var(--info) 30%,transparent);color:var(--info-tx)}
 
 /* ============ ACOMPANHAR ============ */
 .stepper{display:flex;margin:30px 0 8px;overflow-x:auto;padding-bottom:6px}
@@ -458,11 +454,11 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .faq summary .mais{width:22px;height:22px;flex-shrink:0;color:var(--syn);transition:transform .25s}
 .faq details[open] summary .mais{transform:rotate(45deg)}
 .faq .resp{padding:0 22px 20px;color:var(--muted);font-size:13.5px;max-width:760px}
-.band{background:linear-gradient(115deg,var(--deep) 0%,var(--green) 55%,#0B7D6E 100%);
-  border-radius:26px;padding:clamp(34px,6vw,64px);position:relative;overflow:hidden;
+.band{background:linear-gradient(115deg,var(--cortex) 0%,var(--axon) 55%,var(--axon) 100%);
+  border-radius:var(--r);padding:clamp(34px,6vw,64px);position:relative;overflow:hidden;
   border:1px solid rgba(206,220,0,.25)}
 .band::after{content:'';position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;
-  background:radial-gradient(circle,rgba(206,220,0,.35),transparent 70%);filter:blur(30px)}
+  background:radial-gradient(circle,var(--syn-borda),transparent 70%);filter:blur(30px)}
 .band h2{font-size:clamp(26px,4vw,44px);font-weight:700;line-height:1.1;max-width:560px;margin-bottom:12px}
 .band p{color:rgba(245,245,247,.8);max-width:480px;margin-bottom:26px}
 
@@ -487,9 +483,9 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .res-tab td.prot{font-variant-numeric:tabular-nums;font-weight:700;color:var(--syn);white-space:nowrap}
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:99;display:flex;
   flex-direction:column;gap:8px;align-items:center;width:max-content;max-width:92vw}
-.toast{background:#1D1D1F;border:1px solid var(--line2);color:var(--ink);border-radius:13px;
+.toast{background:var(--sulco-medium);border:1px solid var(--line2);color:var(--ink);border-radius:13px;
   padding:12px 20px;font-size:13.5px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
-.toast.err{border-color:rgba(241,128,111,.4);color:#F5B0A5}
+.toast.err{border-color:color-mix(in srgb,var(--bad) 40%,transparent);color:var(--bad-tx)}
 .spin{width:20px;height:20px;border:2.5px solid var(--line2);border-top-color:var(--syn);border-radius:50%;
   animation:gira .8s linear infinite;display:inline-block;vertical-align:middle}
 @keyframes gira{to{transform:rotate(360deg)}}
@@ -515,7 +511,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 /* ============================================================
-   CONFIG — mesmos dados do SOMA (Settings -> API no Supabase).
+   CONFIG, mesmos dados do SOMA (Settings -> API no Supabase).
    ============================================================ */
 const CONFIG = {
   SUPABASE_URL: 'https://rxzmkyjttzzpwtodqkve.supabase.co',
@@ -523,12 +519,12 @@ const CONFIG = {
 };
 
 /* ============================================================
-   SOBRE — conteúdo da página "A NeuroDynamics".
+   SOBRE, conteúdo da página "A NeuroDynamics".
    EDITE os textos, vídeos, matérias e fotos abaixo. Nada além
    deste bloco precisa ser alterado para atualizar a página.
    - videos e materias: desde a migração 23.0, a lista que vale é
      a do banco, editada no portal (Studio › Configurações ›
-     Imprensa) — a mesma do site institucional. As daqui ficam de
+     Imprensa), a mesma do site institucional. As daqui ficam de
      reserva, para quando o banco não responder.
    - videos: o carrossel de reportagens. Cada item leva só o ID
      do YouTube (o que vem depois de "v=" ou de "youtu.be/").
@@ -537,7 +533,7 @@ const CONFIG = {
        { titulo:'', veiculo:'TV UFMG', ano:'2025',
          youtube:'dQw4w9WgXcQ', url:'https://…' }
      Vídeo com visibilidade "não listado" funciona; "privado"
-     não — o carrossel pula o clipe que não carregar.
+     não, o carrossel pula o clipe que não carregar.
    - materias: as reportagens escritas, em cartões menores.
    - fotos: lista de {url, legenda}; deixe [] para ocultar.
    ============================================================ */
@@ -549,7 +545,7 @@ const SOBRE = {
   intro: [
     'A NeuroDynamics é uma equipe de *pesquisa, desenvolvimento e inovação* na Escola de Engenharia da *UFMG*, dedicada a tecnologias para a saúde.',
     'Partimos de uma convicção simples: *tecnologia só faz sentido quando chega até as pessoas*. A UFMG nos dá o espaço para aprender a fazer isso bem, desenvolvendo soluções que ampliem a qualidade de vida de quem precisa delas.',
-    'Acreditamos também que a formação universitária ganha quando é atravessada por prática organizacional real — entregas, prazos e processos conectados ao que existe fora da universidade. *É por isso que nos estruturamos com o rigor de uma organização.*'
+    'Acreditamos também que a formação universitária ganha quando é atravessada por prática organizacional real, entregas, prazos e processos conectados ao que existe fora da universidade. *É por isso que nos estruturamos com o rigor de uma organização.*'
   ],
   /* o ciclo do dispositivo, em passos, logo abaixo da abertura */
   ciclo: {
@@ -585,9 +581,9 @@ const SOBRE = {
      atua na equipe. A lista de cursos é exemplo, não exigência */
   frentes: [
     { nome:'Saúde e clínica',
-      resumo:'Quem entende do corpo humano traduz necessidade clínica em requisito de engenharia — e é quem diz se o que construímos funciona de verdade.',
+      resumo:'Quem entende do corpo humano traduz necessidade clínica em requisito de engenharia, e é quem diz se o que construímos funciona de verdade.',
       atividades:[
-        'Levantar, com pacientes e profissionais, o que o dispositivo precisa resolver — antes da primeira linha de código',
+        'Levantar, com pacientes e profissionais, o que o dispositivo precisa resolver, antes da primeira linha de código',
         'Desenhar protocolos de teste e conduzir as sessões de validação com usuários',
         'Acompanhar treinos e ensaios, medindo o que melhora e o que não melhora',
         'Cuidar da documentação ética da pesquisa e da submissão ao comitê'
@@ -610,11 +606,11 @@ const SOBRE = {
         'Transformar artigo e protótipo em linguagem que a família do paciente entende',
         'Cuidar da identidade visual da equipe e de cada projeto',
         'Conduzir a relação com a imprensa quando a reportagem bate à porta',
-        'Manter as redes vivas — e o processo seletivo cheio'
+        'Manter as redes vivas, e o processo seletivo cheio'
       ],
       cursos:['Comunicação Social','Jornalismo','Publicidade e Propaganda','Relações Públicas','Design','Cinema e Audiovisual','Artes Visuais','Letras'] },
     { nome:'Parcerias e recursos',
-      resumo:'Nada disso acontece sem financiamento, convênio e gente disposta a apostar. Esta frente abre as portas — e presta contas depois.',
+      resumo:'Nada disso acontece sem financiamento, convênio e gente disposta a apostar. Esta frente abre as portas, e presta contas depois.',
       atividades:[
         'Garimpar editais de fomento e escrever as propostas',
         'Prospectar patrocinadores e sustentar a relação com quem já apoia',
@@ -624,7 +620,7 @@ const SOBRE = {
       ],
       cursos:['Administração','Ciências Econômicas','Direito','Relações Internacionais','Ciências Contábeis','Engenharia de Produção','Gestão Pública'] },
     { nome:'Gestão e pessoas',
-      resumo:'A equipe é grande e multidisciplinar. Alguém precisa fazer as peças se encaixarem — e cuidar de quem faz.',
+      resumo:'A equipe é grande e multidisciplinar. Alguém precisa fazer as peças se encaixarem, e cuidar de quem faz.',
       atividades:[
         'Conduzir as sprints, acompanhar as entregas e destravar o que emperrou',
         'Recrutar, integrar e formar cada nova turma de trainees',
@@ -635,7 +631,7 @@ const SOBRE = {
   ],
   frentes_nota: 'A lista de cursos é um retrato de quem já passou por aqui, não uma exigência. Se o seu não está nela e você se reconheceu em alguma das atividades, inscreva-se do mesmo jeito.',
   /* nota logo abaixo do carrossel; deixe '' para não exibir */
-  nota_videos: 'A FreeWheels foi uma iniciativa da NeuroDynamics — a identidade com que a equipe assinou parte desse trabalho antes do nome atual.',
+  nota_videos: 'A FreeWheels foi uma iniciativa da NeuroDynamics, a identidade com que a equipe assinou parte desse trabalho antes do nome atual.',
   materias: [
     { titulo:'Tecnologia desenvolvida pela UFMG leva atleta paraplégico a competição internacional',
       veiculo:'Globo Esporte', ano:'2024',
@@ -654,22 +650,22 @@ const SOBRE = {
 const SITE_INSTITUCIONAL = 'https://neurodynamics.dev';
 
 /* ============================================================
-   FAQ — as perguntas vêm do portal (Seleção → FAQ, migração
+   FAQ, as perguntas vêm do portal (Seleção → FAQ, migração
    soma_v11_ps_faq.sql). Esta lista é o conteúdo de reserva: entra no
    ar enquanto a migração não for aplicada, ou se o banco não
    responder. Vale manter as duas mais ou menos em sincronia.
    ============================================================ */
 const FAQ_RESERVA = [
   ['Preciso ser aluno da UFMG para participar?',
-   'Sim para a maior parte das vagas, mas não só: qualquer estudante é bem-vindo, inclusive de ensino técnico — como o COLTEC. Não exigimos curso nem período específicos, e não é preciso ser da engenharia. Os requisitos formais estão no edital, que prevalece sobre este site.'],
+   'Sim para a maior parte das vagas, mas não só: qualquer estudante é bem-vindo, inclusive de ensino técnico, como o COLTEC. Não exigimos curso nem período específicos, e não é preciso ser da engenharia. Os requisitos formais estão no edital, que prevalece sobre este site.'],
   ['Preciso ter experiência prévia?',
    'Não. Avaliamos potencial, comprometimento e vontade de aprender. O período trainee existe justamente para dar a base necessária, com o acompanhamento dos membros da equipe.'],
   ['As atividades exigem dedicação presencial?',
    'As reuniões gerais, normalmente uma vez por mês, são presenciais. O resto varia com a necessidade de cada projeto: bancada, teste e validação acontecem no laboratório, e boa parte do trabalho se resolve de onde você estiver. Na prática, *desde que as entregas aconteçam no prazo combinado, o lugar onde você trabalha é escolha sua.*'],
   ['Qual a contrapartida da minha participação na equipe?',
-   'A participação é *voluntária e não remunerada* — somos uma equipe universitária, e o que ela oferece não é salário.\n\nO que você leva daqui é outra coisa: responsabilidade real sobre uma entrega, dentro de projetos de tecnologia em saúde que vão do levantamento de requisitos à validação clínica. Prática de trabalho em equipe multidisciplinar, com metodologia ágil, prazos acordados e uma liderança próxima acompanhando seu crescimento. Contato com pesquisa, laboratórios, hospitais, parceiros e competições internacionais. E um portfólio que você defende em qualquer entrevista, porque foi você que construiu.\n\nSome-se a isso a possibilidade de aproveitamento acadêmico das atividades e a rede de pessoas que continua depois que a graduação acaba.'],
+   'A participação é *voluntária e não remunerada*, somos uma equipe universitária, e o que ela oferece não é salário.\n\nO que você leva daqui é outra coisa: responsabilidade real sobre uma entrega, dentro de projetos de tecnologia em saúde que vão do levantamento de requisitos à validação clínica. Prática de trabalho em equipe multidisciplinar, com metodologia ágil, prazos acordados e uma liderança próxima acompanhando seu crescimento. Contato com pesquisa, laboratórios, hospitais, parceiros e competições internacionais. E um portfólio que você defende em qualquer entrevista, porque foi você que construiu.\n\nSome-se a isso a possibilidade de aproveitamento acadêmico das atividades e a rede de pessoas que continua depois que a graduação acaba.'],
   ['Como a equipe se organiza?',
-   'São cinco departamentos: *Pessoal*, *Marketing*, *Relações Institucionais*, *Clínica* e *P&D*. Os projetos ficam dentro do P&D. Cada projeto tem um supervisor e cada departamento, um gerente.\n\nOs times trabalham com metodologias ágeis, no estilo Scrum: abertura de sprint, daily e fechamento de sprint, com as entregas acompanhadas em ferramentas de gestão de projetos. O organograma é bem definido de propósito — assim cada membro tem a liderança imediata por perto para apoiar seu crescimento pessoal e profissional.'],
+   'São cinco departamentos: *Pessoal*, *Marketing*, *Relações Institucionais*, *Clínica* e *P&D*. Os projetos ficam dentro do P&D. Cada projeto tem um supervisor e cada departamento, um gerente.\n\nOs times trabalham com metodologias ágeis, no estilo Scrum: abertura de sprint, daily e fechamento de sprint, com as entregas acompanhadas em ferramentas de gestão de projetos. O organograma é bem definido de propósito, assim cada membro tem a liderança imediata por perto para apoiar seu crescimento pessoal e profissional.'],
   ['Como faço o aproveitamento das atividades no meu curso?',
    'Isso depende diretamente das normas do seu colegiado. Procure a coordenação do seu curso para saber se existe essa possibilidade e quais são os requisitos formais para o aproveitamento como *AACC* (Atividade Acadêmica Curricular Complementar).\n\nA depender das normas e das atividades que você executar, a forma de aproveitamento varia: iniciação científica, extensão, equipe de competição, participação em eventos ou as produções geradas, como publicações.'],
   ['Posso aproveitar a participação como estágio?',
@@ -687,14 +683,14 @@ const FAQ_RESERVA = [
 ];
 
 /* ============================================================
-   COMPETÊNCIAS — o catálogo de etiquetas do formulário também
+   COMPETÊNCIAS, o catálogo de etiquetas do formulário também
    vem do portal. Reserva usada enquanto a migração não roda.
    ============================================================ */
 const COMPETENCIAS_RESERVA = [
-  ['P&D · Software', ['Programação de firmware','Sistemas embarcados','Processamento de sinais','Visão computacional',
+  ['P&D, Software', ['Programação de firmware','Sistemas embarcados','Processamento de sinais','Visão computacional',
     'Aprendizado de máquina','Desenvolvimento web','Aplicativos móveis','Banco de dados','Controle e automação',
     'Interface e experiência (UI/UX)']],
-  ['P&D · Hardware', ['Eletrônica analógica','Eletrônica digital','Projeto de placas (PCB)','Instrumentação e sensores',
+  ['P&D, Hardware', ['Eletrônica analógica','Eletrônica digital','Projeto de placas (PCB)','Instrumentação e sensores',
     'Soldagem e montagem','Modelagem 3D (CAD)','Impressão 3D e prototipagem','Usinagem e fabricação',
     'Projeto mecânico','Simulação e elementos finitos']],
   ['Clínica', ['Anatomia e fisiologia','Biomecânica','Reabilitação e fisioterapia','Protocolos de ensaio clínico',
@@ -743,7 +739,7 @@ const $ = s=>document.querySelector(s);
 const esc = v=> v==null ? '' : String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* marcação mínima dos textos editáveis (SOBRE e o FAQ do portal):
    *negrito*, [texto](https://link) e quebras de linha. Escapa
-   antes de tudo — o que vem do banco nunca entra como HTML. */
+   antes de tudo, o que vem do banco nunca entra como HTML. */
 function rico(t){
   return esc(t||'')
     .replace(/\[([^\][]+)\]\((https?:\/\/[^\s)]+)\)/g,
@@ -792,13 +788,13 @@ async function copiar(t){ try{ await navigator.clipboard.writeText(t); toast('Co
   catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
     ta.select(); document.execCommand('copy'); ta.remove(); toast('Copiado.'); } }
 
-const FASE_COR = {divulgacao:'#94A3B8', inscricao:'#60A5FA', dinamica:'#2DD4BF',
-  entrevista:'#C084FC', trainee:'#FBBF24', resultado:'#CEDC00', outro:'#94A3B8'};
+const FASE_COR = {divulgacao:'var(--idle-tx)', inscricao:'var(--info)', dinamica:'var(--ion)',
+  entrevista:'var(--ion)', trainee:'var(--warn)', resultado:'var(--synapse)', outro:'var(--idle-tx)'};
 const FASE_LBL = {divulgacao:'Divulgação', inscricao:'Inscrições', dinamica:'Dinâmica',
   entrevista:'Entrevista', trainee:'Trainee', resultado:'Resultado', outro:''};
-const TIPO_PUB = {edital:['Edital','#CEDC00'], aviso:['Aviso','#60A5FA'],
-  deferimento:['Inscrições deferidas','#2DD4BF'], resultado_dinamica:['Resultado da 1ª fase','#2DD4BF'],
-  resultado_entrevista:['Resultado da 2ª fase','#C084FC'], resultado_final:['Resultado final','#CEDC00']};
+const TIPO_PUB = {edital:['Edital','var(--synapse)'], aviso:['Aviso','var(--info)'],
+  deferimento:['Inscrições deferidas','var(--ion)'], resultado_dinamica:['Resultado da 1ª fase','var(--ion)'],
+  resultado_entrevista:['Resultado da 2ª fase','var(--ion)'], resultado_final:['Resultado final','var(--synapse)']};
 
 /* ---------------- dados ---------------- */
 async function carregarSite(){
@@ -815,7 +811,7 @@ async function carregarSite(){
   await imprensa;
 }
 /* A imprensa (vídeos e matérias) mora no banco desde a migração 23.0,
-   e é editada no portal, em Studio › Configurações › Imprensa — a mesma
+   e é editada no portal, em Studio › Configurações › Imprensa, a mesma
    lista do site institucional. Sem o banco, ficam as listas do SOBRE. */
 async function carregarImprensa(){
   try{
@@ -883,13 +879,13 @@ const DECK = ()=>{
   const din = etapaPorFase('dinamica'), ent = etapaPorFase('entrevista'),
         tr = etapaPorFase('trainee'), fim = etapaPorFase('resultado', true);
   return [
-    {g:'linear-gradient(150deg,#0B7D6E 0%,#063A33 90%)', ic:'users', fase:'Fase 1',
+    {g:'linear-gradient(150deg,var(--axon) 0%,var(--cortex) 90%)', ic:'users', fase:'Fase 1',
      t:'Dinâmica em grupo', dt: din ? fmtRange(din.data_inicio, din.data_fim) : '26 a 29 ago',
      p:'Uma atividade em grupo com um desafio prático. Queremos ver como você trabalha em equipe: como escuta, colabora e constrói junto. O horário é agendado aqui no site, com a inscrição deferida.'},
-    {g:'linear-gradient(150deg,#4C3A78 0%,#1E1533 90%)', ic:'chat', fase:'Fase 2',
+    {g:'linear-gradient(150deg,var(--ion-dark) 0%,var(--painel) 90%)', ic:'chat', fase:'Fase 2',
      t:'Entrevista individual', dt: ent ? fmtRange(ent.data_inicio, ent.data_fim) : '01 a 05 set',
      p:'Uma conversa individual com o comitê de seleção sobre sua trajetória, seus interesses e sua disponibilidade. Também é o momento de tirar suas dúvidas sobre a equipe.'},
-    {g:'linear-gradient(150deg,#00594F 0%,#00352F 90%)', ic:'rocket', fase:'Fase 3',
+    {g:'linear-gradient(150deg,var(--axon) 0%,var(--cortex) 90%)', ic:'rocket', fase:'Fase 3',
      t:'Período trainee', dt: (tr?fmtCurto(tr.data_inicio):'09 set') + ' a ' + (fim?fmtCurto(fim.data_inicio):'30 nov'),
      p:'Os aprovados entram na equipe como trainees e desenvolvem, em grupo, um desafio multidisciplinar que passa pelas áreas da NeuroDynamics, com acompanhamento dos membros do início ao fim. Ao término, os aprovados são efetivados.'}
   ];
@@ -1003,7 +999,7 @@ function tlItem(x, h){
     <span class="no">${done?`<svg viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg>`:''}</span>
     <span class="dt-badge">${fmtRange(x.data_inicio, x.data_fim)}</span>
     <h3>${esc(x.titulo)}
-      ${FASE_LBL[x.fase]?`<span class="tag" style="--tc:${FASE_COR[x.fase]||'#94A3B8'}">${FASE_LBL[x.fase]}</span>`:''}
+      ${FASE_LBL[x.fase]?`<span class="tag" style="--tc:${FASE_COR[x.fase]||'var(--idle-tx)'}">${FASE_LBL[x.fase]}</span>`:''}
       ${agora?'<span class="agora-lbl">agora</span>':''}</h3>
     ${x.descricao?`<p>${esc(x.descricao)}</p>`:''}
   </div>`;
@@ -1071,12 +1067,12 @@ function montarCountdown(){
 }
 
 /* ============================================================
-   CARROSSEL DE IMPRENSA — um clipe por vez, mudo (única forma
+   CARROSSEL DE IMPRENSA, um clipe por vez, mudo (única forma
    de autoplay que os navegadores aceitam), passando sozinho
    para o próximo quando o vídeo acaba. Pausa fora da tela e
    respeita quem pede prefers-reduced-motion.
-   auto = pode começar sem clique · quer = deveria estar tocando
-   agora · visivel = está na tela · quieto = quando fomos nós
+   auto = pode começar sem clique, quer = deveria estar tocando
+   agora, visivel = está na tela, quieto = quando fomos nós
    que pausamos, e não a pessoa.
    ============================================================ */
 const carr = { i:0, mudo:true, auto:true, quer:true, visivel:false, quieto:0,
@@ -1084,7 +1080,7 @@ const carr = { i:0, mudo:true, auto:true, quer:true, visivel:false, quieto:0,
 
 const vids = ()=> SOBRE.videos || [];
 const vTitulo = v => v.titulo || v.veiculo || 'Reportagem';
-const vSub = v => (v.titulo ? [v.veiculo, v.ano] : [v.ano]).filter(Boolean).join(' · ');
+const vSub = v => (v.titulo ? [v.veiculo, v.ano] : [v.ano]).filter(Boolean).join(', ');
 
 function secaoImprensa(){
   const lista = vids(), mats = SOBRE.materias || [];
@@ -1125,7 +1121,7 @@ function secaoImprensa(){
     <div class="sub-lbl reveal"><span>Também escreveram sobre</span></div>
     <div class="mat-grid">${mats.map(m=>`
       <a class="mat reveal" href="${esc(m.url)}" target="_blank" rel="noopener">
-        <span class="vc">${esc([m.veiculo, m.ano].filter(Boolean).join(' · '))}</span>
+        <span class="vc">${esc([m.veiculo, m.ano].filter(Boolean).join(', '))}</span>
         <h3>${esc(m.titulo)}</h3>
         <span class="abrir">Ler a matéria ${icone('fora')}</span>
       </a>`).join('')}</div>`;
@@ -1172,7 +1168,7 @@ function ytEstado(e){
 }
 
 /* Um player para o carrossel inteiro: o primeiro clipe monta o
-   iframe, os seguintes entram nele — remontar custa um segundo. */
+   iframe, os seguintes entram nele, remontar custa um segundo. */
 function ytMostrar(id){
   if(carr.yt?.loadVideoById){
     (carr.quer && carr.visivel) ? carr.yt.loadVideoById(id) : carr.yt.cueVideoById(id);
@@ -1303,7 +1299,7 @@ function vidPintar(){
 }
 
 /* ============================================================
-   FRENTES — abas mostrando como cada área do conhecimento atua
+   FRENTES, abas mostrando como cada área do conhecimento atua
    na equipe. Só o corpo é repintado na troca de aba, para não
    derrubar o carrossel de imprensa que vive na mesma página.
    ============================================================ */
@@ -1449,7 +1445,7 @@ function pagCronograma(){
    PÁGINA: EDITAL E RESULTADOS
    ============================================================ */
 function pubCard(p){
-  const [lbl,cor] = TIPO_PUB[p.tipo]||['Publicação','#94A3B8'];
+  const [lbl,cor] = TIPO_PUB[p.tipo]||['Publicação','var(--idle-tx)'];
   const destaque = p.tipo==='edital';
   return `<div class="pub${destaque?' pub-destaque':''}" onclick="abrirPub('${p.id}')">
     <span class="tp" style="--tc:${cor}">${lbl}</span>
@@ -1476,10 +1472,10 @@ function pagPublicacoes(){
 }
 window.abrirPub = function(id){
   const p = pubs().find(x=>String(x.id)===String(id)); if(!p) return;
-  const [lbl,cor] = TIPO_PUB[p.tipo]||['Publicação','#94A3B8'];
+  const [lbl,cor] = TIPO_PUB[p.tipo]||['Publicação','var(--idle-tx)'];
   const res = p.resultados;
   abreModal(`
-    <span style="--tc:${cor};display:inline-block;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:3px 11px;background:color-mix(in srgb,${cor} 16%,transparent);color:${cor};border:1px solid color-mix(in srgb,${cor} 35%,transparent);margin-bottom:10px">${lbl}</span>
+    <span style="--tc:${cor};display:inline-block;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:var(--r-chip);padding:3px 11px;background:color-mix(in srgb,${cor} 16%,transparent);color:${cor};border:1px solid color-mix(in srgb,${cor} 35%,transparent);margin-bottom:10px">${lbl}</span>
     <h3>${esc(p.titulo)}</h3>
     <div style="font-size:12px;color:var(--dim)">${p.publicado_em?'Publicado em '+new Date(p.publicado_em).toLocaleString('pt-BR'):''}</div>
     ${p.corpo?`<div class="corpo-pub">${esc(p.corpo)}</div>`:''}
@@ -1592,7 +1588,7 @@ function renderPasso(){
   if(p===3) html = `
     <p class="hint" style="margin:-6px 0 12px">Marque uma vez o que você <b>já sabe fazer</b>;
       marque de novo para dizer que é algo que <b>quer desenvolver</b> na equipe. Ninguém precisa
-      saber tudo — a maior parte de quem entra vem para aprender.</p>
+      saber tudo, a maior parte de quem entra vem para aprender.</p>
     <div class="legenda">
       <span><i class="tem"></i> Já tenho experiência</span>
       <span><i class="quer"></i> Quero desenvolver</span>
@@ -1606,7 +1602,7 @@ function renderPasso(){
           return `<button type="button" class="ch ${cls}" onclick="ciclaComp(this,'${esc(nome).replace(/'/g,"\\'")}')">${esc(nome)}</button>`;
         }).join('')}</div>
       </div>`).join('')}
-    <div class="err-msg" id="comp-err">Escolha ao menos uma etiqueta — pode ser algo que você queira aprender.</div>`;
+    <div class="err-msg" id="comp-err">Escolha ao menos uma etiqueta, pode ser algo que você queira aprender.</div>`;
   if(p===4) html = `
     <label class="check-l"><input type="checkbox" id="f_aceite_edital" ${d.aceite_edital?'checked':''}>
       <span>Li e concordo com as regras do <b>edital do ${esc(e.nome)}</b>${e.edital_url?` (<a href="${esc(e.edital_url)}" target="_blank" rel="noopener" style="color:var(--syn)">abrir edital</a>)`:''}, incluindo prazos e critérios de avaliação. <b>*</b></span></label>
