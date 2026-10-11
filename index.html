@@ -751,7 +751,13 @@ const MES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','
 const dLocal = s=>{ const [a,m,d]=String(s).slice(0,10).split('-').map(Number); return new Date(a,m-1,d); };
 const fmtD = s=> s ? String(s).slice(0,10).split('-').reverse().join('/') : '';
 const fmtCurto = s=>{ const d=dLocal(s); return `${String(d.getDate()).padStart(2,'0')} ${MES[d.getMonth()]}`; };
-const fmtRange = (i,f)=> !f||f===i ? fmtCurto(i) : `${String(dLocal(i).getDate()).padStart(2,'0')} a ${fmtCurto(f)}`;
+/* período: "07 a 08 ago" no mesmo mês; "07 ago a 08 set" quando muda o mês (ou o ano) */
+const fmtRange = (i,f)=>{
+  if (!f || f===i) return fmtCurto(i);
+  const a=dLocal(i), b=dLocal(f);
+  const mesmoMes = a.getMonth()===b.getMonth() && a.getFullYear()===b.getFullYear();
+  return `${mesmoMes ? String(a.getDate()).padStart(2,'0') : fmtCurto(i)} a ${fmtCurto(f)}`;
+};
 const fmtLongo = s=> dLocal(s).toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
 const hojeStr = ()=>{ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 function toast(msg, err){ const t=document.createElement('div'); t.className='toast'+(err?' err':''); t.textContent=msg;
