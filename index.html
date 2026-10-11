@@ -70,7 +70,7 @@ main{max-width:var(--max);margin:0 auto;padding:0 22px}
 section{margin:0 0 90px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:11.5px;font-weight:700;
   letter-spacing:.16em;text-transform:uppercase;color:var(--syn)}
-.eyebrow::before{content:'';width:22px;height:1.5px;background:var(--syn)}
+.eyebrow::before{content:'';width:7px;height:7px;flex:none;background:var(--syn)}
 h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:10px 0 8px}
 .sec-sub{color:var(--muted);max-width:620px;margin-bottom:34px}
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
@@ -326,7 +326,7 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .vazio b{color:var(--ink)}
 
 /* ============ FORMULÁRIOS ============ */
-.fwrap{max-width:680px;margin:0 auto}
+.fwrap{max-width:680px}
 .steps{display:flex;gap:8px;margin:26px 0 30px}
 .steps .st{flex:1;height:4px;border-radius:4px;background:var(--line2)}
 .steps .st.ok{background:var(--syn)}
@@ -391,18 +391,17 @@ h2.sec{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15;margin:
 .aviso.info{background:color-mix(in srgb,var(--info) 8%,transparent);border-color:color-mix(in srgb,var(--info) 30%,transparent);color:var(--info-tx)}
 
 /* ============ ACOMPANHAR ============ */
-.stepper{display:flex;margin:30px 0 8px;overflow-x:auto;padding-bottom:6px}
-.sp{flex:1;min-width:110px;text-align:center;position:relative;padding-top:26px}
-.sp::before{content:'';position:absolute;top:9px;left:0;right:0;height:2px;background:var(--line2)}
-.sp:first-child::before{left:50%}
-.sp:last-child::before{right:50%}
-.sp .pt{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:16px;height:16px;
-  border-radius:50%;background:var(--bg);border:2px solid var(--line2);z-index:1}
-.sp.ok::before{background:var(--syn)}
-.sp.ok .pt{background:var(--syn);border-color:var(--syn)}
-.sp.on .pt{border-color:var(--syn);box-shadow:0 0 0 4px rgba(206,220,0,.18)}
-.sp.falha .pt{background:var(--bad);border-color:var(--bad)}
-.sp .lb{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.stepper{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:26px 0 10px}
+/* progresso linear é a barra: um segmento por fase, a atual acesa */
+.sp{position:relative;padding-top:15px;min-width:0}
+.sp::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:4px;background:rgba(var(--tom),.07)}
+.sp.ok::before{background:rgba(var(--syn-rgb),.45)}
+.sp.on::before{background:var(--syn);box-shadow:0 0 12px rgba(var(--syn-rgb),.35)} /* auditar: ok, barra de progresso, não seleção */
+.sp.falha::before{background:var(--bad)}
+.sp .pt{display:none}
+.sp .lb{display:block;font-family:var(--fd);font-size:12px;font-weight:500;color:var(--dim);overflow-wrap:anywhere}
+.sp.ok .lb{color:var(--muted)}
+.sp.on .lb,.sp.falha .lb{color:var(--ink);font-weight:600}
 .sp.ok .lb,.sp.on .lb{color:var(--ink)}
 .sit-card{border-radius:var(--r);padding:26px;border:1px solid var(--line2);margin:20px 0;
   background:var(--card)}
@@ -1507,16 +1506,16 @@ function pagInscricao(){
   if(!state.online){
     corpo = `<div class="aviso err">Não foi possível conectar ao sistema de inscrições agora. Tente novamente em alguns minutos.</div>`;
   } else if(!abertas && h < e.inscricoes_inicio){
-    corpo = `<div class="fcard" style="text-align:center">
+    corpo = `<div class="fcard">
       <h3>As inscrições ainda não abriram</h3>
       <p class="hint" style="margin-bottom:20px">O período de inscrição vai de <b style="color:var(--ink)">${fmtD(e.inscricoes_inicio)}</b> a <b style="color:var(--ink)">${fmtD(e.inscricoes_fim)}</b>. Enquanto isso, leia o edital e conheça a equipe.</p>
-      <div class="cnt-wrap" style="justify-content:center"><span class="cnt-label" id="cnt-label"></span><div class="cnt" id="cnt"></div></div>
+      <div class="cnt-wrap"><span class="cnt-label" id="cnt-label"></span><div class="cnt" id="cnt"></div></div>
       <div style="margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <a class="cta ghost" href="#/sobre">A NeuroDynamics</a>
         <a class="cta ghost" href="#/cronograma">Cronograma</a></div>
     </div>`;
   } else if(!abertas){
-    corpo = `<div class="fcard" style="text-align:center">
+    corpo = `<div class="fcard">
       <h3>Inscrições encerradas</h3>
       <p class="hint">O período de inscrição terminou em ${fmtD(e.inscricoes_fim)}. Se você se inscreveu, acompanhe sua situação com o protocolo.</p>
       <a class="cta" href="#/acompanhar">Acompanhar minha inscrição ${icone('arrow')}</a>
@@ -1525,10 +1524,10 @@ function pagInscricao(){
     corpo = `<div id="wizard"></div>`;
   }
   $('#main').innerHTML = `
-  <div class="pg-head" style="text-align:center">
-    <span class="eyebrow" style="justify-content:center">${esc(e.nome)}</span>
+  <div class="pg-head">
+    <span class="eyebrow">${esc(e.nome)}</span>
     <h2 class="sec">Formulário de inscrição</h2>
-    <p class="sec-sub" style="margin:0 auto 10px">Leva cerca de dez minutos. Ao final, você recebe o protocolo para acompanhar o processo.</p>
+    <p class="sec-sub" style="margin:0 0 10px">Leva cerca de dez minutos. Ao final, você recebe o protocolo para acompanhar o processo.</p>
   </div>
   <section class="fwrap">${corpo}</section>`;
   if(abertas && state.online){ form.passo=0; renderPasso(); }
@@ -1707,9 +1706,9 @@ window.enviarInscricao = async function(){
     if(data.status==='ok'){
       localStorage.setItem('ps_ident', JSON.stringify({protocolo:data.protocolo, email:form.dados.email}));
       $('#wizard').innerHTML = `
-        <div class="fcard" style="text-align:center">
+        <div class="fcard">
           <div style="width:74px;height:74px;border-radius:50%;background:rgba(206,220,0,.14);border:2px solid var(--syn);
-            display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+            display:flex;align-items:center;justify-content:center;margin:0 0 18px">
             <svg viewBox="0 0 24 24" style="width:34px;height:34px;stroke:var(--syn);stroke-width:2.5;fill:none;stroke-linecap:round"><path d="M5 12.5 10 17.5 19 7"/></svg>
           </div>
           <h3>Inscrição enviada</h3>
@@ -1768,10 +1767,10 @@ function pagAcompanhar(){
   let salvo = doLink;
   try{ salvo = salvo || JSON.parse(localStorage.getItem('ps_ident')||'null'); }catch(e){}
   $('#main').innerHTML = `
-  <div class="pg-head" style="text-align:center">
-    <span class="eyebrow" style="justify-content:center">Área do candidato</span>
+  <div class="pg-head">
+    <span class="eyebrow">Área do candidato</span>
     <h2 class="sec">Acompanhe sua inscrição</h2>
-    <p class="sec-sub" style="margin:0 auto 10px">Informe o protocolo recebido na inscrição e o e-mail cadastrado.</p>
+    <p class="sec-sub" style="margin:0 0 10px">Informe o protocolo recebido na inscrição e o e-mail cadastrado.</p>
   </div>
   <section class="fwrap">
     <div class="fcard">
